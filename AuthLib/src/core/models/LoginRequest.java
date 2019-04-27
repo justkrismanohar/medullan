@@ -12,13 +12,28 @@ import javax.servlet.http.Cookie;
  */
 
 public class LoginRequest {
+	public static enum RequestStatus {
+		SUCCESSFUL,
+		FAILED,
+		PENDING
+	}
+	
 	//Maybe use hashMap or something if there are to be more properties later on
 	public IPWrapper address;
 	public CookieWrapper cookie;
 	public UserAgentWrapper userAgent;
+	public LoginDetails loginDetails;
+	public RequestStatus status;
 	
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent) {
 		this. address = address; this.cookie = cookie; this.userAgent = userAgent;
+		loginDetails = new LoginDetails("","");
+		this.status = RequestStatus.PENDING;
+	}
+	
+	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent, LoginDetails loginDetails) {
+		this. address = address; this.cookie = cookie; this.userAgent = userAgent; this.loginDetails = loginDetails;
+		this.status = RequestStatus.PENDING;
 	}
 	
 	public boolean equals(LoginRequest req) {
