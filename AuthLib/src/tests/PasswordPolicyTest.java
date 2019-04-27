@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import core.policy.AND;
-import core.policy.Has;
-import core.policy.OR;
-import core.policy.PasswordPolicy;;
+import core.policy.password.AND;
+import core.policy.password.Has;
+import core.policy.password.OR;
+import core.policy.password.PasswordPolicy;;
 
 class PasswordPolicyTest {
 

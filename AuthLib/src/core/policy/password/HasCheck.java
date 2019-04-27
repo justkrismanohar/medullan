@@ -1,4 +1,4 @@
-package core.policy;
+package core.policy.password;
 
 public abstract class HasCheck implements PasswordPolicy{
 	protected int amt;

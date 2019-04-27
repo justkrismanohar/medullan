@@ -1,12 +1,12 @@
-package core.policy;
+package core.policy.password;
 
 import java.util.ArrayList;
 
-public class OR implements PasswordPolicy{
+public class AND implements PasswordPolicy{
 	
 	private ArrayList<PasswordPolicy> list;
 	
-	public OR() {
+	public AND() {
 		list = new ArrayList<PasswordPolicy>();
 	}
 	
@@ -18,9 +18,9 @@ public class OR implements PasswordPolicy{
 	@Override
 	public boolean evaluatePassword(String password) {
 		for(PasswordPolicy p : list)
-			if(p.evaluatePassword(password))
-				return true;
-		return false;
+			if(!p.evaluatePassword(password))
+				return false;
+		return true;
 	}
 
 }

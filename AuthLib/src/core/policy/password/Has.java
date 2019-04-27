@@ -1,4 +1,4 @@
-package core.policy;
+package core.policy.password;
 
 public class Has {
 	public static PasswordPolicy lowerCase() {
