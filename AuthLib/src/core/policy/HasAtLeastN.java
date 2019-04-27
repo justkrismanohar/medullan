@@ -1,15 +1,15 @@
 package core.policy;
 
-public abstract class HasCheck implements PasswordPolicy{
-	protected int amt;
+public abstract class HasAtLeastN implements PasswordPolicy{
+	private int amt;
 	
 	
 	
-	public HasCheck() {
+	public HasAtLeastN() {
 		this.amt = 0;
 	}
 	
-	public HasCheck(int amt) {
+	public HasAtLeastN(int amt) {
 		this.amt = amt;
 		if(this.amt <0 ) {
 			this.amt = 0;
@@ -18,12 +18,8 @@ public abstract class HasCheck implements PasswordPolicy{
 	
 	public abstract boolean charIsWhatever(char ch);
 	
-	public boolean hasRequiredAmt(int count) {
-		return count == amt;
-	}
-	
 	/**
-	 * Verifies if password has a certain amt (determined by hasRequiredAmt) of letters that pass 
+	 * Verifies if password has at least a certain amt of letters specified by 
 	 * the charIsWhatever test.
 	 * Default is 0
 	 */
@@ -37,7 +33,7 @@ public abstract class HasCheck implements PasswordPolicy{
 				count++;
 		}
 		
-		return hasRequiredAmt(count);
+		return count >= amt;
 	}
 
 }

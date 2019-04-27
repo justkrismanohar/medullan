@@ -54,4 +54,47 @@ public class Has {
 			}
 		};
 	}
+
+	public static PasswordPolicy atLeastLowerCase(int amt) {
+		return new HasCheck(amt) {
+			@Override
+			public boolean charIsWhatever(char ch) {
+				return Character.isLowerCase(ch);
+			}
+			
+			@Override
+			public boolean hasRequiredAmt(int count) {
+				return count >= this.amt;
+			}
+		};
+	}
+	
+	public static PasswordPolicy atLeastUpperCase(int amt) {
+		return new HasCheck(amt) {
+			@Override
+			public boolean charIsWhatever(char ch) {
+				return Character.isUpperCase(ch);
+			}
+			
+			@Override
+			public boolean hasRequiredAmt(int count) {
+				return count >= this.amt;
+			}
+		};
+	}
+	
+	public static PasswordPolicy atLeastDigit(int amt) {
+		return new HasCheck(amt) {
+			@Override
+			public boolean charIsWhatever(char ch) {
+				return Character.isDigit(ch);
+			}
+			
+			@Override
+			public boolean hasRequiredAmt(int count) {
+				return count >= this.amt;
+			}
+		};
+	}
+
 }

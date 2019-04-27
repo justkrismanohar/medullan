@@ -53,5 +53,19 @@ class PasswordPolicyTest {
 		assertFalse(c.evaluatePassword(password));
 		
 	}
+	
+	@Test
+	void testAtLeastN() {
+		CompositePolicy c = new CompositePolicy();
+		c.add(Has.atLeastUpperCase(2));
+		c.add(Has.atLeastLowerCase(3));
+		c.add(Has.atLeastDigit(1));
+		
+		String password = "ThisP1sP2";
+		assertTrue(c.evaluatePassword(password));
+		
+		password = "This";
+		assertFalse(c.evaluatePassword(password));
+	}
 
 }
