@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import core.policy.CompositePolicy;
 import core.policy.Has;
 import core.policy.PasswordPolicy;;
 
@@ -11,7 +12,7 @@ class PasswordPolicyTest {
 
 	
 	@Test
-	void testUppercase() {
+	void testUppercaseExact() {
 		String password = "ThisHasUpperCase";
 		PasswordPolicy p = Has.upperCase(4);
 		assertTrue(p.evaluatePassword(password));
@@ -25,7 +26,7 @@ class PasswordPolicyTest {
 	}
 	
 	@Test
-	void testlowercase() {
+	void testlowercaseExact() {
 		String password = "ThisHasLowerCase";
 		PasswordPolicy p = Has.lowerCase(12);
 		assertTrue(p.evaluatePassword(password));
@@ -38,6 +39,19 @@ class PasswordPolicyTest {
 		PasswordPolicy p = Has.lowerCase(0);
 		assertTrue(p.evaluatePassword(password));
 	
+	}
+	
+	@Test
+	void testLowerAndUpperExact() {
+		CompositePolicy c = new CompositePolicy();
+		c.add(Has.upperCase(2));
+		c.add(Has.lowerCase(2));
+		String password = "TiHs";
+		assertTrue(c.evaluatePassword(password));
+		
+		password = "This";
+		assertFalse(c.evaluatePassword(password));
+		
 	}
 
 }
