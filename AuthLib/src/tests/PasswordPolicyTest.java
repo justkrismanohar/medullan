@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import core.policy.CompositePolicy;
+import core.policy.AND;
 import core.policy.Has;
+import core.policy.OR;
 import core.policy.PasswordPolicy;;
 
 class PasswordPolicyTest {
@@ -43,7 +44,7 @@ class PasswordPolicyTest {
 	
 	@Test
 	void testLowerAndUpperExact() {
-		CompositePolicy c = new CompositePolicy();
+		AND c = new AND();
 		c.add(Has.upperCase(2));
 		c.add(Has.lowerCase(2));
 		String password = "TiHs";
@@ -55,8 +56,8 @@ class PasswordPolicyTest {
 	}
 	
 	@Test
-	void testAtLeastN() {
-		CompositePolicy c = new CompositePolicy();
+	void testAtLeastNWithAND() {
+		AND c = new AND();
 		c.add(Has.atLeastUpperCase(2));
 		c.add(Has.atLeastLowerCase(3));
 		c.add(Has.atLeastDigit(1));
@@ -65,6 +66,26 @@ class PasswordPolicyTest {
 		assertTrue(c.evaluatePassword(password));
 		
 		password = "This";
+		assertFalse(c.evaluatePassword(password));
+	}
+	
+	@Test
+	void testAtLeastNWithOR() {
+		OR c = new OR();
+		c.add(Has.atLeastUpperCase(2));
+		c.add(Has.atLeastLowerCase(3));
+		c.add(Has.atLeastDigit(1));
+		
+		String password = "ThPd";
+		assertTrue(c.evaluatePassword(password));
+		
+		password = "Thsedee";
+		assertTrue(c.evaluatePassword(password));
+		
+		password = "1Pw";
+		assertTrue(c.evaluatePassword(password));
+		
+		password = "Tp";
 		assertFalse(c.evaluatePassword(password));
 	}
 
