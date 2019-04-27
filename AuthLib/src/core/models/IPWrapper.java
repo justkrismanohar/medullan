@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
  * but it can be swapped out for something else later, if necessary
  */
 
-public class IP {
+public class IPWrapper {
 	
 	public class IPCreationFailed extends Exception{
 		public IPCreationFailed(String message) {
@@ -20,7 +20,7 @@ public class IP {
 	
 	private InetAddress address;
 	
-	public IP(String name) throws IPCreationFailed{
+	public IPWrapper(String name) throws IPCreationFailed{
 		
 		try {
 			address = InetAddress.getByName(name);
@@ -30,7 +30,7 @@ public class IP {
 		}
 	}
 	
-	public boolean equals(IP other) {
+	public boolean equals(IPWrapper other) {
 		return other.address.equals(this.address);
 	}
 }
