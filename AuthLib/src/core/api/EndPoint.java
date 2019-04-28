@@ -66,7 +66,7 @@ public class EndPoint {
 			LoginDetails details = req.loginDetails;
 			boolean passPolicies = usernamePolicy.evaluatePassword(details.userName) && passwordPolicy.evaluatePassword(details.encryptedPassword);
 			if(passPolicies)
-				QueryLayerFactory.getInstance().registerUser(details);
+				QueryLayerFactory.getInstance().registerUser(req);
 				
 			return passPolicies ;
 		}

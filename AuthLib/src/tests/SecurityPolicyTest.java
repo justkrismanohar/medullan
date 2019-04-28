@@ -82,6 +82,7 @@ class SecurityPolicyTest {
 				count++;
 				return failed;
 			}
+						
 		};
 		
 		MockDB.setMockDB(q);//quick and dirty something just for testing
@@ -91,9 +92,11 @@ class SecurityPolicyTest {
 		CookieWrapper c1 = new CookieWrapper("c1","val1");
 		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		String userName = "user1";
-		LoginDetails details = new LoginDetails(userName,"pass1");
+		LoginDetails details = new LoginDetails(userName,"PAass1");
 		
 		LoginRequest signature = new LoginRequest(ip1,c1,a1,details);
+		q.registerUser(signature);
+		
 		SecurityPolicy cFailed = new NConsecutiveFailedLogins(3);
 		
 		assertFalse(q.isUserNameLocked(userName));

@@ -24,12 +24,12 @@ public class MockDB implements QueryLayer {
 		mockDB = m;
 	}
 	
-	private List<LoginRequest> blockedSignatures;
-	private List<String> blockedUsernames;
+	protected List<LoginRequest> blockedSignatures;
+	protected List<String> blockedUsernames;
 	
-	private HashMap<LoginRequest, List<LocalTime>> failedBySignature;
-	private HashMap<String,Integer> consecutiveFailedByUser;
-	private HashMap<String,String> registeredUsers;
+	protected HashMap<LoginRequest, List<LocalTime>> failedBySignature;
+	protected HashMap<String,Integer> consecutiveFailedByUser;
+	protected HashMap<String,String> registeredUsers;
 	
 	
 	public MockDB() {
@@ -144,7 +144,8 @@ public class MockDB implements QueryLayer {
 	}
 
 	@Override
-	public boolean registerUser(LoginDetails details) {
+	public boolean registerUser(LoginRequest req) {
+		LoginDetails details = req.loginDetails;
 		this.registeredUsers.put(details.userName, details.encryptedPassword);
 		return true;// boolean is place holder for exceptions etc later on...
 	}
