@@ -10,6 +10,7 @@ import core.policy.security.BasicBruteForce;
 import core.policy.security.LockoutPolicy;
 import core.policy.security.NConsecutiveFailedLogins;
 import core.policy.security.UserAccountLockedPolicy;
+import core.queries.QueryLayerFactory;
 
 public class EndPoint {
 	
@@ -54,17 +55,20 @@ public class EndPoint {
 			//Check if the request is blocked
 			boolean blocked = blockPolicies.handleRequest(req);
 			//Determine if the UN + PWD pair match
-			boolean verified = LoginDetails.verifyLoginDetails(req);
+			boolean verified = QueryLayerFactory.getInstance().verifyLoginDetails(req);
 			//Apply security post security policies
 			boolean passedPostPolicies = postLoginPolicies.handleRequest(req);
 			//If pass checks return true
 			return blocked && verified && passedPostPolicies;
 		}
 		
-		public boolean register(LoginDetails details) {
+		public boolean register(LoginRequest req) {
+			LoginDetails details = req.loginDetails;
 			boolean passPolicies = usernamePolicy.evaluatePassword(details.userName) && passwordPolicy.evaluatePassword(details.encryptedPassword);
-			
-			return passPolicies;
+			if(passPolicies)
+				QueryLayerFactory.getInstance().registerUser(details);
+				
+			return passPolicies ;
 		}
 		
 		

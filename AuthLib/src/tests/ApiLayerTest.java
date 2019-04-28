@@ -23,27 +23,29 @@ class ApiLayerTest {
 		CookieWrapper c1 = new CookieWrapper("c1","val1");
 		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		
-		LoginDetails detailsPass = new LoginDetails("user1","user1");
-		LoginDetails detailsFail = new LoginDetails("user1","user11");
+		LoginDetails detailsPass = new LoginDetails("user1@users.com","USername1");
+		LoginDetails detailsFail = new LoginDetails("user1@users.com","USername11");
 		
 		LoginRequest req = new LoginRequest(ip1,c1,a1,detailsPass);
 		EndPoint end = new EndPoint();
+		
+		end.register(req);//registers user1
 		
 		assertTrue(end.login(req));
 		
 		req.loginDetails = detailsFail;
 		
-		//Simulate 3 login failures. This should block user
+		//Simulate 3 login failures. This should block registered user
 		for(int i =0; i <3; i++)
 			end.login(req);
 		
 		assertFalse(end.login(req));//check fail login
 		
 		req.loginDetails = detailsPass;
-		assertFalse(end.login(req));//Should still fail, user is blocked
+		assertFalse(end.login(req));//Should still fail, registered user is blocked
 		assertTrue(QueryLayerFactory.getInstance().isUserNameLocked(req.loginDetails.userName));//verify at the data layer too
 		
-		LoginDetails otherUser = new LoginDetails("other","user");
+		LoginDetails otherUser = new LoginDetails("other","user");//Unknown user from same signatrue
 		
 		req.loginDetails = otherUser;
 		for(int i= 0; i < 10; i++)//simulate additional 10 to total 13 requests from same signature
@@ -59,15 +61,23 @@ class ApiLayerTest {
 
 	
 	@Test
-	void testRegister() {
+	void testRegister() throws IPCreationFailed {
 		EndPoint end = new EndPoint();
+		
+		//set up a request
+		IPWrapper ip1 = new IPWrapper("127.0.0.1");
+		CookieWrapper c1 = new CookieWrapper("c1","val1");
+		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
+		
 		LoginDetails newUser = new LoginDetails("user","user1");
-		assertFalse(end.register(newUser));
+		LoginRequest req = new LoginRequest(ip1,c1,a1,newUser);
+		
+		assertFalse(end.register(req));
 		
 		newUser.encryptedPassword = "PaSSword5";
-		assertFalse(end.register(newUser));
+		assertFalse(end.register(req));
 		
 		newUser.userName = "user@domain.com";
-		assertTrue(end.register(newUser));
+		assertTrue(end.register(req));
 	}
 }

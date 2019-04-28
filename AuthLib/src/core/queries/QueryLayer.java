@@ -1,10 +1,12 @@
 package core.queries;
 
 
+import core.models.LoginDetails;
 import core.models.LoginRequest;
 
 public interface QueryLayer {
 	
+	public boolean registerUser(LoginDetails details);
 	public boolean verifyLoginDetails(LoginRequest details);
 	
 	public void blockUser(String userName);

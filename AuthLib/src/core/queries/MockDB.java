@@ -29,13 +29,15 @@ public class MockDB implements QueryLayer {
 	
 	private HashMap<LoginRequest, List<LocalTime>> failedBySignature;
 	private HashMap<String,Integer> consecutiveFailedByUser;
+	private HashMap<String,String> registeredUsers;
 	
 	
 	public MockDB() {
 		blockedSignatures = new ArrayList<LoginRequest>();
 		blockedUsernames = new ArrayList<String>();
 		failedBySignature = new HashMap<LoginRequest,List<LocalTime>>();
-		consecutiveFailedByUser = new HashMap<String,Integer>();	
+		consecutiveFailedByUser = new HashMap<String,Integer>();
+		registeredUsers = new HashMap<String,String>();
 	}
 	
 	@Override
@@ -88,7 +90,7 @@ public class MockDB implements QueryLayer {
 
 	@Override
 	public void blockUser(String userName) {
-		if(!blockedUsernames.contains(userName))
+		if(registeredUsers.containsKey(userName) && !blockedUsernames.contains(userName))
 			this.blockedUsernames.add(userName);
 	} 
 
@@ -108,19 +110,26 @@ public class MockDB implements QueryLayer {
 	@Override
 	public boolean verifyLoginDetails(LoginRequest req) {
 		String un = req.loginDetails.userName;
-		if(req.loginDetails.userName.equals(req.loginDetails.encryptedPassword)) {
-			if(consecutiveFailedByUser.containsKey(un)) {
-				consecutiveFailedByUser.put(un, 0);
+		boolean isRegistered = registeredUsers.containsKey(un);
+		if(isRegistered) {
+			String encryptedPassworedStored = registeredUsers.get(un);
+			if(req.loginDetails.encryptedPassword.equals(encryptedPassworedStored)) {
+				if(consecutiveFailedByUser.containsKey(un)) {
+					consecutiveFailedByUser.put(un, 0);
+				}
+				return true;
 			}
-			return true;
 		}
+
 		
 		//update failure stats
-		if(consecutiveFailedByUser.containsKey(un)) {
-			consecutiveFailedByUser.put(un, consecutiveFailedByUser.get(un).intValue() +1);
-		}
-		else{
-			consecutiveFailedByUser.put(un, 0);
+		if(isRegistered) {
+			if(consecutiveFailedByUser.containsKey(un)) {
+				consecutiveFailedByUser.put(un, consecutiveFailedByUser.get(un).intValue() +1);
+			}
+			else{
+				consecutiveFailedByUser.put(un, 0);
+			}
 		}
 		
 		if(failedBySignature.containsKey(req)) {
@@ -132,5 +141,11 @@ public class MockDB implements QueryLayer {
 		
 		return false;
 		
+	}
+
+	@Override
+	public boolean registerUser(LoginDetails details) {
+		this.registeredUsers.put(details.userName, details.encryptedPassword);
+		return true;// boolean is place holder for exceptions etc later on...
 	}
 }
