@@ -2,6 +2,11 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import core.models.CookieWrapper;
@@ -12,6 +17,7 @@ import core.models.LoginRequest;
 import core.models.UserAgentWrapper;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.BasicBruteForce;
+import core.policy.security.LockoutPolicy;
 import core.policy.security.NConsecutiveFailedLogins;
 import core.policy.security.ORSecurityPolicy;
 import core.policy.security.SecurityPolicy;
@@ -211,4 +217,32 @@ class SecurityPolicyTest {
 		assertFalse(or.handleRequest(req));// Fail AND Fail is Fail
 		
 	}
+	
+	@Test
+	void testLockoutPolicy() throws IPCreationFailed {
+		
+		MockDB q = new MockDB();
+		MockDB.setMockDB(q);//quick and dirty something just for testing
+		
+		//set up a request
+		IPWrapper ip1 = new IPWrapper("127.0.0.1");
+		CookieWrapper c1 = new CookieWrapper("c1","val1");
+		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
+		String userName = "user1";
+		LoginDetails details = new LoginDetails(userName,"pass1");
+		
+		LoginRequest req = new LoginRequest(ip1,c1,a1,details);
+		LockoutPolicy lp = new LockoutPolicy(20);
+		
+		assertTrue(lp.handleRequest(req));//Not blocked should pass
+		
+		q.blockSignature(req);//Say something caused it to be locked out
+		assertFalse(lp.handleRequest(req));//Blocked so should fail
+		
+		req.dateTime = req.dateTime.minusMinutes(100);//pretend  100 mins passed
+		assertTrue(lp.handleRequest(req));//handleRequest should unblock the signature
+		assertFalse(q.isSignaturetInBlockList(req));//just double checking
+	
+	}
+			
 }

@@ -9,6 +9,12 @@ import core.queries.QueryLayerFactory;
 public class LockoutPolicy implements SecurityPolicy{
 
 	
+	private long duration;
+	
+	public LockoutPolicy(long duration) {
+		this.duration = duration;
+	}
+	
 	/*
 	 * This implements an event based unlocking of previously block signatures.
 	 * Simply get the time from the currently blocked signature and compare
@@ -17,15 +23,20 @@ public class LockoutPolicy implements SecurityPolicy{
 	public boolean handleRequest(LoginRequest req) {
 		String userName = req.loginDetails.userName;
 		QueryLayer q = QueryLayerFactory.getInstance();
-		if(q.isUserNameLocked(userName)) {
+	
+		if(q.isSignaturetInBlockList(req)) {
 			//Determine if to unblock
-			boolean unblock = true;
-			if(unblock)
-				q.unBlockUser(userName);
+			LocalTime XMinutesAgo = LocalTime.now().minusMinutes(duration);
+			if(XMinutesAgo.compareTo(req.dateTime) > 0) {
+				q.unblockSignature(req);;//duration passed unblock user
+				return true;
+			}
+			
+			return false;//user is still blocked
 		}
 		
-		
-		return false;
+		return true;
 	}
+	
 	
 }

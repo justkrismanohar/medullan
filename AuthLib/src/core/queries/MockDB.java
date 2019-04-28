@@ -75,8 +75,7 @@ public class MockDB implements QueryLayer {
 	}
 
 	@Override
-	public void unBlockUser(String userName) {
-		this.blockedUsernames.remove(userName);
-		
+	public void unblockSignature(LoginRequest signature) {
+		this.blockedSignatures.remove(signature);
 	}
 }

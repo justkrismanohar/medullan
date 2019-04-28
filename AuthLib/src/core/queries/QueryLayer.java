@@ -7,7 +7,7 @@ public interface QueryLayer {
 	public void blockUser(String userName);
 	public void blockSignature(LoginRequest signature);
 	
-	public void unBlockUser(String userName);
+	public void unblockSignature(LoginRequest signature);
 	
 	public boolean isSignaturetInBlockList(LoginRequest signature);
 	public boolean isUserNameLocked(String userName);
