@@ -2,6 +2,7 @@ package core.models;
 
 import java.net.InetAddress;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 
@@ -27,18 +28,21 @@ public class LoginRequest {
 	public LoginDetails loginDetails;
 	public RequestStatus status;
 	public LocalTime dateTime;
+	public UUID requestID;
 	
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent) {
 		this. address = address; this.cookie = cookie; this.userAgent = userAgent;
 		loginDetails = new LoginDetails("","");
 		this.status = RequestStatus.PENDING;
 		this.dateTime = LocalTime.now();
+		this.requestID = UUID.randomUUID();
 	}
 	
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent, LoginDetails loginDetails) {
 		this. address = address; this.cookie = cookie; this.userAgent = userAgent; this.loginDetails = loginDetails;
 		this.status = RequestStatus.PENDING;
 		this.dateTime = LocalTime.now();
+		this.requestID = UUID.randomUUID();
 	}
 	
 	public boolean equals(LoginRequest req) {

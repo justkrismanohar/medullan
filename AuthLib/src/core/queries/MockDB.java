@@ -7,6 +7,7 @@ import java.util.List;
 
 import core.models.LoginDetails;
 import core.models.LoginRequest;
+import core.models.Session;
 
 public class MockDB implements QueryLayer {
 	private static MockDB mockDB = null;
@@ -30,6 +31,7 @@ public class MockDB implements QueryLayer {
 	protected HashMap<LoginRequest, List<LocalTime>> failedBySignature;
 	protected HashMap<String,Integer> consecutiveFailedByUser;
 	protected HashMap<String,String> registeredUsers;
+	protected HashMap<String,Session> userSessions;
 	
 	
 	public MockDB() {
@@ -38,6 +40,7 @@ public class MockDB implements QueryLayer {
 		failedBySignature = new HashMap<LoginRequest,List<LocalTime>>();
 		consecutiveFailedByUser = new HashMap<String,Integer>();
 		registeredUsers = new HashMap<String,String>();
+		userSessions = new HashMap<String,Session>();
 	}
 	
 	@Override
@@ -107,41 +110,41 @@ public class MockDB implements QueryLayer {
 		this.blockedSignatures.remove(signature);
 	}
 
-	@Override
-	public boolean verifyLoginDetails(LoginRequest req) {
-		String un = req.loginDetails.userName;
-		boolean isRegistered = registeredUsers.containsKey(un);
-		if(isRegistered) {
-			String encryptedPassworedStored = registeredUsers.get(un);
-			if(req.loginDetails.encryptedPassword.equals(encryptedPassworedStored)) {
-				if(consecutiveFailedByUser.containsKey(un)) {
-					consecutiveFailedByUser.put(un, 0);
-				}
-				return true;
-			}
-		}
-
-		
-		//update failure stats
-		if(isRegistered) {
-			if(consecutiveFailedByUser.containsKey(un)) {
-				consecutiveFailedByUser.put(un, consecutiveFailedByUser.get(un).intValue() +1);
-			}
-			else{
-				consecutiveFailedByUser.put(un, 0);
-			}
-		}
-		
-		if(failedBySignature.containsKey(req)) {
-			failedBySignature.get(req).add(req.dateTime);
-		}
-		else {
-			failedBySignature.put(req, new ArrayList<LocalTime>());
-		}
-		
-		return false;
-		
-	}
+//	@Override
+//	public boolean verifyLoginDetails(LoginRequest req) {
+//		String un = req.loginDetails.userName;
+//		boolean isRegistered = registeredUsers.containsKey(un);
+//		if(isRegistered) {
+//			String encryptedPassworedStored = registeredUsers.get(un);
+//			if(req.loginDetails.encryptedPassword.equals(encryptedPassworedStored)) {
+//				if(consecutiveFailedByUser.containsKey(un)) {
+//					consecutiveFailedByUser.put(un, 0);
+//				}
+//				return true;
+//			}
+//		}
+//
+//		
+//		//update failure stats
+//		if(isRegistered) {
+//			if(consecutiveFailedByUser.containsKey(un)) {
+//				consecutiveFailedByUser.put(un, consecutiveFailedByUser.get(un).intValue() +1);
+//			}
+//			else{
+//				consecutiveFailedByUser.put(un, 0);
+//			}
+//		}
+//		
+//		if(failedBySignature.containsKey(req)) {
+//			failedBySignature.get(req).add(req.dateTime);
+//		}
+//		else {
+//			failedBySignature.put(req, new ArrayList<LocalTime>());
+//		}
+//		
+//		return false;
+//		
+//	}
 
 	@Override
 	public boolean registerUser(LoginRequest req) {
@@ -149,4 +152,57 @@ public class MockDB implements QueryLayer {
 		this.registeredUsers.put(details.userName, details.encryptedPassword);
 		return true;// boolean is place holder for exceptions etc later on...
 	}
+
+	@Override
+	public Session getUserSession(String username) {
+		if(userSessions.containsKey(username))
+			return userSessions.get(username);
+		return null;//should really be null object...
+	}
+
+	@Override
+	public boolean createSession(LoginRequest req) {
+		//Assumes this is called only after verifying login details
+		userSessions.put(req.loginDetails.userName, new Session(req));
+		return true;// boolean is place holder for exceptions etc later on...
+	}
+
+	@Override
+	public boolean isUserRegistered(String username) {
+		return registeredUsers.containsKey(username);
+	}
+
+	@Override
+	public String getPasswordHash(String username) {
+		return registeredUsers.get(username);
+	}
+
+	@Override
+	public void resetConsecutiveFailedByUser(String username) {
+		if(consecutiveFailedByUser.containsKey(username)) {
+			consecutiveFailedByUser.put(username, 0);
+		}
+	}
+
+	@Override
+	public void recordConsecutiveFailedLogonForUser(String username) {
+		if(consecutiveFailedByUser.containsKey(username)) {
+			consecutiveFailedByUser.put(username, consecutiveFailedByUser.get(username).intValue() +1);
+		}
+		else{
+			consecutiveFailedByUser.put(username, 0);
+		}
+	}
+
+	@Override
+	public void recordFailedLogonFromSignature(LoginRequest signature) {
+		if(failedBySignature.containsKey(signature)) {
+			failedBySignature.get(signature).add(signature.dateTime);
+		}
+		else {
+			failedBySignature.put(signature, new ArrayList<LocalTime>());
+		}
+	}
+	
+	
 }

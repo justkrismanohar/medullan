@@ -2,6 +2,9 @@ package core.api;
 
 import core.models.LoginDetails;
 import core.models.LoginRequest;
+import core.models.Session;
+import core.policy.login.BasicVerification;
+import core.policy.login.VerificationPolicy;
 import core.policy.password.ANDPasswordPolicy;
 import core.policy.password.EmailFormat;
 import core.policy.password.Has;
@@ -19,12 +22,13 @@ public class EndPoint {
 	 * For now testing the core logic.
 	 * 
 	 */
-	
 		private ANDSecurityPolicy blockPolicies;
 		private ANDSecurityPolicy postLoginPolicies;
 		
 		private ANDPasswordPolicy passwordPolicy;
 		private EmailFormat usernamePolicy;
+		
+		private VerificationPolicy basicVerification;
 		
 		public EndPoint() {
 			//should really load execute the following based on .xml config
@@ -46,6 +50,9 @@ public class EndPoint {
 			
 			//set up username policies 
 			usernamePolicy = new EmailFormat();
+			
+			//setup verification policies
+			basicVerification = new BasicVerification();
 		}
 		
 		/**
@@ -55,7 +62,7 @@ public class EndPoint {
 			//Check if the request is blocked
 			boolean blocked = blockPolicies.handleRequest(req);
 			//Determine if the UN + PWD pair match
-			boolean verified = QueryLayerFactory.getInstance().verifyLoginDetails(req);
+			boolean verified = basicVerification.verifyLoginDetails(req);
 			//Apply security post security policies
 			boolean passedPostPolicies = postLoginPolicies.handleRequest(req);
 			//If pass checks return true
@@ -70,6 +77,15 @@ public class EndPoint {
 				
 			return passPolicies ;
 		}
+		
+		public boolean autheticateSession(Session s) {
+			
+			return false;
+		}
+		
+		
+		
+		
 		
 		
 }
