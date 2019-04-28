@@ -15,12 +15,15 @@ public class BasicBruteForce implements SecurityPolicy {
 	}
 	
 	@Override
-	public void handleRequest(LoginRequest req) {
+	public boolean handleRequest(LoginRequest req) {
 		QueryLayer q = QueryLayerFactory.getInstance();
 		int numFailed = q.getNumFailedByRequestInLastXMins(req, xMins);
 		if( numFailed >= threshold) {
 			q.blockSignature(req);
+			return false;
 		}
+		
+		return true;
 	}
 
 }

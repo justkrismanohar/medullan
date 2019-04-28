@@ -13,14 +13,17 @@ public class NConsecutiveFailedLogins implements SecurityPolicy{
 	}
 	
 	@Override
-	public void handleRequest(LoginRequest req) {
+	public boolean handleRequest(LoginRequest req) {
 		QueryLayer q = QueryLayerFactory.getInstance();
 		String userName = req.loginDetails.userName;
 		int failures = q.getNumFailedConnsecutiveByUser(userName);
 		
 		if(failures >= maxFailures) {
 			q.blockUser(userName);
+			return false;
 		}
+		
+		return true;
 	}
 
 }

@@ -136,3 +136,6 @@ org.eclipse.jface.text.BadLocationException
 
 !ENTRY org.eclipse.jdt.debug 2 0 2019-04-27 19:11:45.553
 !MESSAGE Unable to find location of java.lang.Thread.setName() in debuggee JVM, for type java.lang.Thread
+
+!ENTRY org.eclipse.jdt.debug 2 0 2019-04-27 21:12:11.373
+!MESSAGE Unable to find location of java.lang.Thread.setName() in debuggee JVM, for type java.lang.Thread
