@@ -110,41 +110,10 @@ public class MockDB implements QueryLayer {
 		this.blockedSignatures.remove(signature);
 	}
 
-//	@Override
-//	public boolean verifyLoginDetails(LoginRequest req) {
-//		String un = req.loginDetails.userName;
-//		boolean isRegistered = registeredUsers.containsKey(un);
-//		if(isRegistered) {
-//			String encryptedPassworedStored = registeredUsers.get(un);
-//			if(req.loginDetails.encryptedPassword.equals(encryptedPassworedStored)) {
-//				if(consecutiveFailedByUser.containsKey(un)) {
-//					consecutiveFailedByUser.put(un, 0);
-//				}
-//				return true;
-//			}
-//		}
-//
-//		
-//		//update failure stats
-//		if(isRegistered) {
-//			if(consecutiveFailedByUser.containsKey(un)) {
-//				consecutiveFailedByUser.put(un, consecutiveFailedByUser.get(un).intValue() +1);
-//			}
-//			else{
-//				consecutiveFailedByUser.put(un, 0);
-//			}
-//		}
-//		
-//		if(failedBySignature.containsKey(req)) {
-//			failedBySignature.get(req).add(req.dateTime);
-//		}
-//		else {
-//			failedBySignature.put(req, new ArrayList<LocalTime>());
-//		}
-//		
-//		return false;
-//		
-//	}
+	@Override
+	public void removeSession(String username) {
+		userSessions.remove(username);
+	}
 
 	@Override
 	public boolean registerUser(LoginRequest req) {

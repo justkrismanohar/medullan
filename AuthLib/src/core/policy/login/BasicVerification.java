@@ -21,6 +21,7 @@ public class BasicVerification implements VerificationPolicy{
 			if(req.loginDetails.encryptedPassword.equals(encryptedPassworedStored)) {
 				q.resetConsecutiveFailedByUser(username);
 				//register session
+				q.createSession(req);
 				return true;
 			}
 		}

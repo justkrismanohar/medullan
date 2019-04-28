@@ -4,6 +4,8 @@ import core.models.LoginDetails;
 import core.models.LoginRequest;
 import core.models.Session;
 import core.policy.login.BasicVerification;
+import core.policy.login.SessionPolicy;
+import core.policy.login.TimeoutSession;
 import core.policy.login.VerificationPolicy;
 import core.policy.password.ANDPasswordPolicy;
 import core.policy.password.EmailFormat;
@@ -29,6 +31,7 @@ public class EndPoint {
 		private EmailFormat usernamePolicy;
 		
 		private VerificationPolicy basicVerification;
+		private SessionPolicy timeoutSession;
 		
 		public EndPoint() {
 			//should really load execute the following based on .xml config
@@ -53,6 +56,9 @@ public class EndPoint {
 			
 			//setup verification policies
 			basicVerification = new BasicVerification();
+			
+			//setup session policy
+			timeoutSession = new TimeoutSession(30);
 		}
 		
 		/**
@@ -71,21 +77,15 @@ public class EndPoint {
 		
 		public boolean register(LoginRequest req) {
 			LoginDetails details = req.loginDetails;
-			boolean passPolicies = usernamePolicy.evaluatePassword(details.userName) && passwordPolicy.evaluatePassword(details.encryptedPassword);
-			if(passPolicies)
+			boolean passedPolicies= usernamePolicy.evaluatePassword(details.userName) && passwordPolicy.evaluatePassword(details.encryptedPassword);
+			if(passedPolicies)
 				QueryLayerFactory.getInstance().registerUser(req);
 				
-			return passPolicies ;
+			return passedPolicies;
 		}
 		
 		public boolean autheticateSession(Session s) {
-			
-			return false;
+			return timeoutSession.isValid(s);
 		}
-		
-		
-		
-		
-		
 		
 }

@@ -1,15 +1,11 @@
 package core.queries;
 
-
-import core.models.LoginDetails;
 import core.models.LoginRequest;
 import core.models.Session;
 
 public interface QueryLayer {
 	
 	public boolean registerUser(LoginRequest details);
-	//public boolean verifyLoginDetails(LoginRequest details);//maybe put this one level of abastraction up...
-	
 	public boolean isUserRegistered(String username);
 	public String getPasswordHash(String username);
 	public void resetConsecutiveFailedByUser(String username);
@@ -28,5 +24,6 @@ public interface QueryLayer {
 	
 	public Session getUserSession(String username);
 	public boolean createSession(LoginRequest req);
+	public void removeSession(String username);
 	
 }
