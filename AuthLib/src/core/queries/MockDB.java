@@ -57,7 +57,7 @@ public class MockDB implements QueryLayer {
 		LocalTime now = LocalTime.now().minusMinutes(xMins);
 		int count = 0;
 		for(LocalTime then : fails) {
-			if(now.compareTo(then) > 0)
+			if(now.compareTo(then) < 0)//after minusing if now occurs before then, it means then is within xMins of now
 				count++;
 		}
 		return count;
@@ -88,7 +88,7 @@ public class MockDB implements QueryLayer {
 	@Override
 	public void blockUser(String userName) {
 		this.blockedUsernames.add(userName);
-	}
+	} 
 
 	public void resetBlockSignatures() {
 		this.blockedSignatures.clear();

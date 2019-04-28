@@ -18,13 +18,17 @@ public class ANDSecurityPolicy implements SecurityPolicy{
 		this.policies.add(p);
 	}
 
+	/*
+	 * Execute all policies to update stats but the RESULT is logical AND
+	 * 
+	 */
 	@Override
 	public boolean handleRequest(LoginRequest req) {
+		boolean result = true;
 		for(SecurityPolicy s : policies)
 			if(!s.handleRequest(req))
-				return false;
-		return true;
-		
+				result = false;
+		return result;
 	}
 	
 }

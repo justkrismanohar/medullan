@@ -15,6 +15,9 @@ public class EndPoint {
 		private ANDSecurityPolicy postLoginPolicies;
 		
 		public EndPoint() {
+			
+			blockPolicies = new ANDSecurityPolicy();
+			postLoginPolicies = new ANDSecurityPolicy();
 			//should really load execute the following based on .xml config
 			blockPolicies.add(new LockoutPolicy(20));
 			blockPolicies.add(new UserAccountLockedPolicy());
@@ -28,16 +31,13 @@ public class EndPoint {
 		 */
 		public boolean login(LoginRequest req) {
 			//Check if the request is blocked
-			if(blockPolicies.handleRequest(req)) {
-				//Determine if the UN + PWD pair match
-				if(LoginDetails.verifyLoginDetails(req)) {
-					//Apply security post security policies
-					//If pass checks return true	
-					return postLoginPolicies.handleRequest(req);
-				}
-			}
-			
-			return false;
+			boolean blocked = blockPolicies.handleRequest(req);
+			//Determine if the UN + PWD pair match
+			boolean verified = LoginDetails.verifyLoginDetails(req);
+			//Apply security post security policies
+			boolean passPostPolicies = postLoginPolicies.handleRequest(req);
+			//If pass checks return true
+			return blocked && verified && passPostPolicies;
 		}
 		
 		
