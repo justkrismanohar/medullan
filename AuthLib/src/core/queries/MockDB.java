@@ -73,4 +73,10 @@ public class MockDB implements QueryLayer {
 	public void resetBlockUsernames() {
 		this.blockedUsernames.clear();
 	}
+
+	@Override
+	public void unBlockUser(String userName) {
+		this.blockedUsernames.remove(userName);
+		
+	}
 }
