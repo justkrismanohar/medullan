@@ -5,7 +5,7 @@ import core.models.LoginRequest;
 public class EndPoint {
 
 		/**
-		 * External APIs will use an EndPoint to access the libary
+		 * External APIs will use an EndPoint to access the library
 		 */
 		public boolean login(LoginRequest req) {
 			//Check if the request is blocked
