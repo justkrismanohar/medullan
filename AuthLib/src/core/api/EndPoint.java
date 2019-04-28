@@ -1,14 +1,11 @@
 package core.api;
 
-import java.util.List;
-
 import core.models.LoginDetails;
 import core.models.LoginRequest;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.BasicBruteForce;
 import core.policy.security.LockoutPolicy;
 import core.policy.security.NConsecutiveFailedLogins;
-import core.policy.security.SecurityPolicy;
 import core.policy.security.UserAccountLockedPolicy;
 
 public class EndPoint {
@@ -33,7 +30,7 @@ public class EndPoint {
 			//Check if the request is blocked
 			if(blockPolicies.handleRequest(req)) {
 				//Determine if the UN + PWD pair match
-				if(LoginDetails.verifyLoginDetails(req.loginDetails)) {
+				if(LoginDetails.verifyLoginDetails(req)) {
 					//Apply security post security policies
 					//If pass checks return true	
 					return postLoginPolicies.handleRequest(req);

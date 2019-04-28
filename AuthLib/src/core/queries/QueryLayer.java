@@ -1,11 +1,11 @@
 package core.queries;
 
-import core.models.LoginDetails;
+
 import core.models.LoginRequest;
 
 public interface QueryLayer {
 	
-	public boolean verifyLoginDetails(LoginDetails details);
+	public boolean verifyLoginDetails(LoginRequest details);
 	
 	public void blockUser(String userName);
 	public void blockSignature(LoginRequest signature);

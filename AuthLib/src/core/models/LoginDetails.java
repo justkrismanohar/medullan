@@ -7,7 +7,7 @@ public class LoginDetails {
 	public String userName;
 	
 	
-	public static boolean verifyLoginDetails(LoginDetails details) {
+	public static boolean verifyLoginDetails(LoginRequest details) {
 		return QueryLayerFactory.getInstance().verifyLoginDetails(details);
 	}
 	

@@ -1,6 +1,8 @@
 package core.queries;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import core.models.LoginDetails;
@@ -25,19 +27,40 @@ public class MockDB implements QueryLayer {
 	private List<LoginRequest> blockedSignatures;
 	private List<String> blockedUsernames;
 	
+	private HashMap<LoginRequest, List<LocalTime>> failedBySignature;
+	private HashMap<String,Integer> consecutiveFailedByUser;
+	
+	
 	public MockDB() {
 		blockedSignatures = new ArrayList<LoginRequest>();
 		blockedUsernames = new ArrayList<String>();
+		failedBySignature = new HashMap<LoginRequest,List<LocalTime>>();
+		consecutiveFailedByUser = new HashMap<String,Integer>();	
 	}
 	
 	@Override
 	public int getNumFailedConnsecutiveByUser(String userName) {
-		return 3;
+		try{
+			return consecutiveFailedByUser.get(userName).intValue();
+		}
+		catch(Throwable t) {
+			return 0;//not in hashmap
+		}
 	}
 
 	@Override
 	public int getNumFailedByRequestInLastXMins(LoginRequest signature, int xMins) {
-		return 13;
+		if(!failedBySignature.containsKey(signature))
+			return 0;
+		
+		List<LocalTime> fails = failedBySignature.get(signature);
+		LocalTime now = LocalTime.now().minusMinutes(xMins);
+		int count = 0;
+		for(LocalTime then : fails) {
+			if(now.compareTo(then) > 0)
+				count++;
+		}
+		return count;
 	}
 
 	@Override
@@ -81,7 +104,31 @@ public class MockDB implements QueryLayer {
 	}
 
 	@Override
-	public boolean verifyLoginDetails(LoginDetails details) {
-		return details.userName.equals(details.encryptedPassword);
+	public boolean verifyLoginDetails(LoginRequest req) {
+		String un = req.loginDetails.userName;
+		if(req.loginDetails.userName.equals(req.loginDetails.encryptedPassword)) {
+			if(consecutiveFailedByUser.containsKey(un)) {
+				consecutiveFailedByUser.put(un, 0);
+			}
+			return true;
+		}
+		
+		//update failure stats
+		if(consecutiveFailedByUser.containsKey(un)) {
+			consecutiveFailedByUser.put(un, consecutiveFailedByUser.get(un).intValue() +1);
+		}
+		else{
+			consecutiveFailedByUser.put(un, 0);
+		}
+		
+		if(failedBySignature.containsKey(req)) {
+			failedBySignature.get(req).add(req.dateTime);
+		}
+		else {
+			failedBySignature.put(req, new ArrayList<LocalTime>());
+		}
+		
+		return false;
+		
 	}
 }
