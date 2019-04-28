@@ -203,7 +203,7 @@ class SecurityPolicyTest {
 		SecurityPolicy bruteForce = new BasicBruteForce(10,13);
 		
 		ANDSecurityPolicy or = new ANDSecurityPolicy();
-		or.add(bruteForce);//keep order to work with tick fucntion in mock DB
+		or.add(bruteForce);//keep order to work with tick function in mock DB
 		or.add(cFailed);
 		
 		assertTrue(or.handleRequest(req));//Pass AND Pass is Pass	
