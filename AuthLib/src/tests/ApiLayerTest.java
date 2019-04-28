@@ -54,6 +54,20 @@ class ApiLayerTest {
 		req.loginDetails = anotherUser;
 		assertFalse(end.login(req));//verify with another user (new but from same signature)
 		assertTrue(QueryLayerFactory.getInstance().isSignaturetInBlockList(req));//verify at data layer
+		
 	}
 
+	
+	@Test
+	void testRegister() {
+		EndPoint end = new EndPoint();
+		LoginDetails newUser = new LoginDetails("user","user1");
+		assertFalse(end.register(newUser));
+		
+		newUser.encryptedPassword = "PaSSword5";
+		assertFalse(end.register(newUser));
+		
+		newUser.userName = "user@domain.com";
+		assertTrue(end.register(newUser));
+	}
 }

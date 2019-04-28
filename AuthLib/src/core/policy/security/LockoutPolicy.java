@@ -27,7 +27,7 @@ public class LockoutPolicy implements SecurityPolicy{
 		if(q.isSignaturetInBlockList(req)) {
 			//Determine if to unblock
 			LocalTime XMinutesAgo = LocalTime.now().minusMinutes(duration);
-			if(XMinutesAgo.compareTo(req.dateTime) > 0) {
+			if(XMinutesAgo.compareTo(req.dateTime) > 0) {//After minusing XMins if now is still bigger this means more than Xmins has passed
 				q.unblockSignature(req);;//duration passed unblock user
 				return true;
 			}

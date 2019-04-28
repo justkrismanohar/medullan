@@ -81,13 +81,15 @@ public class MockDB implements QueryLayer {
 
 	@Override
 	public void blockSignature(LoginRequest signature) {
-		blockedSignatures.add(signature);
+		if(!blockedSignatures.contains(signature)) 
+				blockedSignatures.add(signature);
 	}
 	
 
 	@Override
 	public void blockUser(String userName) {
-		this.blockedUsernames.add(userName);
+		if(!blockedUsernames.contains(userName))
+			this.blockedUsernames.add(userName);
 	} 
 
 	public void resetBlockSignatures() {
