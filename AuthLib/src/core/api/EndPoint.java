@@ -24,7 +24,7 @@ public class EndPoint {
 	 * For now testing the core logic.
 	 * 
 	 */
-		private ANDSecurityPolicy blockPolicies;
+		private ANDSecurityPolicy preLoginPolicies;
 		private ANDSecurityPolicy postLoginPolicies;
 		
 		private ANDPasswordPolicy passwordPolicy;
@@ -36,11 +36,11 @@ public class EndPoint {
 		public EndPoint() {
 			//should really load execute the following based on .xml config
 			//set up security policies
-			blockPolicies = new ANDSecurityPolicy();
+			preLoginPolicies = new ANDSecurityPolicy();
 			postLoginPolicies = new ANDSecurityPolicy();
 			
-			blockPolicies.add(new LockoutPolicy(20));
-			blockPolicies.add(new UserAccountLockedPolicy());
+			preLoginPolicies.add(new LockoutPolicy(20));
+			preLoginPolicies.add(new UserAccountLockedPolicy());
 			
 			postLoginPolicies.add(new NConsecutiveFailedLogins(3));
 			postLoginPolicies.add(new BasicBruteForce(10, 13));
@@ -66,7 +66,7 @@ public class EndPoint {
 		 */
 		public boolean login(LoginRequest req) {
 			//Check if the request is blocked
-			boolean blocked = blockPolicies.handleRequest(req);
+			boolean blocked = preLoginPolicies.handleRequest(req);
 			//Determine if the UN + PWD pair match
 			boolean verified = basicVerification.verifyLoginDetails(req);
 			//Apply security post security policies
@@ -84,8 +84,8 @@ public class EndPoint {
 			return passedPolicies;
 		}
 		
-		public boolean autheticateSession(Session s) {
-			return timeoutSession.isValid(s);
+		public boolean autheticateSession(String username) {
+			return timeoutSession.isValid(username);
 		}
 		
 }

@@ -15,15 +15,14 @@ public class TimeoutSession implements SessionPolicy{
 	}
 	
 	@Override
-	public boolean isValid(Session s) {
+	public boolean isValid(String username) {
 		QueryLayer q = QueryLayerFactory.getInstance();
-		String username = s.lastRequest.loginDetails.userName;
 		Session current = q.getUserSession(username);
 		if(current == null) return false;//no session for user
 		
 		LocalTime validTime = LocalTime.now().minusMinutes(timeout);
 		
-		if(validTime.compareTo(s.lastRequest.dateTime) > 0)
+		if(validTime.compareTo(current.lastRequest.dateTime) < 0)
 			return true;//There is still time for this session
 		
 		//Session expired 

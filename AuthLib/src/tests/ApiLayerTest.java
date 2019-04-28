@@ -10,7 +10,9 @@ import core.models.IPWrapper;
 import core.models.IPWrapper.IPCreationFailed;
 import core.models.LoginDetails;
 import core.models.LoginRequest;
+import core.models.Session;
 import core.models.UserAgentWrapper;
+import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
 class ApiLayerTest {
@@ -79,5 +81,33 @@ class ApiLayerTest {
 		
 		newUser.userName = "user@domain.com";
 		assertTrue(end.register(req));
+	}
+	
+	@Test
+	void testSession() throws IPCreationFailed {
+		//set up a request
+		IPWrapper ip1 = new IPWrapper("127.0.0.1");
+		CookieWrapper c1 = new CookieWrapper("c1","val1");
+		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
+		String username = "session1@users.com";
+		LoginDetails detailsPass = new LoginDetails(username,"USername1");
+		
+		LoginRequest req = new LoginRequest(ip1,c1,a1,detailsPass);
+		
+		EndPoint end = new EndPoint();
+		
+		end.register(req);//registers user1
+		
+		assertFalse(end.autheticateSession(username));//no session user needs to log in
+		end.login(req);
+		assertTrue(end.autheticateSession(username));//user logged in should now have a valid session
+		
+		//Simulate some time passing 
+		QueryLayer q = QueryLayerFactory.getInstance();
+		Session userSession = q.getUserSession(username);
+		userSession.lastRequest.dateTime = userSession.lastRequest.dateTime.minusMinutes(100);
+		
+		assertFalse(end.autheticateSession(username));//session should timeout
+		assertTrue(q.getUserSession(username) == null);//verify at data layer, that session was removed
 	}
 }

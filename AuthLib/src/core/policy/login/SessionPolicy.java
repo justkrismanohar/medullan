@@ -3,5 +3,5 @@ package core.policy.login;
 import core.models.Session;
 
 public interface SessionPolicy {
-	public boolean isValid(Session s);
+	public boolean isValid(String username);
 }

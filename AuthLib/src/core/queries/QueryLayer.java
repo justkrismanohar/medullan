@@ -23,7 +23,7 @@ public interface QueryLayer {
 	public int getNumFailedByRequestInLastXMins(LoginRequest signature, int xMins);
 	
 	public Session getUserSession(String username);
-	public boolean createSession(LoginRequest req);
+	public Session createSession(LoginRequest req);
 	public void removeSession(String username);
 	
 }

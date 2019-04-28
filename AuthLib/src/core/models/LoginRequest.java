@@ -29,6 +29,7 @@ public class LoginRequest {
 	public RequestStatus status;
 	public LocalTime dateTime;
 	public UUID requestID;
+	public UUID sessionID;
 	
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent) {
 		this. address = address; this.cookie = cookie; this.userAgent = userAgent;
@@ -36,6 +37,7 @@ public class LoginRequest {
 		this.status = RequestStatus.PENDING;
 		this.dateTime = LocalTime.now();
 		this.requestID = UUID.randomUUID();
+		sessionID = null;//empty
 	}
 	
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent, LoginDetails loginDetails) {
@@ -43,6 +45,7 @@ public class LoginRequest {
 		this.status = RequestStatus.PENDING;
 		this.dateTime = LocalTime.now();
 		this.requestID = UUID.randomUUID();
+		sessionID = null;//empty
 	}
 	
 	public boolean equals(LoginRequest req) {

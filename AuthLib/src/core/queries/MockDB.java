@@ -130,10 +130,11 @@ public class MockDB implements QueryLayer {
 	}
 
 	@Override
-	public boolean createSession(LoginRequest req) {
+	public Session createSession(LoginRequest req) {
 		//Assumes this is called only after verifying login details
-		userSessions.put(req.loginDetails.userName, new Session(req));
-		return true;// boolean is place holder for exceptions etc later on...
+		Session s = new Session(req);
+		userSessions.put(req.loginDetails.userName,s);
+		return s;// boolean is place holder for exceptions etc later on...
 	}
 
 	@Override
