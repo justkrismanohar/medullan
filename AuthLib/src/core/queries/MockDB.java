@@ -3,6 +3,7 @@ package core.queries;
 import java.util.ArrayList;
 import java.util.List;
 
+import core.models.LoginDetails;
 import core.models.LoginRequest;
 
 public class MockDB implements QueryLayer {
@@ -77,5 +78,10 @@ public class MockDB implements QueryLayer {
 	@Override
 	public void unblockSignature(LoginRequest signature) {
 		this.blockedSignatures.remove(signature);
+	}
+
+	@Override
+	public boolean verifyLoginDetails(LoginDetails details) {
+		return details.userName.equals(details.encryptedPassword);
 	}
 }

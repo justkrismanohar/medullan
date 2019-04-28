@@ -2,18 +2,20 @@ package core.api;
 
 import java.util.List;
 
+import core.models.LoginDetails;
 import core.models.LoginRequest;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.BasicBruteForce;
 import core.policy.security.LockoutPolicy;
 import core.policy.security.NConsecutiveFailedLogins;
 import core.policy.security.SecurityPolicy;
-import core.policy.security.UserAccountLockedPolicy;;
+import core.policy.security.UserAccountLockedPolicy;
+
 public class EndPoint {
 	
 	
-		ANDSecurityPolicy blockPolicies;
-		ANDSecurityPolicy postLoginPolicies;
+		private ANDSecurityPolicy blockPolicies;
+		private ANDSecurityPolicy postLoginPolicies;
 		
 		public EndPoint() {
 			//should really load execute the following based on .xml config
@@ -31,10 +33,11 @@ public class EndPoint {
 			//Check if the request is blocked
 			if(blockPolicies.handleRequest(req)) {
 				//Determine if the UN + PWD pair match
-				
-				//Apply security post security policies
-				//If pass checks return true	
-				return postLoginPolicies.handleRequest(req);
+				if(LoginDetails.verifyLoginDetails(req.loginDetails)) {
+					//Apply security post security policies
+					//If pass checks return true	
+					return postLoginPolicies.handleRequest(req);
+				}
 			}
 			
 			return false;
