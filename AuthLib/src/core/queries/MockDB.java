@@ -22,9 +22,11 @@ public class MockDB implements QueryLayer {
 	}
 	
 	private List<LoginRequest> blockedSignatures;
+	private List<String> blockedUsernames;
 	
 	public MockDB() {
 		blockedSignatures = new ArrayList<LoginRequest>();
+		blockedUsernames = new ArrayList<String>();
 	}
 	
 	@Override
@@ -47,6 +49,9 @@ public class MockDB implements QueryLayer {
 
 	@Override
 	public boolean isUserNameLocked(String userName) {
+		for(String s : blockedUsernames)
+			if(s.equals(userName))
+				return true;
 		return false;
 	}
 
@@ -55,8 +60,17 @@ public class MockDB implements QueryLayer {
 		blockedSignatures.add(signature);
 	}
 	
+
+	@Override
+	public void blockUser(String userName) {
+		this.blockedUsernames.add(userName);
+	}
+
 	public void resetBlockSignatures() {
 		this.blockedSignatures.clear();
 	}
-
+	
+	public void resetBlockUsernames() {
+		this.blockedUsernames.clear();
+	}
 }

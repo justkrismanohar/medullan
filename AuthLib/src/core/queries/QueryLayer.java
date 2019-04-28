@@ -4,6 +4,7 @@ import core.models.LoginRequest;
 
 public interface QueryLayer {
 	
+	public void blockUser(String userName);
 	public void blockSignature(LoginRequest signature);
 	/*
 	 * This method check should implement an event based unlocking of previously block signatures.

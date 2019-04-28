@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import core.policy.password.AND;
+import core.policy.password.ANDPasswordPolicy;
 import core.policy.password.Has;
-import core.policy.password.OR;
+import core.policy.password.ORPasswordPolicy;
 import core.policy.password.PasswordPolicy;;
 
 class PasswordPolicyTest {
@@ -44,7 +44,7 @@ class PasswordPolicyTest {
 	
 	@Test
 	void testLowerAndUpperExact() {
-		AND c = new AND();
+		ANDPasswordPolicy c = new ANDPasswordPolicy();
 		c.add(Has.upperCase(2));
 		c.add(Has.lowerCase(2));
 		String password = "TiHs";
@@ -57,7 +57,7 @@ class PasswordPolicyTest {
 	
 	@Test
 	void testAtLeastNWithAND() {
-		AND c = new AND();
+		ANDPasswordPolicy c = new ANDPasswordPolicy();
 		c.add(Has.atLeastUpperCase(2));
 		c.add(Has.atLeastLowerCase(3));
 		c.add(Has.atLeastDigit(1));
@@ -71,7 +71,7 @@ class PasswordPolicyTest {
 	
 	@Test
 	void testAtLeastNWithOR() {
-		OR c = new OR();
+		ORPasswordPolicy c = new ORPasswordPolicy();
 		c.add(Has.atLeastUpperCase(2));
 		c.add(Has.atLeastLowerCase(3));
 		c.add(Has.atLeastDigit(1));

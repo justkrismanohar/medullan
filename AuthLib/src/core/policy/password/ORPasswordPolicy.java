@@ -2,11 +2,11 @@ package core.policy.password;
 
 import java.util.ArrayList;
 
-public class AND implements PasswordPolicy{
+public class ORPasswordPolicy implements PasswordPolicy{
 	
 	private ArrayList<PasswordPolicy> list;
 	
-	public AND() {
+	public ORPasswordPolicy() {
 		list = new ArrayList<PasswordPolicy>();
 	}
 	
@@ -18,9 +18,9 @@ public class AND implements PasswordPolicy{
 	@Override
 	public boolean evaluatePassword(String password) {
 		for(PasswordPolicy p : list)
-			if(!p.evaluatePassword(password))
-				return false;
-		return true;
+			if(p.evaluatePassword(password))
+				return true;
+		return false;
 	}
 
 }
