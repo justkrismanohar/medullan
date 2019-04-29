@@ -6,6 +6,9 @@ public abstract class CompositePasswordPolicy implements PasswordPolicy {
 	
 	
 	public static CompositePasswordPolicy getInstanceOf(String type) {
+		//These checks could be automated using java reflections and a file
+		//or whatever to map String type to a class name
+		//Not necessary right now for only AND and OR types
 		if(type.equals("OR"))
 			return new ORPasswordPolicy();
 		
