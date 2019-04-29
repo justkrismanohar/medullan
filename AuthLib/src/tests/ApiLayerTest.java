@@ -17,7 +17,7 @@ import core.models.UserAgentWrapper;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-class ApiLayerTest {
+class ApiLayerTest { 
 
 	@Test
 	void testEndPoint() throws IPCreationFailed {
@@ -107,7 +107,7 @@ class ApiLayerTest {
 		//Simulate some time passing 
 		QueryLayer q = QueryLayerFactory.getInstance();
 		Session userSession = q.getUserSession(username);
-		userSession.lastRequest.dateTime = userSession.lastRequest.dateTime.minus(100,ChronoUnit.MINUTES);
+		userSession.requestTime = userSession.requestTime.minus(100,ChronoUnit.MINUTES);
 		
 		assertFalse(end.autheticateSession(username));//session should timeout
 		assertTrue(q.getUserSession(username) == null);//verify at data layer, that session was removed

@@ -24,14 +24,14 @@ public class TimeoutSession implements SessionPolicy{
 		
 		Instant validTime = Instant.now().minus(timeout,ChronoUnit.MINUTES);
 		
-		if(validTime.compareTo(current.lastRequest.dateTime) < 0)
+		if(validTime.compareTo(current.requestTime) < 0)
 			return true;//There is still time for this session 
 		
 		//Session expired 
 		//remove it
 		q.removeSession(username);
 		return false;
-	}
+	} 
 	
 	public boolean equals(Object other) {
 		if(other instanceof TimeoutSession) {
