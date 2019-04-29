@@ -6,19 +6,8 @@ import java.util.List;
 import core.models.LoginRequest;
 import core.policy.password.ANDPasswordPolicy;
 
-public class ANDSecurityPolicy implements SecurityPolicy{
+public class ANDSecurityPolicy extends CompositeSecurityPolicy{
 	
-	private List<SecurityPolicy> policies;
-	
-	
-	public ANDSecurityPolicy() {
-		policies = new ArrayList<SecurityPolicy>();
-	}
-	
-	public void add(SecurityPolicy p) {
-		this.policies.add(p);
-	}
-
 	/*
 	 * Execute all policies to update stats but the RESULT is logical AND
 	 * 
@@ -33,16 +22,7 @@ public class ANDSecurityPolicy implements SecurityPolicy{
 	}
 	
 	public boolean equals(Object o) {
-		if(o instanceof ANDSecurityPolicy) {
-			ANDSecurityPolicy other = (ANDSecurityPolicy)o;
-			int len = policies.size();
-			for(int i =0; i < len; i++) {
-				if(!policies.get(i).equals(other.policies.get(i)))
-					return false;
-			}
-			return true;
-		}
-		return false;
+		return o instanceof ANDSecurityPolicy && super.equals(o);
 	}
 	
 }

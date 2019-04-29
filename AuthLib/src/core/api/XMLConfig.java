@@ -23,6 +23,8 @@ import core.policy.password.ANDPasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.password.PasswordPolicyFactory;
 import core.policy.security.ANDSecurityPolicy;
+import core.policy.security.CompositeSecurityPolicy;
+import core.policy.security.ORSecurityPolicy;
 import core.policy.security.SecurityPolicy;
 import core.policy.security.SecurityPolicyFactory;
 import core.policy.username.UsernamePolicy;
@@ -73,16 +75,19 @@ public class XMLConfig {
 		Policies p = new Policies();
 		
 		//load session
-		p.timeoutSession = loadSession(config.getElementsByTagName("Session"));
+		p.timeoutSession = loadSession(
+				extractRootNode(config.getElementsByTagName("Session")));
 		//load prelogin
-		p.preLoginPolicies = loadLoginSecurityPolicies(config.getElementsByTagName("PreLogin"));
+		p.preLoginPolicies = loadLoginSecurityPolicies(
+				extractRootNode(config.getElementsByTagName("PreLogin")));
 		//load login
 		p.basicVerification = loadVerification(config.getElementsByTagName("Verification"));
 		p.passwordPolicy = loadPasswordPolicies(config.getElementsByTagName("Password"));
 		p.usernamePolicy = loadUsernamePolicies(config.getElementsByTagName("Username"));
 		
 		//load postlogin
-		p.postLoginPolicies = loadLoginSecurityPolicies(config.getElementsByTagName("PostLogin"));
+		p.postLoginPolicies = loadLoginSecurityPolicies(
+				extractRootNode(config.getElementsByTagName("PostLogin")));
 		
 		return p;
 	}
@@ -99,7 +104,7 @@ public class XMLConfig {
 	}
 	
 	
-	private Node extractFirstNode(NodeList l) {
+	private Node extractRootNode(NodeList l) {
 		return l.item(0);
 	}
 	
@@ -128,8 +133,9 @@ public class XMLConfig {
 		
 		return out;
 	}
-	private SessionPolicy loadSession(NodeList l) {
-		l = l.item(0).getChildNodes();
+	
+	private SessionPolicy loadSession(Node root) {
+		NodeList l = root.getChildNodes();
 		for(int i=0; i < l.getLength(); i ++) {
 			Node n = l.item(i);
 			
@@ -141,15 +147,26 @@ public class XMLConfig {
 		return null;
 	}
 	
-	private SecurityPolicy loadLoginSecurityPolicies(NodeList l) {
-		ANDSecurityPolicy out = new ANDSecurityPolicy();//This can be configured as well later
+	private SecurityPolicy loadLoginSecurityPolicies(Node root) {
+		String rootNodeName = root.getNodeName();
+		HashMap<String,String> attr = extractAttributes(root);
+		String type = attr.get("type");
+		type = (type == null ? "AND" : type);
+		CompositeSecurityPolicy out = CompositeSecurityPolicy.getInstanceOf(type);
 		
-		l = l.item(0).getChildNodes();
+		NodeList l = root.getChildNodes();
 		for(int i=0; i < l.getLength(); i ++) {
 			Node n = l.item(i);
 			
 			if(n.getNodeType() == Node.ELEMENT_NODE) {
-				out.add(SecurityPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n)));
+				if(n.getNodeName().equals(rootNodeName)) {
+					//recurse another root entry
+					out.add(loadLoginSecurityPolicies(n));
+				}
+				else {
+					//just a leaf entry
+					out.add(SecurityPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n)));
+				}
 			}
 		}
 		
