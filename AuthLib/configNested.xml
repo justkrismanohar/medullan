@@ -16,7 +16,10 @@
 		<Password>
 			<UpperCase type="atleast" n="2" />
 			<LowerCase type="atleast" n="3" />
-			<Digit type="atleast" n="1" />	
+			<Digit type="atleast" n="1" />
+			<Password type="OR">
+				<Digit type="atleast" n="10" />	
+			</Password>"	
 		</Password>"
 	</Login>
 	

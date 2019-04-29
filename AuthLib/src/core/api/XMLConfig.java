@@ -20,6 +20,7 @@ import core.policy.login.SessionPolicyFactory;
 import core.policy.login.VerificationPolicy;
 import core.policy.login.VerificationPolicyFactory;
 import core.policy.password.ANDPasswordPolicy;
+import core.policy.password.CompositePasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.password.PasswordPolicyFactory;
 import core.policy.security.ANDSecurityPolicy;
@@ -82,7 +83,9 @@ public class XMLConfig {
 				extractRootNode(config.getElementsByTagName("PreLogin")));
 		//load login
 		p.basicVerification = loadVerification(config.getElementsByTagName("Verification"));
-		p.passwordPolicy = loadPasswordPolicies(config.getElementsByTagName("Password"));
+		p.passwordPolicy = loadPasswordPolicies(
+				extractRootNode(config.getElementsByTagName("Password")));
+		
 		p.usernamePolicy = loadUsernamePolicies(config.getElementsByTagName("Username"));
 		
 		//load postlogin
@@ -118,16 +121,25 @@ public class XMLConfig {
 		return VerificationPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
 	}
 	
-	private PasswordPolicy loadPasswordPolicies(NodeList l) {
-		ANDPasswordPolicy out = new ANDPasswordPolicy();//This can be configured as well later
+	private PasswordPolicy loadPasswordPolicies(Node root) {
+		String rootNodeName = root.getNodeName();
+		HashMap<String,String> attr = extractAttributes(root);
+		String type = attr.get("type");
+		type = (type == null ? "AND" : type);
+		CompositePasswordPolicy out = CompositePasswordPolicy.getInstanceOf(type);
 		
-		l = l.item(0).getChildNodes();
+		NodeList l = root.getChildNodes();
 		for(int i=0; i < l.getLength(); i ++) {
 			Node n = l.item(i);
 			
 			if(n.getNodeType() == Node.ELEMENT_NODE) {
-				//If is another "Password node then recurse
-				out.add(PasswordPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n)));
+				if(n.getNodeName().equals(rootNodeName)) {
+					//recurse another root entry
+					out.add(loadPasswordPolicies(n));
+				}
+				else {
+					out.add(PasswordPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n)));
+				}
 			}
 		}
 		

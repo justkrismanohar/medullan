@@ -10,6 +10,7 @@ import core.policy.login.BasicVerification;
 import core.policy.login.TimeoutSession;
 import core.policy.password.ANDPasswordPolicy;
 import core.policy.password.Has;
+import core.policy.password.ORPasswordPolicy;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.BasicBruteForce;
 import core.policy.security.LockoutPolicy;
@@ -104,6 +105,10 @@ class XMLConfigTest {
 		passwordPolicy.add(Has.atLeastUpperCase(2));
 		passwordPolicy.add(Has.atLeastLowerCase(3));
 		passwordPolicy.add(Has.atLeastDigit(1));
+		ORPasswordPolicy passwordPolicyOR = new ORPasswordPolicy();
+		passwordPolicyOR.add(Has.atLeastDigit(10));
+		passwordPolicy.add(passwordPolicyOR);
+		
 		
 		//set up username policies 
 		appConfig.usernamePolicy = new EmailFormat();
