@@ -78,15 +78,19 @@ public class XMLConfig {
 		//load session
 		p.timeoutSession = loadSession(
 				extractRootNode(config.getElementsByTagName("Session")));
+		
 		//load prelogin
 		p.preLoginPolicies = loadLoginSecurityPolicies(
 				extractRootNode(config.getElementsByTagName("PreLogin")));
-		//load login
-		p.basicVerification = loadVerification(config.getElementsByTagName("Verification"));
+		
+		//load logins
+		p.basicVerification = loadVerification(
+				extractRootNode(config.getElementsByTagName("Verification")));
 		p.passwordPolicy = loadPasswordPolicies(
 				extractRootNode(config.getElementsByTagName("Password")));
 		
-		p.usernamePolicy = loadUsernamePolicies(config.getElementsByTagName("Username"));
+		p.usernamePolicy = loadUsernamePolicies(
+				extractRootNode(config.getElementsByTagName("Username")));
 		
 		//load postlogin
 		p.postLoginPolicies = loadLoginSecurityPolicies(
@@ -111,13 +115,11 @@ public class XMLConfig {
 		return l.item(0);
 	}
 	
-	private UsernamePolicy loadUsernamePolicies(NodeList l) {
-		Node n = l.item(0);
+	private UsernamePolicy loadUsernamePolicies(Node n) {
 		return UsernamePolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
 	}
 	
-	private VerificationPolicy loadVerification(NodeList l) {
-		Node n = l.item(0);
+	private VerificationPolicy loadVerification(Node n) {
 		return VerificationPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
 	}
 	
