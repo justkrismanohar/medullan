@@ -1,6 +1,7 @@
 package core.policy.security;
 
-import java.time.LocalTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import core.models.LoginRequest;
 import core.queries.QueryLayer;
@@ -26,11 +27,11 @@ public class LockoutPolicy implements SecurityPolicy{
 	
 		if(q.isSignaturetInBlockList(req)) {
 			//Determine if to unblock
-			LocalTime XMinutesAgo = LocalTime.now().minusMinutes(duration);
+			Instant XMinutesAgo = Instant.now().minus(duration,ChronoUnit.MINUTES);
 			if(XMinutesAgo.compareTo(req.dateTime) > 0) {//After minusing XMins if now is still bigger this means more than Xmins has passed
 				q.unblockSignature(req);;//duration passed unblock user
 				return true;
-			}
+			} 
 			
 			return false;//user is still blocked
 		}

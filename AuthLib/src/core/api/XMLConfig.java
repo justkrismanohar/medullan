@@ -2,6 +2,8 @@ package core.api;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -46,7 +48,9 @@ public class XMLConfig {
 	
 	
 	public static void main(String[] args) {
-		XMLConfig test = new XMLConfig("config.xml");
+		//XMLConfig test = new XMLConfig("config.xml");
+		Instant t = Instant.now();
+		System.out.println(t);
 	}
 	
 	private Document config;

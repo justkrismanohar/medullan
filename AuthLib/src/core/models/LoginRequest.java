@@ -1,6 +1,7 @@
 package core.models;
 
 import java.net.InetAddress;
+import java.time.Instant;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class LoginRequest {
 	public UserAgentWrapper userAgent;
 	public LoginDetails loginDetails;
 	public RequestStatus status;
-	public LocalTime dateTime;
+	public Instant dateTime;
 	public UUID requestID;
 	public UUID sessionID;
 	
@@ -35,7 +36,7 @@ public class LoginRequest {
 		this. address = address; this.cookie = cookie; this.userAgent = userAgent;
 		loginDetails = new LoginDetails("","");
 		this.status = RequestStatus.PENDING;
-		this.dateTime = LocalTime.now();
+		this.dateTime = Instant.now();
 		this.requestID = UUID.randomUUID();
 		sessionID = null;//empty
 	}
@@ -43,7 +44,7 @@ public class LoginRequest {
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent, LoginDetails loginDetails) {
 		this. address = address; this.cookie = cookie; this.userAgent = userAgent; this.loginDetails = loginDetails;
 		this.status = RequestStatus.PENDING;
-		this.dateTime = LocalTime.now();
+		this.dateTime = Instant.now();
 		this.requestID = UUID.randomUUID();
 		sessionID = null;//empty
 	}

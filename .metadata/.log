@@ -742,3 +742,6 @@ java.lang.IllegalArgumentException
 
 !ENTRY org.eclipse.help.base 2 0 2019-04-29 09:44:58.546
 !MESSAGE Unable to consume Lucene index from bundle 'org.eclipse.wst.sse.doc.user_1.2.0.v201901071922 [433]'. The index should be rebuilt with Lucene 7.0.0
+
+!ENTRY org.eclipse.jdt.debug 2 0 2019-04-29 12:49:27.950
+!MESSAGE Unable to find location of java.lang.Thread.setName() in debuggee JVM, for type java.lang.Thread

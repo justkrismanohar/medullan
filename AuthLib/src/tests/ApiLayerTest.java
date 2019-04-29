@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.temporal.ChronoUnit;
+
 import org.junit.jupiter.api.Test;
 
 import core.api.EndPoint;
@@ -32,7 +34,7 @@ class ApiLayerTest {
 		EndPoint end = new EndPoint();
 		
 		end.register(req);//registers user1
-		
+		 
 		assertTrue(end.login(req));
 		
 		req.loginDetails = detailsFail;
@@ -105,7 +107,7 @@ class ApiLayerTest {
 		//Simulate some time passing 
 		QueryLayer q = QueryLayerFactory.getInstance();
 		Session userSession = q.getUserSession(username);
-		userSession.lastRequest.dateTime = userSession.lastRequest.dateTime.minusMinutes(100);
+		userSession.lastRequest.dateTime = userSession.lastRequest.dateTime.minus(100,ChronoUnit.MINUTES);
 		
 		assertFalse(end.autheticateSession(username));//session should timeout
 		assertTrue(q.getUserSession(username) == null);//verify at data layer, that session was removed
