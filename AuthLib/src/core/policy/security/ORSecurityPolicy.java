@@ -25,4 +25,17 @@ public class ORSecurityPolicy implements SecurityPolicy{
 				return true;
 		return false;
 	}
+	
+	public boolean equals(Object o) {
+		if(o instanceof ORSecurityPolicy) {
+			ORSecurityPolicy other = (ORSecurityPolicy)o;
+			int len = policies.size();
+			for(int i =0; i < len; i++) {
+				if(!policies.get(i).equals(other.policies.get(i)))
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
 }

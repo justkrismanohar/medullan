@@ -25,5 +25,13 @@ public class NConsecutiveFailedLogins implements SecurityPolicy{
 		
 		return true;
 	}
+	
+	public boolean equals(Object o) {
+		if(o instanceof NConsecutiveFailedLogins) {
+			NConsecutiveFailedLogins other = (NConsecutiveFailedLogins)o;
+			return other.maxFailures == this.maxFailures;
+		}
+		return false;
+	}
 
 }

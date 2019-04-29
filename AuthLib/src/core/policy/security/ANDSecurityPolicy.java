@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.models.LoginRequest;
+import core.policy.password.ANDPasswordPolicy;
 
 public class ANDSecurityPolicy implements SecurityPolicy{
 	
@@ -29,6 +30,19 @@ public class ANDSecurityPolicy implements SecurityPolicy{
 			if(!s.handleRequest(req))
 				result = false;
 		return result;
+	}
+	
+	public boolean equals(Object o) {
+		if(o instanceof ANDSecurityPolicy) {
+			ANDSecurityPolicy other = (ANDSecurityPolicy)o;
+			int len = policies.size();
+			for(int i =0; i < len; i++) {
+				if(!policies.get(i).equals(other.policies.get(i)))
+					return false;
+			}
+			return true;
+		}
+		return false;
 	}
 	
 }

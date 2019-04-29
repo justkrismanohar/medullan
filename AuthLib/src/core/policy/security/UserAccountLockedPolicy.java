@@ -11,4 +11,8 @@ public class UserAccountLockedPolicy implements SecurityPolicy{
 		QueryLayer q = QueryLayerFactory.getInstance();
 		return !q.isUserNameLocked(req.loginDetails.userName);
 	}
+	
+	public boolean equals(Object o) {
+		return o instanceof UserAccountLockedPolicy;
+	}
 }

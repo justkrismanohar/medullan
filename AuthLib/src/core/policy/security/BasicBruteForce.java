@@ -25,5 +25,9 @@ public class BasicBruteForce implements SecurityPolicy {
 		
 		return true;
 	}
+	
+	public boolean equals(Object o) {
+		return o instanceof BasicBruteForce;
+	}
 
 }

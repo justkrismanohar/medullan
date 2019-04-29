@@ -32,5 +32,9 @@ public class BasicVerification implements VerificationPolicy{
 		
 		return false;
 	}
+	
+	public boolean equals(Object other) {
+		return other instanceof BasicVerification;
+	}
 
 }

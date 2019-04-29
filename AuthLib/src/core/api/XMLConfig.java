@@ -99,6 +99,10 @@ public class XMLConfig {
 	}
 	
 	
+	private Node extractFirstNode(NodeList l) {
+		return l.item(0);
+	}
+	
 	private UsernamePolicy loadUsernamePolicies(NodeList l) {
 		Node n = l.item(0);
 		return UsernamePolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
@@ -117,6 +121,7 @@ public class XMLConfig {
 			Node n = l.item(i);
 			
 			if(n.getNodeType() == Node.ELEMENT_NODE) {
+				//If is another "Password node then recurse
 				out.add(PasswordPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n)));
 			}
 		}

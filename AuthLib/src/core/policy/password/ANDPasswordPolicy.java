@@ -22,5 +22,18 @@ public class ANDPasswordPolicy implements PasswordPolicy{
 				return false;
 		return true;
 	}
+	
+	public boolean equals(Object o) {
+		if(o instanceof ANDPasswordPolicy) {
+			ANDPasswordPolicy other = (ANDPasswordPolicy)o;
+			int len = list.size();
+			for(int i =0; i < len; i++) {
+				if(!list.get(i).equals(other.list.get(i)))
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
 
 }

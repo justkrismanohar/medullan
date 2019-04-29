@@ -30,5 +30,13 @@ public class TimeoutSession implements SessionPolicy{
 		q.removeSession(username);
 		return false;
 	}
+	
+	public boolean equals(Object other) {
+		if(other instanceof TimeoutSession) {
+			TimeoutSession t = (TimeoutSession )other;
+			return t.timeout == this.timeout;
+		}
+		return false;
+	}
 
 }

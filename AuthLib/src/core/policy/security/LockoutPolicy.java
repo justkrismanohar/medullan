@@ -39,4 +39,14 @@ public class LockoutPolicy implements SecurityPolicy{
 	}
 	
 	
+	public boolean equals(Object o) {
+		if(o instanceof LockoutPolicy) {
+			LockoutPolicy other = (LockoutPolicy)o;
+			return other.duration == this.duration;
+		}
+		return false;
+	}
+
+	
+	
 }

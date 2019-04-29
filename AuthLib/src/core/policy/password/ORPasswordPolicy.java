@@ -22,5 +22,17 @@ public class ORPasswordPolicy implements PasswordPolicy{
 				return true;
 		return false;
 	}
-
+	
+	public boolean equals(Object o) {
+		if(o instanceof ORPasswordPolicy) {
+			ORPasswordPolicy other = (ORPasswordPolicy)o;
+			int len = list.size();
+			for(int i =0; i < len; i++) {
+				if(!list.get(i).equals(other.list.get(i)))
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
 }
