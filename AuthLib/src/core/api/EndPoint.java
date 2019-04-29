@@ -8,7 +8,6 @@ import core.policy.login.SessionPolicy;
 import core.policy.login.TimeoutSession;
 import core.policy.login.VerificationPolicy;
 import core.policy.password.ANDPasswordPolicy;
-import core.policy.password.EmailFormat;
 import core.policy.password.Has;
 import core.policy.password.PasswordPolicy;
 import core.policy.security.ANDSecurityPolicy;
@@ -17,6 +16,8 @@ import core.policy.security.LockoutPolicy;
 import core.policy.security.NConsecutiveFailedLogins;
 import core.policy.security.SecurityPolicy;
 import core.policy.security.UserAccountLockedPolicy;
+import core.policy.username.EmailFormat;
+import core.policy.username.UsernamePolicy;
 import core.queries.QueryLayerFactory;
 
 public class EndPoint {
@@ -26,16 +27,16 @@ public class EndPoint {
 	 * For now testing the core logic.
 	 * 
 	 */
-		private SecurityPolicy preLoginPolicies;
-		private SecurityPolicy postLoginPolicies;
+		Policies appConfig;
 		
-		private PasswordPolicy passwordPolicy;
-		private EmailFormat usernamePolicy;
-		
-		private VerificationPolicy basicVerification;
-		private SessionPolicy timeoutSession;
+		public EndPoint(String configFile) {
+			XMLConfig config = new XMLConfig(configFile);
+			appConfig = config.parsePolicies();
+		}
 		
 		public EndPoint() {
+			appConfig = new Policies();
+			
 			//should really load execute the following based on .xml config
 			//set up security policies
 			ANDSecurityPolicy preLoginPolicies = new ANDSecurityPolicy();
@@ -54,17 +55,17 @@ public class EndPoint {
 			passwordPolicy.add(Has.atLeastDigit(1));
 			
 			//set up username policies 
-			usernamePolicy = new EmailFormat();
+			appConfig.usernamePolicy = new EmailFormat();
 			
 			//setup verification policies
-			basicVerification = new BasicVerification();
+			appConfig.basicVerification = new BasicVerification();
 			
 			//setup session policy
-			timeoutSession = new TimeoutSession(30);
+			appConfig.timeoutSession = new TimeoutSession(30);
 			
-			this.preLoginPolicies = preLoginPolicies;
-			this.postLoginPolicies = postLoginPolicies;
-			this.passwordPolicy = passwordPolicy;
+			appConfig.preLoginPolicies = preLoginPolicies;
+			appConfig.postLoginPolicies = postLoginPolicies;
+			appConfig.passwordPolicy = passwordPolicy;
 		}
 		
 		/**
@@ -72,18 +73,19 @@ public class EndPoint {
 		 */
 		public boolean login(LoginRequest req) {
 			//Check if the request is blocked
-			boolean blocked = preLoginPolicies.handleRequest(req);
+			boolean blocked = appConfig.preLoginPolicies.handleRequest(req);
 			//Determine if the UN + PWD pair match
-			boolean verified = basicVerification.verifyLoginDetails(req);
+			boolean verified = appConfig.basicVerification.verifyLoginDetails(req);
 			//Apply security post security policies
-			boolean passedPostPolicies = postLoginPolicies.handleRequest(req);
+			boolean passedPostPolicies = appConfig.postLoginPolicies.handleRequest(req);
 			//If pass checks return true
 			return blocked && verified && passedPostPolicies;
 		}
 		
 		public boolean register(LoginRequest req) {
 			LoginDetails details = req.loginDetails;
-			boolean passedPolicies= usernamePolicy.evaluatePassword(details.userName) && passwordPolicy.evaluatePassword(details.encryptedPassword);
+			boolean passedPolicies = appConfig.usernamePolicy.evaluateUsername(details.userName) && 
+									 appConfig.passwordPolicy.evaluatePassword(details.encryptedPassword);
 			if(passedPolicies)
 				QueryLayerFactory.getInstance().registerUser(req);
 				
@@ -91,7 +93,7 @@ public class EndPoint {
 		}
 		
 		public boolean autheticateSession(String username) {
-			return timeoutSession.isValid(username);
+			return appConfig.timeoutSession.isValid(username);
 		}
 		
 }

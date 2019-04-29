@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import core.policy.password.ANDPasswordPolicy;
-import core.policy.password.EmailFormat;
 import core.policy.password.Has;
 import core.policy.password.ORPasswordPolicy;
-import core.policy.password.PasswordPolicy;;
+import core.policy.password.PasswordPolicy;
+import core.policy.username.EmailFormat;;
 
 class PasswordPolicyTest {
 
@@ -96,8 +96,8 @@ class PasswordPolicyTest {
 		String emailFail = "@gmail.com";
 		
 		EmailFormat emailPolicy = new EmailFormat();
-		assertTrue(emailPolicy.evaluatePassword(emailPass));
-		assertFalse(emailPolicy.evaluatePassword(emailFail));		
+		assertTrue(emailPolicy.evaluateUsername(emailPass));
+		assertFalse(emailPolicy.evaluateUsername(emailFail));		
 	}
 
 }

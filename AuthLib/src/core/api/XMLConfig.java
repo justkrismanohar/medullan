@@ -25,7 +25,20 @@ import core.policy.password.PasswordPolicyFactory;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.SecurityPolicy;
 import core.policy.security.SecurityPolicyFactory;
+import core.policy.username.UsernamePolicy;
+import core.policy.username.UsernamePolicyFactory;
 
+/*
+ * This class is a bit messy. XML was chosen over .properties since 
+ * can model complex relationships later (the API supports composition
+ * so it can get very complicated). While not necessary for the current
+ * client, the potential for reuse and extending is baked in...which 
+ * will save time in working with future clients...
+ * 
+ * The loadXPolicies calls can be abstracted out to be less repetitive. 
+ * Something for later I guess....
+ * 
+ */
 public class XMLConfig {
 	
 	
@@ -33,20 +46,16 @@ public class XMLConfig {
 		XMLConfig test = new XMLConfig("config.xml");
 	}
 	
+	private Document config;
+	
 	public XMLConfig(String filePath) {
 
 		try {
 			File configXML = new File(filePath);
 			DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = f.newDocumentBuilder();
-			Document config = builder.parse(configXML);
+			config = builder.parse(configXML);
 			config.getDocumentElement().normalize();
-			
-			//NodeList l = config.getElementsByTagName("Policies");
-			//printList(l);
-			loadPolicies(config);
-			
-			
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -54,6 +63,10 @@ public class XMLConfig {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	 
+	}
+	
+	public Policies parsePolicies() {
+		return loadPolicies(config);
 	}
 	
 	private Policies loadPolicies(Document config) {
@@ -66,6 +79,7 @@ public class XMLConfig {
 		//load login
 		p.basicVerification = loadVerification(config.getElementsByTagName("Verification"));
 		p.passwordPolicy = loadPasswordPolicies(config.getElementsByTagName("Password"));
+		p.usernamePolicy = loadUsernamePolicies(config.getElementsByTagName("Username"));
 		
 		//load postlogin
 		p.postLoginPolicies = loadLoginSecurityPolicies(config.getElementsByTagName("PostLogin"));
@@ -82,6 +96,12 @@ public class XMLConfig {
 			out.put(att.getNodeName(),att.getNodeValue());
 		}
 		return out;
+	}
+	
+	
+	private UsernamePolicy loadUsernamePolicies(NodeList l) {
+		Node n = l.item(0);
+		return UsernamePolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
 	}
 	
 	private VerificationPolicy loadVerification(NodeList l) {
