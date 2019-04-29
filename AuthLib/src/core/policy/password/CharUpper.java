@@ -1,6 +1,6 @@
-package core.policy;
+package core.policy.password;
 
-import core.policy.CharX;
+import core.policy.password.CharX;
 
 public class CharUpper implements CharX{
 	@Override

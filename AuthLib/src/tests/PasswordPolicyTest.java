@@ -4,10 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import core.policy.AND;
-import core.policy.Has;
-import core.policy.OR;
-import core.policy.PasswordPolicy;;
+import core.policy.password.ANDPasswordPolicy;
+import core.policy.password.Has;
+import core.policy.password.ORPasswordPolicy;
+import core.policy.password.PasswordPolicy;
+import core.policy.username.EmailFormat;;
 
 class PasswordPolicyTest {
 
@@ -44,7 +45,7 @@ class PasswordPolicyTest {
 	
 	@Test
 	void testLowerAndUpperExact() {
-		AND c = new AND();
+		ANDPasswordPolicy c = new ANDPasswordPolicy();
 		c.add(Has.upperCase(2));
 		c.add(Has.lowerCase(2));
 		String password = "TiHs";
@@ -57,7 +58,7 @@ class PasswordPolicyTest {
 	
 	@Test
 	void testAtLeastNWithAND() {
-		AND c = new AND();
+		ANDPasswordPolicy c = new ANDPasswordPolicy();
 		c.add(Has.atLeastUpperCase(2));
 		c.add(Has.atLeastLowerCase(3));
 		c.add(Has.atLeastDigit(1));
@@ -71,7 +72,7 @@ class PasswordPolicyTest {
 	
 	@Test
 	void testAtLeastNWithOR() {
-		OR c = new OR();
+		ORPasswordPolicy c = new ORPasswordPolicy();
 		c.add(Has.atLeastUpperCase(2));
 		c.add(Has.atLeastLowerCase(3));
 		c.add(Has.atLeastDigit(1));
@@ -87,6 +88,16 @@ class PasswordPolicyTest {
 		
 		password = "Tp";
 		assertFalse(c.evaluatePassword(password));
+	}
+	
+	@Test
+	void testEmailPattern(){
+		String emailPass = "justkrismanohar@gmail.com";
+		String emailFail = "@gmail.com";
+		
+		EmailFormat emailPolicy = new EmailFormat();
+		assertTrue(emailPolicy.evaluateUsername(emailPass));
+		assertFalse(emailPolicy.evaluateUsername(emailFail));		
 	}
 
 }

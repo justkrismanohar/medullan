@@ -1,8 +1,8 @@
-package core.policy;
+package core.policy.password;
 
 public class Has {
 	public static PasswordPolicy lowerCase() {
-		return new HasCheck() {
+		return new HasCheck(HasCheck.Type.LOWER_CASE) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isLowerCase(ch);
@@ -11,7 +11,7 @@ public class Has {
 	}
 	
 	public static PasswordPolicy upperCase() {
-		return new HasCheck() {
+		return new HasCheck(HasCheck.Type.UPPER_CASE) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isUpperCase(ch);
@@ -20,7 +20,7 @@ public class Has {
 	}
 	
 	public static PasswordPolicy digit() {
-		return new HasCheck() {
+		return new HasCheck(HasCheck.Type.DIGIT) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isDigit(ch);
@@ -29,7 +29,7 @@ public class Has {
 	}
 	
 	public static PasswordPolicy lowerCase(int amt) {
-		return new HasCheck(amt) {
+		return new HasCheck(amt, HasCheck.Type.LOWER_CASE) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isLowerCase(ch);
@@ -38,7 +38,7 @@ public class Has {
 	}
 	
 	public static PasswordPolicy upperCase(int amt) {
-		return new HasCheck(amt) {
+		return new HasCheck(amt, HasCheck.Type.UPPER_CASE) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isUpperCase(ch);
@@ -47,7 +47,7 @@ public class Has {
 	}
 	
 	public static PasswordPolicy digit(int amt) {
-		return new HasCheck(amt) {
+		return new HasCheck(amt, HasCheck.Type.DIGIT) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isDigit(ch);
@@ -56,7 +56,7 @@ public class Has {
 	}
 
 	public static PasswordPolicy atLeastLowerCase(int amt) {
-		return new HasCheck(amt) {
+		return new HasCheck(amt, HasCheck.Type.LOWER_CASE) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isLowerCase(ch);
@@ -70,7 +70,7 @@ public class Has {
 	}
 	
 	public static PasswordPolicy atLeastUpperCase(int amt) {
-		return new HasCheck(amt) {
+		return new HasCheck(amt, HasCheck.Type.UPPER_CASE) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isUpperCase(ch);
@@ -84,7 +84,7 @@ public class Has {
 	}
 	
 	public static PasswordPolicy atLeastDigit(int amt) {
-		return new HasCheck(amt) {
+		return new HasCheck(amt, HasCheck.Type.DIGIT) {
 			@Override
 			public boolean charIsWhatever(char ch) {
 				return Character.isDigit(ch);
