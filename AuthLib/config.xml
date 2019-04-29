@@ -7,7 +7,7 @@
 	
 	<PreLogin>
 		<Lockout duration="20"/>
-		<BlockLockedUsers />
+		<UserAccountLocked />
 	</PreLogin>
 	
 	<Login>

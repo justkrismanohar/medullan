@@ -10,10 +10,12 @@ import core.policy.login.VerificationPolicy;
 import core.policy.password.ANDPasswordPolicy;
 import core.policy.password.EmailFormat;
 import core.policy.password.Has;
+import core.policy.password.PasswordPolicy;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.BasicBruteForce;
 import core.policy.security.LockoutPolicy;
 import core.policy.security.NConsecutiveFailedLogins;
+import core.policy.security.SecurityPolicy;
 import core.policy.security.UserAccountLockedPolicy;
 import core.queries.QueryLayerFactory;
 
@@ -24,10 +26,10 @@ public class EndPoint {
 	 * For now testing the core logic.
 	 * 
 	 */
-		private ANDSecurityPolicy preLoginPolicies;
-		private ANDSecurityPolicy postLoginPolicies;
+		private SecurityPolicy preLoginPolicies;
+		private SecurityPolicy postLoginPolicies;
 		
-		private ANDPasswordPolicy passwordPolicy;
+		private PasswordPolicy passwordPolicy;
 		private EmailFormat usernamePolicy;
 		
 		private VerificationPolicy basicVerification;
@@ -36,8 +38,8 @@ public class EndPoint {
 		public EndPoint() {
 			//should really load execute the following based on .xml config
 			//set up security policies
-			preLoginPolicies = new ANDSecurityPolicy();
-			postLoginPolicies = new ANDSecurityPolicy();
+			ANDSecurityPolicy preLoginPolicies = new ANDSecurityPolicy();
+			ANDSecurityPolicy postLoginPolicies = new ANDSecurityPolicy();
 			
 			preLoginPolicies.add(new LockoutPolicy(20));
 			preLoginPolicies.add(new UserAccountLockedPolicy());
@@ -46,7 +48,7 @@ public class EndPoint {
 			postLoginPolicies.add(new BasicBruteForce(10, 13));
 			
 			//set up password policies
-			passwordPolicy = new ANDPasswordPolicy();
+			ANDPasswordPolicy passwordPolicy = new ANDPasswordPolicy();
 			passwordPolicy.add(Has.atLeastUpperCase(2));
 			passwordPolicy.add(Has.atLeastLowerCase(3));
 			passwordPolicy.add(Has.atLeastDigit(1));
@@ -59,6 +61,10 @@ public class EndPoint {
 			
 			//setup session policy
 			timeoutSession = new TimeoutSession(30);
+			
+			this.preLoginPolicies = preLoginPolicies;
+			this.postLoginPolicies = postLoginPolicies;
+			this.passwordPolicy = passwordPolicy;
 		}
 		
 		/**
