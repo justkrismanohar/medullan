@@ -2,6 +2,7 @@ package core.utils;
 
 import java.util.HashMap;
 
+import core.models.LoginRequest;
 import core.policy.username.EmailFormatUsernamePolicy;
 import core.policy.username.UsernamePolicy;
 
@@ -14,7 +15,14 @@ public class UsernamePolicyFactory {
 				return new EmailFormatUsernamePolicy();
 		}
 	
-		return null;	
+		return new UsernamePolicy() {
+			@Override
+			public boolean evaluateUsername(LoginRequest req) {
+				
+				return false;
+			}
+			
+		};	
 	}
 
 }

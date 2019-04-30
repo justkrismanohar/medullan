@@ -6,10 +6,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import core.policy.password.CompositeANDPasswordPolicy;
+import core.models.LoginRequest;
+import core.models.wrappers.IPWrapper.IPCreationFailed;
 import core.policy.password.CharHasWhateverPasswordPolicyFactory;
 import core.policy.password.CompositeORPasswordPolicy;
 import core.policy.password.PasswordPolicy;
-import core.policy.username.EmailFormatUsernamePolicy;;
+import core.policy.username.EmailFormatUsernamePolicy;
+import core.utils.LoginRequestFactory;;
 
 public class PasswordPolicyTest {
 
@@ -92,12 +95,16 @@ public class PasswordPolicyTest {
 	}
 	
 	@Test
-	public void testEmailPattern(){
-		String emailPass = "justkrismanohar@gmail.com";
-		String emailFail = "@gmail.com";
-		
+	public void emailFormatUsernamePolicyWith_validEmail_evaluatesTrue() throws IPCreationFailed{
+		LoginRequest emailPass = LoginRequestFactory.getBasicLoginRequestWithEmailAs("justkrismanohar@gmail.com");	
 		EmailFormatUsernamePolicy emailPolicy = new EmailFormatUsernamePolicy();
 		assertTrue(emailPolicy.evaluateUsername(emailPass));
+	}
+	
+	@Test
+	public void emailFormatUsernamePolicyWith_validEmail_evaluatesFalse() throws IPCreationFailed{
+		LoginRequest emailFail = LoginRequestFactory.getBasicLoginRequestWithEmailAs("@gmail.com");
+		EmailFormatUsernamePolicy emailPolicy = new EmailFormatUsernamePolicy();
 		assertFalse(emailPolicy.evaluateUsername(emailFail));		
 	}
 

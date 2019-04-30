@@ -55,7 +55,7 @@ public class EndPoint {
 		
 		public boolean register(LoginRequest req) {
 			LoginDetails details = req.loginDetails;
-			boolean passedPolicies = appConfig.usernamePolicy.evaluateUsername(details.userName) && 
+			boolean passedPolicies = appConfig.usernamePolicy.evaluateUsername(req) && 
 									 appConfig.passwordPolicy.evaluatePassword(details.encryptedPassword);
 			if(passedPolicies)
 				QueryLayerFactory.getInstance().registerUser(req);
