@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import core.policy.password.CompositeANDPasswordPolicy;
-import core.policy.password.CharHasSometingPasswordPolicyFactory;
+import core.policy.password.CharHasWhateverPasswordPolicyFactory;
 import core.policy.password.CompositeORPasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.username.EmailFormatUsernamePolicy;;
@@ -17,21 +17,21 @@ public class PasswordPolicyTest {
 	@Test
 	public void testUppercaseExact() {
 		String password = "ThisHasUpperCase";
-		PasswordPolicy p = CharHasSometingPasswordPolicyFactory.upperCase(4);
+		PasswordPolicy p = CharHasWhateverPasswordPolicyFactory.upperCase(4);
 		assertTrue(p.evaluatePassword(password));
 	}
 	
 	@Test
 	public void testNoUppercase() {
 		String password = "no_upper_case";
-		PasswordPolicy p = CharHasSometingPasswordPolicyFactory.upperCase(0);
+		PasswordPolicy p = CharHasWhateverPasswordPolicyFactory.upperCase(0);
 		assertTrue(p.evaluatePassword(password));
 	}
 	
 	@Test
 	public void testlowercaseExact() {
 		String password = "ThisHasLowerCase";
-		PasswordPolicy p = CharHasSometingPasswordPolicyFactory.lowerCase(12);
+		PasswordPolicy p = CharHasWhateverPasswordPolicyFactory.lowerCase(12);
 		assertTrue(p.evaluatePassword(password));
 	}
 	
@@ -39,7 +39,7 @@ public class PasswordPolicyTest {
 	public void testNolowercase() {
 		String password = "NO_LOWER_CASE";
 		
-		PasswordPolicy p = CharHasSometingPasswordPolicyFactory.lowerCase(0);
+		PasswordPolicy p = CharHasWhateverPasswordPolicyFactory.lowerCase(0);
 		assertTrue(p.evaluatePassword(password));
 	
 	}
@@ -47,8 +47,8 @@ public class PasswordPolicyTest {
 	@Test
 	public void testLowerAndUpperExact() {
 		CompositeANDPasswordPolicy c = new CompositeANDPasswordPolicy();
-		c.add(CharHasSometingPasswordPolicyFactory.upperCase(2));
-		c.add(CharHasSometingPasswordPolicyFactory.lowerCase(2));
+		c.add(CharHasWhateverPasswordPolicyFactory.upperCase(2));
+		c.add(CharHasWhateverPasswordPolicyFactory.lowerCase(2));
 		String password = "TiHs";
 		assertTrue(c.evaluatePassword(password));
 		
@@ -60,9 +60,9 @@ public class PasswordPolicyTest {
 	@Test
 	public void testAtLeastNWithAND() {
 		CompositeANDPasswordPolicy c = new CompositeANDPasswordPolicy();
-		c.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
-		c.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
-		c.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
+		c.add(CharHasWhateverPasswordPolicyFactory.atLeastUpperCase(2));
+		c.add(CharHasWhateverPasswordPolicyFactory.atLeastLowerCase(3));
+		c.add(CharHasWhateverPasswordPolicyFactory.atLeastDigit(1));
 		
 		String password = "ThisP1sP2";
 		assertTrue(c.evaluatePassword(password));
@@ -74,9 +74,9 @@ public class PasswordPolicyTest {
 	@Test
 	public void testAtLeastNWithOR() {
 		CompositeORPasswordPolicy c = new CompositeORPasswordPolicy();
-		c.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
-		c.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
-		c.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
+		c.add(CharHasWhateverPasswordPolicyFactory.atLeastUpperCase(2));
+		c.add(CharHasWhateverPasswordPolicyFactory.atLeastLowerCase(3));
+		c.add(CharHasWhateverPasswordPolicyFactory.atLeastDigit(1));
 		
 		String password = "ThPd";
 		assertTrue(c.evaluatePassword(password));

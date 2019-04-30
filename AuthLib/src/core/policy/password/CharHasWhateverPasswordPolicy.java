@@ -1,28 +1,28 @@
 package core.policy.password;
 
-public abstract class CharHasPasswordPolicy implements PasswordPolicy{
+public abstract class CharHasWhateverPasswordPolicy implements PasswordPolicy{
 	protected int amt;
 	public static enum Type {UPPER_CASE,LOWER_CASE,DIGIT,OTHER};
 	
 	private Type type = Type.OTHER;
 	
 	
-	public CharHasPasswordPolicy(Type t) {
+	public CharHasWhateverPasswordPolicy(Type t) {
 		this.amt = 0;
 		type =t;
 	}
-	public CharHasPasswordPolicy() {
+	public CharHasWhateverPasswordPolicy() {
 		this.amt = 0;
 	}
 	
-	public CharHasPasswordPolicy(int amt) {
+	public CharHasWhateverPasswordPolicy(int amt) {
 		this.amt = amt;
 		if(this.amt <0 ) {
 			this.amt = 0;
 		}
 	}
 	
-	public CharHasPasswordPolicy(int amt,Type t) {
+	public CharHasWhateverPasswordPolicy(int amt,Type t) {
 		this.amt = amt;
 		this.type = t;
 		if(this.amt <0 ) {
@@ -55,8 +55,8 @@ public abstract class CharHasPasswordPolicy implements PasswordPolicy{
 	}
 	
 	public boolean equals(Object other) {
-		if(other instanceof CharHasPasswordPolicy) {
-			CharHasPasswordPolicy t = (CharHasPasswordPolicy)other;
+		if(other instanceof CharHasWhateverPasswordPolicy) {
+			CharHasWhateverPasswordPolicy t = (CharHasWhateverPasswordPolicy)other;
 			return t.amt == this.amt && t.type == this.type;
 		}
 		return false;

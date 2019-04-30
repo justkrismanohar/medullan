@@ -6,7 +6,7 @@ import core.models.Session;
 import core.policy.login.BasicLoginPolicy;
 import core.policy.login.LoginPolicy;
 import core.policy.password.CompositeANDPasswordPolicy;
-import core.policy.password.CharHasSometingPasswordPolicyFactory;
+import core.policy.password.CharHasWhateverPasswordPolicyFactory;
 import core.policy.password.PasswordPolicy;
 import core.policy.security.CompositeANDSecurityPolicy;
 import core.policy.security.BasicBruteForceSecurityPolicy;
@@ -50,9 +50,9 @@ public class EndPoint {
 			
 			//set up password policies
 			CompositeANDPasswordPolicy passwordPolicy = new CompositeANDPasswordPolicy();
-			passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
-			passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
-			passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
+			passwordPolicy.add(CharHasWhateverPasswordPolicyFactory.atLeastUpperCase(2));
+			passwordPolicy.add(CharHasWhateverPasswordPolicyFactory.atLeastLowerCase(3));
+			passwordPolicy.add(CharHasWhateverPasswordPolicyFactory.atLeastDigit(1));
 			
 			//set up username policies 
 			appConfig.usernamePolicy = new EmailFormatUsernamePolicy();
