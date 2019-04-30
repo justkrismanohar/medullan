@@ -1,13 +1,17 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+
 
 import core.models.CookieWrapper;
 import core.models.IPWrapper;
@@ -24,10 +28,10 @@ import core.policy.security.SecurityPolicy;
 import core.queries.MockDB;
 import core.queries.QueryLayer;
 
-class SecurityPolicyTest {
+public class SecurityPolicyTest {
 
 	@Test
-	void testBasicBruteForce() throws IPCreationFailed {
+	public void testBasicBruteForce() throws IPCreationFailed {
 		//Set up mockDB specifics for this test 
 		MockDB q = new MockDB() {
 			private int [] simulatedFailuresInLastXMins = {23,0};//force fail login, then force pass login
@@ -71,7 +75,7 @@ class SecurityPolicyTest {
 
 	
 	@Test
-	void testConsecutiveFailedLogins() throws IPCreationFailed {
+	public void testConsecutiveFailedLogins() throws IPCreationFailed {
 		//Set up mockDB specifics for this test 
 		MockDB q = new MockDB() {
 			private int [] simulatedFailedConsecutiveLogins = {0,3};//force pass login, then force fail login
@@ -117,7 +121,7 @@ class SecurityPolicyTest {
 	
 	
 	@Test
-	void testORSecurityPolicy() throws IPCreationFailed {
+	public void testORSecurityPolicy() throws IPCreationFailed {
 		//Set up mockDB specifics for this test 
 		MockDB q = new MockDB() {
 			private int [] simulatedFailedConsecutiveLogins = {3,0,0};//Fail, Pass, Pass
@@ -170,7 +174,7 @@ class SecurityPolicyTest {
 	}
 	
 	@Test
-	void testANDSecurityPolicy() throws IPCreationFailed {
+	public void testANDSecurityPolicy() throws IPCreationFailed {
 		//Set up mockDB specifics for this test 
 		MockDB q = new MockDB() {
 			private int [] simulatedFailedConsecutiveLogins = {0,3,3};//Pass, Fail, Fail
@@ -222,7 +226,7 @@ class SecurityPolicyTest {
 	}
 	
 	@Test
-	void testLockoutPolicy() throws IPCreationFailed {
+	public void testLockoutPolicy() throws IPCreationFailed {
 		
 		MockDB q = new MockDB();
 		MockDB.setMockDB(q);//quick and dirty something just for testing

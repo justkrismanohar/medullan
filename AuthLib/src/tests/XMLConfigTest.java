@@ -1,16 +1,17 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 import core.api.Policies;
 import core.api.XMLConfig;
 import core.policy.login.BasicVerification;
 import core.policy.login.TimeoutSession;
-import core.policy.password.ANDPasswordPolicy;
+import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.Has;
-import core.policy.password.ORPasswordPolicy;
+import core.policy.password.ORCompositePasswordPolicy;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.BasicBruteForce;
 import core.policy.security.LockoutPolicy;
@@ -19,10 +20,10 @@ import core.policy.security.ORSecurityPolicy;
 import core.policy.security.UserAccountLockedPolicy;
 import core.policy.username.EmailFormat;
 
-class XMLConfigTest {
+public class XMLConfigTest {
 
 	@Test
-	void testSimpleConfigFile() {
+	public void testSimpleConfigFile() {
 		//load app Polices to compare with 
 		Policies appConfig = setupAppPolicies();
 		XMLConfig xmlFile = new XMLConfig("config.xml");
@@ -48,7 +49,7 @@ class XMLConfigTest {
 		postLoginPolicies.add(new BasicBruteForce(10, 13));
 		
 		//set up password policies
-		ANDPasswordPolicy passwordPolicy = new ANDPasswordPolicy();
+		ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
 		passwordPolicy.add(Has.atLeastUpperCase(2));
 		passwordPolicy.add(Has.atLeastLowerCase(3));
 		passwordPolicy.add(Has.atLeastDigit(1));
@@ -70,7 +71,7 @@ class XMLConfigTest {
 	}
 	
 	@Test
-	void testNestedConfigFile() {
+	public void testNestedConfigFile() {
 		//load app Polices to compare with 
 		Policies appConfig = setupNestedAppPolicies();
 		XMLConfig xmlFile = new XMLConfig("configNested.xml");
@@ -101,11 +102,11 @@ class XMLConfigTest {
 		
 		
 		//set up password policies
-		ANDPasswordPolicy passwordPolicy = new ANDPasswordPolicy();
+		ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
 		passwordPolicy.add(Has.atLeastUpperCase(2));
 		passwordPolicy.add(Has.atLeastLowerCase(3));
 		passwordPolicy.add(Has.atLeastDigit(1));
-		ORPasswordPolicy passwordPolicyOR = new ORPasswordPolicy();
+		ORCompositePasswordPolicy passwordPolicyOR = new ORCompositePasswordPolicy();
 		passwordPolicyOR.add(Has.atLeastDigit(10));
 		passwordPolicy.add(passwordPolicyOR);
 		

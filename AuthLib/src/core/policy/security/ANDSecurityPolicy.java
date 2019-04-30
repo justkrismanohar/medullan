@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.models.LoginRequest;
-import core.policy.password.ANDPasswordPolicy;
+import core.policy.password.ANDCompositePasswordPolicy;
 
 public class ANDSecurityPolicy extends CompositeSecurityPolicy{
 	

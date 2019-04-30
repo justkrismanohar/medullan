@@ -1,4 +1,4 @@
 package core.policy.password;
-public interface CharX{
+public interface CharIsSomethingPasswordPolicy{
 	boolean charIsWhatever(char c);
 }

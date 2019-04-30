@@ -19,7 +19,7 @@ import core.policy.login.SessionPolicy;
 import core.policy.login.SessionPolicyFactory;
 import core.policy.login.VerificationPolicy;
 import core.policy.login.VerificationPolicyFactory;
-import core.policy.password.ANDPasswordPolicy;
+import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.CompositePasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.password.PasswordPolicyFactory;

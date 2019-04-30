@@ -10,10 +10,10 @@ public abstract class CompositePasswordPolicy implements PasswordPolicy {
 		//or whatever to map String type to a class name
 		//Not necessary right now for only AND and OR types
 		if(type.equals("OR"))
-			return new ORPasswordPolicy();
+			return new ORCompositePasswordPolicy();
 		
 		//Default maybe throw and error later
-		return new ANDPasswordPolicy();
+		return new ANDCompositePasswordPolicy();
 	}
 	
 	protected ArrayList<PasswordPolicy> list;

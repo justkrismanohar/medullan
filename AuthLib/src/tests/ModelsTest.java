@@ -1,11 +1,9 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import core.models.CookieWrapper;
 import core.models.IPWrapper;
@@ -13,10 +11,10 @@ import core.models.IPWrapper.IPCreationFailed;
 import core.models.LoginRequest;
 import core.models.UserAgentWrapper;
 
-class ModelsTest {
+public class ModelsTest {
 
 	@Test
-	void testIPCreation() throws IPCreationFailed {
+	public void testIPCreation() throws IPCreationFailed {
 		IPWrapper other = new IPWrapper("127.0.0.1");
 		IPWrapper address = new IPWrapper("127.0.0.1");
 		assertTrue(address.equals(other));
@@ -24,7 +22,7 @@ class ModelsTest {
 
 	
 	@Test
-	void testCookieCreation() {
+	public void testCookieCreation() {
 		CookieWrapper c1 = new CookieWrapper("c1","val1");
 		CookieWrapper c2 = new CookieWrapper("c1","val1");
 		assertTrue(c1.equals(c2));
@@ -33,7 +31,7 @@ class ModelsTest {
 	}
 	
 	@Test
-	void testUserAgentCreation() {
+	public void testUserAgentCreation() {
 		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		UserAgentWrapper a2 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		assertTrue(a1.equals(a2));
@@ -42,7 +40,7 @@ class ModelsTest {
 	}
 	
 	@Test
-	void testLoginRequest() throws IPCreationFailed {
+	public void testLoginRequest() throws IPCreationFailed {
 		
 		IPWrapper ip1 = new IPWrapper("127.0.0.1");
 		CookieWrapper c1 = new CookieWrapper("c1","val1");

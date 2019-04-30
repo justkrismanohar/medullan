@@ -1,8 +1,10 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
 
 import core.api.EndPoint;
 import core.models.CookieWrapper;
@@ -15,10 +17,10 @@ import core.models.UserAgentWrapper;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-class ApiLayerTest {
+public class ApiLayerTest {
 
 	@Test
-	void testEndPoint() throws IPCreationFailed {
+	public void testEndPoint() throws IPCreationFailed {
 		
 		//set up a request
 		IPWrapper ip1 = new IPWrapper("127.0.0.1");
@@ -63,7 +65,7 @@ class ApiLayerTest {
 
 	
 	@Test
-	void testRegister() throws IPCreationFailed {
+	public void testRegister() throws IPCreationFailed {
 		EndPoint end = new EndPoint();
 		
 		//set up a request
@@ -84,7 +86,7 @@ class ApiLayerTest {
 	}
 	
 	@Test
-	void testSession() throws IPCreationFailed {
+	public void testSession() throws IPCreationFailed {
 		//set up a request
 		IPWrapper ip1 = new IPWrapper("127.0.0.1");
 		CookieWrapper c1 = new CookieWrapper("c1","val1");

@@ -1,41 +1,42 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import core.policy.password.ANDPasswordPolicy;
+import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.Has;
-import core.policy.password.ORPasswordPolicy;
+import core.policy.password.ORCompositePasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.username.EmailFormat;;
 
-class PasswordPolicyTest {
+public class PasswordPolicyTest {
 
 	
 	@Test
-	void testUppercaseExact() {
+	public void testUppercaseExact() {
 		String password = "ThisHasUpperCase";
 		PasswordPolicy p = Has.upperCase(4);
 		assertTrue(p.evaluatePassword(password));
 	}
 	
 	@Test
-	void testNoUppercase() {
+	public void testNoUppercase() {
 		String password = "no_upper_case";
 		PasswordPolicy p = Has.upperCase(0);
 		assertTrue(p.evaluatePassword(password));
 	}
 	
 	@Test
-	void testlowercaseExact() {
+	public void testlowercaseExact() {
 		String password = "ThisHasLowerCase";
 		PasswordPolicy p = Has.lowerCase(12);
 		assertTrue(p.evaluatePassword(password));
 	}
 	
 	@Test
-	void testNolowercase() {
+	public void testNolowercase() {
 		String password = "NO_LOWER_CASE";
 		
 		PasswordPolicy p = Has.lowerCase(0);
@@ -44,8 +45,8 @@ class PasswordPolicyTest {
 	}
 	
 	@Test
-	void testLowerAndUpperExact() {
-		ANDPasswordPolicy c = new ANDPasswordPolicy();
+	public void testLowerAndUpperExact() {
+		ANDCompositePasswordPolicy c = new ANDCompositePasswordPolicy();
 		c.add(Has.upperCase(2));
 		c.add(Has.lowerCase(2));
 		String password = "TiHs";
@@ -57,8 +58,8 @@ class PasswordPolicyTest {
 	}
 	
 	@Test
-	void testAtLeastNWithAND() {
-		ANDPasswordPolicy c = new ANDPasswordPolicy();
+	public void testAtLeastNWithAND() {
+		ANDCompositePasswordPolicy c = new ANDCompositePasswordPolicy();
 		c.add(Has.atLeastUpperCase(2));
 		c.add(Has.atLeastLowerCase(3));
 		c.add(Has.atLeastDigit(1));
@@ -71,8 +72,8 @@ class PasswordPolicyTest {
 	}
 	
 	@Test
-	void testAtLeastNWithOR() {
-		ORPasswordPolicy c = new ORPasswordPolicy();
+	public void testAtLeastNWithOR() {
+		ORCompositePasswordPolicy c = new ORCompositePasswordPolicy();
 		c.add(Has.atLeastUpperCase(2));
 		c.add(Has.atLeastLowerCase(3));
 		c.add(Has.atLeastDigit(1));
@@ -91,7 +92,7 @@ class PasswordPolicyTest {
 	}
 	
 	@Test
-	void testEmailPattern(){
+	public void testEmailPattern(){
 		String emailPass = "justkrismanohar@gmail.com";
 		String emailFail = "@gmail.com";
 		

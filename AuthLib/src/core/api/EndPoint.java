@@ -7,7 +7,7 @@ import core.policy.login.BasicVerification;
 import core.policy.login.SessionPolicy;
 import core.policy.login.TimeoutSession;
 import core.policy.login.VerificationPolicy;
-import core.policy.password.ANDPasswordPolicy;
+import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.Has;
 import core.policy.password.PasswordPolicy;
 import core.policy.security.ANDSecurityPolicy;
@@ -49,7 +49,7 @@ public class EndPoint {
 			postLoginPolicies.add(new BasicBruteForce(10, 13));
 			
 			//set up password policies
-			ANDPasswordPolicy passwordPolicy = new ANDPasswordPolicy();
+			ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
 			passwordPolicy.add(Has.atLeastUpperCase(2));
 			passwordPolicy.add(Has.atLeastLowerCase(3));
 			passwordPolicy.add(Has.atLeastDigit(1));
