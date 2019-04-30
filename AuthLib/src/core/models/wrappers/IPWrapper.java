@@ -31,6 +31,6 @@ public class IPWrapper {
 	}
 	
 	public boolean equals(IPWrapper other) {
-		return other.address.equals(this.address);
+		return other.address.getHostAddress().equals(this.address.getHostAddress());
 	}
 }

@@ -53,8 +53,12 @@ public class LoginRequest {
 		sessionID = null;//empty
 	}
 	
-	public boolean equals(LoginRequest req) {
-		return address.equals(req.address) && cookie.equals(req.cookie) && userAgent.equals(req.userAgent);
+	public boolean equals(Object o) {
+		if(o instanceof LoginRequest) {
+			LoginRequest req = (LoginRequest)o;
+			return address.equals(req.address) && cookie.equals(req.cookie) && userAgent.equals(req.userAgent);
+		}
+		return false;
 	}
 
 }

@@ -57,10 +57,21 @@ public class MockDB implements QueryLayer {
 
 	@Override
 	public int getNumFailedByRequestInLastXMins(LoginRequest signature, int xMins) {
-		if(!failedBySignature.containsKey(signature))
-			return 0;
+		List<Instant> fails;
+		if(!failedBySignature.containsKey(signature)) {
+			//hascode .equals madenss
+			Object value = containsFindValueFromEqualKey(failedBySignature,signature);
+			if(value !=null) {
+				fails = (List<Instant>)value;
+			}
+			else {
+				return 0;
+			}
+		}
+		else {
+			fails = failedBySignature.get(signature);
+		}
 		
-		List<Instant> fails = failedBySignature.get(signature);
 		Instant now = Instant.now().minus(xMins,ChronoUnit.MINUTES);
 		int count = 0;
 		for(Instant then : fails) {
@@ -165,11 +176,34 @@ public class MockDB implements QueryLayer {
 			consecutiveFailedByUser.put(username, 0);
 		}
 	}
-
+	
+	/*
+	 * 
+	 * Hashcode .equals madness
+	 */
+	
+	private Object containsFindValueFromEqualKey(HashMap map, Object key) {
+		Object[] keys = map.keySet().toArray();
+		Object[] values = map.values().toArray();
+		Object other;
+		for(int i=0; i < keys.length; i++) {
+			other = keys[i];
+			if(other.equals(key))
+				return values[i];
+		}
+		return null;
+	}
+	
 	@Override
 	public void recordFailedLogonFromSignature(LoginRequest signature) {
 		if(failedBySignature.containsKey(signature)) {
 			failedBySignature.get(signature).add(signature.dateTime);
+		}
+		//Hashcode vs .equals madness
+		Object value = containsFindValueFromEqualKey(failedBySignature,signature);
+		if(value !=null) {
+			List<Instant> list = (List<Instant>)value;
+			list.add(signature.dateTime);
 		}
 		else {
 			failedBySignature.put(signature, new ArrayList<Instant>());
