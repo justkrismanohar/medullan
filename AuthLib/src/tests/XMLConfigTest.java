@@ -5,29 +5,29 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import core.api.Policies;
-import core.api.XMLConfig;
-import core.policy.login.BasicVerification;
-import core.policy.login.TimeoutSession;
+import core.api.AppPolicies;
+import core.api.XMLConfigParser;
+import core.policy.login.BasicLoginPolicy;
 import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.CharHasSometingPasswordPolicyFactory;
 import core.policy.password.ORCompositePasswordPolicy;
-import core.policy.security.ANDSecurityPolicy;
-import core.policy.security.BasicBruteForce;
-import core.policy.security.LockoutPolicy;
-import core.policy.security.NConsecutiveFailedLogins;
-import core.policy.security.ORSecurityPolicy;
-import core.policy.security.UserAccountLockedPolicy;
-import core.policy.username.EmailFormat;
+import core.policy.security.ANDCompositeSecurityPolicy;
+import core.policy.security.BasicBruteForceSecurityPolicy;
+import core.policy.security.LockoutSecurityPolicy;
+import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
+import core.policy.security.ORCompositeSecurityPolicy;
+import core.policy.security.UserAccountLockedSecurityPolicy;
+import core.policy.session.TimeoutSessionSessionPolicy;
+import core.policy.username.EmailFormatUsernamePolicy;
 
 public class XMLConfigTest {
 
 	@Test
 	public void testSimpleConfigFile() {
 		//load app Polices to compare with 
-		Policies appConfig = setupAppPolicies();
-		XMLConfig xmlFile = new XMLConfig("config.xml");
-		Policies fileConfig = xmlFile.parsePolicies();
+		AppPolicies appConfig = setupAppPolicies();
+		XMLConfigParser xmlFile = new XMLConfigParser("config.xml");
+		AppPolicies fileConfig = xmlFile.parsePolicies();
 		assertTrue(appConfig.timeoutSession.equals(fileConfig.timeoutSession));
 		assertTrue(appConfig.basicVerification.equals(fileConfig.basicVerification));
 		assertTrue(appConfig.passwordPolicy.equals(fileConfig.passwordPolicy));
@@ -36,17 +36,17 @@ public class XMLConfigTest {
 		assertTrue(appConfig.preLoginPolicies.equals(fileConfig.preLoginPolicies));
 	}
 
-	private Policies setupAppPolicies() {
-		Policies appConfig = new Policies();
+	private AppPolicies setupAppPolicies() {
+		AppPolicies appConfig = new AppPolicies();
 		
-		ANDSecurityPolicy preLoginPolicies = new ANDSecurityPolicy();
-		ANDSecurityPolicy postLoginPolicies = new ANDSecurityPolicy();
+		ANDCompositeSecurityPolicy preLoginPolicies = new ANDCompositeSecurityPolicy();
+		ANDCompositeSecurityPolicy postLoginPolicies = new ANDCompositeSecurityPolicy();
 		
-		preLoginPolicies.add(new LockoutPolicy(20));
-		preLoginPolicies.add(new UserAccountLockedPolicy());
+		preLoginPolicies.add(new LockoutSecurityPolicy(20));
+		preLoginPolicies.add(new UserAccountLockedSecurityPolicy());
 		
-		postLoginPolicies.add(new NConsecutiveFailedLogins(3));
-		postLoginPolicies.add(new BasicBruteForce(10, 13));
+		postLoginPolicies.add(new NConsecutiveFailedLoginsSecurityPolicy(3));
+		postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
 		
 		//set up password policies
 		ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
@@ -55,13 +55,13 @@ public class XMLConfigTest {
 		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
 		
 		//set up username policies 
-		appConfig.usernamePolicy = new EmailFormat();
+		appConfig.usernamePolicy = new EmailFormatUsernamePolicy();
 		
 		//setup verification policies
-		appConfig.basicVerification = new BasicVerification();
+		appConfig.basicVerification = new BasicLoginPolicy();
 		
 		//setup session policy
-		appConfig.timeoutSession = new TimeoutSession(30);
+		appConfig.timeoutSession = new TimeoutSessionSessionPolicy(30);
 		
 		appConfig.preLoginPolicies = preLoginPolicies;
 		appConfig.postLoginPolicies = postLoginPolicies;
@@ -73,9 +73,9 @@ public class XMLConfigTest {
 	@Test
 	public void testNestedConfigFile() {
 		//load app Polices to compare with 
-		Policies appConfig = setupNestedAppPolicies();
-		XMLConfig xmlFile = new XMLConfig("configNested.xml");
-		Policies fileConfig = xmlFile.parsePolicies();
+		AppPolicies appConfig = setupNestedAppPolicies();
+		XMLConfigParser xmlFile = new XMLConfigParser("configNested.xml");
+		AppPolicies fileConfig = xmlFile.parsePolicies();
 		assertTrue(appConfig.timeoutSession.equals(fileConfig.timeoutSession));
 		assertTrue(appConfig.basicVerification.equals(fileConfig.basicVerification));
 		assertTrue(appConfig.passwordPolicy.equals(fileConfig.passwordPolicy));
@@ -84,20 +84,20 @@ public class XMLConfigTest {
 		assertTrue(appConfig.preLoginPolicies.equals(fileConfig.preLoginPolicies));
 	}
 	
-	private Policies setupNestedAppPolicies() {
-		Policies appConfig = new Policies();
+	private AppPolicies setupNestedAppPolicies() {
+		AppPolicies appConfig = new AppPolicies();
 		
-		ANDSecurityPolicy preLoginPolicies = new ANDSecurityPolicy();
-		ANDSecurityPolicy postLoginPolicies = new ANDSecurityPolicy();
+		ANDCompositeSecurityPolicy preLoginPolicies = new ANDCompositeSecurityPolicy();
+		ANDCompositeSecurityPolicy postLoginPolicies = new ANDCompositeSecurityPolicy();
 		
-		preLoginPolicies.add(new LockoutPolicy(20));
-		preLoginPolicies.add(new UserAccountLockedPolicy());
+		preLoginPolicies.add(new LockoutSecurityPolicy(20));
+		preLoginPolicies.add(new UserAccountLockedSecurityPolicy());
 		
-		postLoginPolicies.add(new NConsecutiveFailedLogins(3));
-		postLoginPolicies.add(new BasicBruteForce(10, 13));
-		ORSecurityPolicy postLoginPoliciesOR = new ORSecurityPolicy();
-		postLoginPoliciesOR.add(new NConsecutiveFailedLogins(2));
-		postLoginPoliciesOR.add(new BasicBruteForce(7, 9));
+		postLoginPolicies.add(new NConsecutiveFailedLoginsSecurityPolicy(3));
+		postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
+		ORCompositeSecurityPolicy postLoginPoliciesOR = new ORCompositeSecurityPolicy();
+		postLoginPoliciesOR.add(new NConsecutiveFailedLoginsSecurityPolicy(2));
+		postLoginPoliciesOR.add(new BasicBruteForceSecurityPolicy(7, 9));
 		postLoginPolicies.add(postLoginPoliciesOR);
 		
 		
@@ -112,13 +112,13 @@ public class XMLConfigTest {
 		
 		
 		//set up username policies 
-		appConfig.usernamePolicy = new EmailFormat();
+		appConfig.usernamePolicy = new EmailFormatUsernamePolicy();
 		
 		//setup verification policies
-		appConfig.basicVerification = new BasicVerification();
+		appConfig.basicVerification = new BasicLoginPolicy();
 		
 		//setup session policy
-		appConfig.timeoutSession = new TimeoutSession(30);
+		appConfig.timeoutSession = new TimeoutSessionSessionPolicy(30);
 		
 		appConfig.preLoginPolicies = preLoginPolicies;
 		appConfig.postLoginPolicies = postLoginPolicies;

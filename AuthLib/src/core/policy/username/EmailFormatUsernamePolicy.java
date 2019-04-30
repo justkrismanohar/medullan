@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import core.policy.password.PasswordPolicy;
 
-public class EmailFormat implements UsernamePolicy{
+public class EmailFormatUsernamePolicy implements UsernamePolicy{
 
 	@Override
 	public boolean evaluateUsername(String username) {

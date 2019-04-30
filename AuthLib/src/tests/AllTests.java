@@ -16,7 +16,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 public class AllTests {
 	   
-   private static final Logger LOGGER = LogManager.getLogger(AllTests.class);
+   private static final Logger log = LogManager.getLogger(AllTests.class);
    public static void main(String[] args) {
 	      Result result = JUnitCore.runClasses(AllTests.class);
 
@@ -24,7 +24,8 @@ public class AllTests {
 	         System.out.println(failure.toString());
 	      }
 			
-	      System.out.println(result.wasSuccessful());
-	      LOGGER.warn("Hi");
+	      if(result.wasSuccessful())
+	      	log.info("All Tests Passed");
+	      
    }
 }

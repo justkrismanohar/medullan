@@ -3,20 +3,20 @@ package core.api;
 import core.models.LoginDetails;
 import core.models.LoginRequest;
 import core.models.Session;
-import core.policy.login.BasicVerification;
-import core.policy.login.SessionPolicy;
-import core.policy.login.TimeoutSession;
-import core.policy.login.VerificationPolicy;
+import core.policy.login.BasicLoginPolicy;
+import core.policy.login.LoginPolicy;
 import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.CharHasSometingPasswordPolicyFactory;
 import core.policy.password.PasswordPolicy;
-import core.policy.security.ANDSecurityPolicy;
-import core.policy.security.BasicBruteForce;
-import core.policy.security.LockoutPolicy;
-import core.policy.security.NConsecutiveFailedLogins;
+import core.policy.security.ANDCompositeSecurityPolicy;
+import core.policy.security.BasicBruteForceSecurityPolicy;
+import core.policy.security.LockoutSecurityPolicy;
+import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
 import core.policy.security.SecurityPolicy;
-import core.policy.security.UserAccountLockedPolicy;
-import core.policy.username.EmailFormat;
+import core.policy.security.UserAccountLockedSecurityPolicy;
+import core.policy.session.SessionPolicy;
+import core.policy.session.TimeoutSessionSessionPolicy;
+import core.policy.username.EmailFormatUsernamePolicy;
 import core.policy.username.UsernamePolicy;
 import core.queries.QueryLayerFactory;
 
@@ -27,26 +27,26 @@ public class EndPoint {
 	 * For now testing the core logic.
 	 * 
 	 */
-		Policies appConfig;
+		AppPolicies appConfig;
 		
 		public EndPoint(String configFile) {
-			XMLConfig config = new XMLConfig(configFile);
+			XMLConfigParser config = new XMLConfigParser(configFile);
 			appConfig = config.parsePolicies();
 		}
 		
 		public EndPoint() {
-			appConfig = new Policies();
+			appConfig = new AppPolicies();
 			
 			//should really load execute the following based on .xml config
 			//set up security policies
-			ANDSecurityPolicy preLoginPolicies = new ANDSecurityPolicy();
-			ANDSecurityPolicy postLoginPolicies = new ANDSecurityPolicy();
+			ANDCompositeSecurityPolicy preLoginPolicies = new ANDCompositeSecurityPolicy();
+			ANDCompositeSecurityPolicy postLoginPolicies = new ANDCompositeSecurityPolicy();
 			
-			preLoginPolicies.add(new LockoutPolicy(20));
-			preLoginPolicies.add(new UserAccountLockedPolicy());
+			preLoginPolicies.add(new LockoutSecurityPolicy(20));
+			preLoginPolicies.add(new UserAccountLockedSecurityPolicy());
 			
-			postLoginPolicies.add(new NConsecutiveFailedLogins(3));
-			postLoginPolicies.add(new BasicBruteForce(10, 13));
+			postLoginPolicies.add(new NConsecutiveFailedLoginsSecurityPolicy(3));
+			postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
 			
 			//set up password policies
 			ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
@@ -55,13 +55,13 @@ public class EndPoint {
 			passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
 			
 			//set up username policies 
-			appConfig.usernamePolicy = new EmailFormat();
+			appConfig.usernamePolicy = new EmailFormatUsernamePolicy();
 			
 			//setup verification policies
-			appConfig.basicVerification = new BasicVerification();
+			appConfig.basicVerification = new BasicLoginPolicy();
 			
 			//setup session policy
-			appConfig.timeoutSession = new TimeoutSession(30);
+			appConfig.timeoutSession = new TimeoutSessionSessionPolicy(30);
 			
 			appConfig.preLoginPolicies = preLoginPolicies;
 			appConfig.postLoginPolicies = postLoginPolicies;

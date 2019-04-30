@@ -4,7 +4,7 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class UserAccountLockedPolicy implements SecurityPolicy{
+public class UserAccountLockedSecurityPolicy implements SecurityPolicy{
 
 	@Override
 	public boolean handleRequest(LoginRequest req) {
@@ -13,6 +13,6 @@ public class UserAccountLockedPolicy implements SecurityPolicy{
 	}
 	
 	public boolean equals(Object o) {
-		return o instanceof UserAccountLockedPolicy;
+		return o instanceof UserAccountLockedSecurityPolicy;
 	}
 }

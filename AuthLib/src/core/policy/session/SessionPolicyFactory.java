@@ -1,4 +1,4 @@
-package core.policy.login;
+package core.policy.session;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -12,7 +12,7 @@ public class SessionPolicyFactory {
 	public static SessionPolicy getInstance(String name, HashMap<String,String> attr) {
 		if(name.equals("Timeout")) {
 			int max = Integer.parseInt(attr.get("max"));
-			return new TimeoutSession(max);
+			return new TimeoutSessionSessionPolicy(max);
 		}
 		return null;
 	}

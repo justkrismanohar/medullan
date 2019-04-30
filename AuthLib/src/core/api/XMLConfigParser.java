@@ -15,19 +15,19 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import core.policy.login.SessionPolicy;
-import core.policy.login.SessionPolicyFactory;
-import core.policy.login.VerificationPolicy;
-import core.policy.login.VerificationPolicyFactory;
+import core.policy.login.LoginPolicy;
+import core.policy.login.LoginPolicyFactory;
 import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.CompositePasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.password.PasswordPolicyFactory;
-import core.policy.security.ANDSecurityPolicy;
+import core.policy.security.ANDCompositeSecurityPolicy;
 import core.policy.security.CompositeSecurityPolicy;
-import core.policy.security.ORSecurityPolicy;
+import core.policy.security.ORCompositeSecurityPolicy;
 import core.policy.security.SecurityPolicy;
 import core.policy.security.SecurityPolicyFactory;
+import core.policy.session.SessionPolicy;
+import core.policy.session.SessionPolicyFactory;
 import core.policy.username.UsernamePolicy;
 import core.policy.username.UsernamePolicyFactory;
 
@@ -42,16 +42,16 @@ import core.policy.username.UsernamePolicyFactory;
  * Something for later I guess....
  * 
  */
-public class XMLConfig {
+public class XMLConfigParser {
 	
 	
 	public static void main(String[] args) {
-		XMLConfig test = new XMLConfig("config.xml");
+		XMLConfigParser test = new XMLConfigParser("config.xml");
 	}
 	
 	private Document config;
 	
-	public XMLConfig(String filePath) {
+	public XMLConfigParser(String filePath) {
 
 		try {
 			File configXML = new File(filePath);
@@ -68,12 +68,12 @@ public class XMLConfig {
 		}	 
 	}
 	
-	public Policies parsePolicies() {
+	public AppPolicies parsePolicies() {
 		return loadPolicies(config);
 	}
 	
-	private Policies loadPolicies(Document config) {
-		Policies p = new Policies();
+	private AppPolicies loadPolicies(Document config) {
+		AppPolicies p = new AppPolicies();
 		
 		//load session
 		p.timeoutSession = loadSession(
@@ -119,8 +119,8 @@ public class XMLConfig {
 		return UsernamePolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
 	}
 	
-	private VerificationPolicy loadVerification(Node n) {
-		return VerificationPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
+	private LoginPolicy loadVerification(Node n) {
+		return LoginPolicyFactory.getInstance(n.getNodeName(),extractAttributes(n));
 	}
 	
 	private PasswordPolicy loadPasswordPolicies(Node root) {

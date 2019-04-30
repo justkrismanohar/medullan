@@ -2,6 +2,6 @@ package core.policy.login;
 
 import core.models.LoginRequest;
 
-public interface VerificationPolicy {
+public interface LoginPolicy {
 	public boolean verifyLoginDetails(LoginRequest req);
 }

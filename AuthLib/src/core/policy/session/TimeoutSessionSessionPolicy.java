@@ -1,4 +1,4 @@
-package core.policy.login;
+package core.policy.session;
 
 import java.time.LocalTime;
 
@@ -6,11 +6,11 @@ import core.models.Session;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class TimeoutSession implements SessionPolicy{
+public class TimeoutSessionSessionPolicy implements SessionPolicy{
 
 	private int timeout;
 	
-	public TimeoutSession(int timeout) {
+	public TimeoutSessionSessionPolicy(int timeout) {
 		this.timeout = timeout;
 	}
 	
@@ -32,8 +32,8 @@ public class TimeoutSession implements SessionPolicy{
 	}
 	
 	public boolean equals(Object other) {
-		if(other instanceof TimeoutSession) {
-			TimeoutSession t = (TimeoutSession )other;
+		if(other instanceof TimeoutSessionSessionPolicy) {
+			TimeoutSessionSessionPolicy t = (TimeoutSessionSessionPolicy )other;
 			return t.timeout == this.timeout;
 		}
 		return false;

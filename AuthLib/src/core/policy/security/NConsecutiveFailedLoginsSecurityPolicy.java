@@ -4,11 +4,11 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class NConsecutiveFailedLogins implements SecurityPolicy{
+public class NConsecutiveFailedLoginsSecurityPolicy implements SecurityPolicy{
 
 	private int maxFailures;
 	
-	public NConsecutiveFailedLogins(int maxFailures) {
+	public NConsecutiveFailedLoginsSecurityPolicy(int maxFailures) {
 		this.maxFailures = maxFailures;
 	}
 	
@@ -27,8 +27,8 @@ public class NConsecutiveFailedLogins implements SecurityPolicy{
 	}
 	
 	public boolean equals(Object o) {
-		if(o instanceof NConsecutiveFailedLogins) {
-			NConsecutiveFailedLogins other = (NConsecutiveFailedLogins)o;
+		if(o instanceof NConsecutiveFailedLoginsSecurityPolicy) {
+			NConsecutiveFailedLoginsSecurityPolicy other = (NConsecutiveFailedLoginsSecurityPolicy)o;
 			return other.maxFailures == this.maxFailures;
 		}
 		return false;

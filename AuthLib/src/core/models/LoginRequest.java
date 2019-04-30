@@ -6,6 +6,10 @@ import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 
+import core.models.wrappers.CookieWrapper;
+import core.models.wrappers.IPWrapper;
+import core.models.wrappers.UserAgentWrapper;
+
 /**
  * @author krism
  * Internal model of a LoginRequest.

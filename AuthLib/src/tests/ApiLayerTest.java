@@ -7,13 +7,13 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import core.api.EndPoint;
-import core.models.CookieWrapper;
-import core.models.IPWrapper;
-import core.models.IPWrapper.IPCreationFailed;
 import core.models.LoginDetails;
 import core.models.LoginRequest;
 import core.models.Session;
-import core.models.UserAgentWrapper;
+import core.models.wrappers.CookieWrapper;
+import core.models.wrappers.IPWrapper;
+import core.models.wrappers.UserAgentWrapper;
+import core.models.wrappers.IPWrapper.IPCreationFailed;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 

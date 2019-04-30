@@ -7,7 +7,7 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class BasicVerification implements VerificationPolicy{
+public class BasicLoginPolicy implements LoginPolicy{
 
 	@Override
 	public boolean verifyLoginDetails(LoginRequest req) {
@@ -34,7 +34,7 @@ public class BasicVerification implements VerificationPolicy{
 	}
 	
 	public boolean equals(Object other) {
-		return other instanceof BasicVerification;
+		return other instanceof BasicLoginPolicy;
 	}
 
 }

@@ -4,12 +4,12 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class BasicBruteForce implements SecurityPolicy {
+public class BasicBruteForceSecurityPolicy implements SecurityPolicy {
 
 	private int xMins;
 	private int threshold;
 	
-	public BasicBruteForce(int xMins, int threshold) {
+	public BasicBruteForceSecurityPolicy(int xMins, int threshold) {
 		this.xMins = xMins;
 		this.threshold = threshold;
 	}
@@ -27,7 +27,7 @@ public class BasicBruteForce implements SecurityPolicy {
 	}
 	
 	public boolean equals(Object o) {
-		return o instanceof BasicBruteForce;
+		return o instanceof BasicBruteForceSecurityPolicy;
 	}
 
 }

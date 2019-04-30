@@ -6,12 +6,12 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class LockoutPolicy implements SecurityPolicy{
+public class LockoutSecurityPolicy implements SecurityPolicy{
 
 	
 	private long duration;
 	
-	public LockoutPolicy(long duration) {
+	public LockoutSecurityPolicy(long duration) {
 		this.duration = duration;
 	}
 	
@@ -40,8 +40,8 @@ public class LockoutPolicy implements SecurityPolicy{
 	
 	
 	public boolean equals(Object o) {
-		if(o instanceof LockoutPolicy) {
-			LockoutPolicy other = (LockoutPolicy)o;
+		if(o instanceof LockoutSecurityPolicy) {
+			LockoutSecurityPolicy other = (LockoutSecurityPolicy)o;
 			return other.duration == this.duration;
 		}
 		return false;

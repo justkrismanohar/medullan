@@ -1,4 +1,4 @@
-package core.models;
+package core.models.wrappers;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

@@ -6,7 +6,7 @@ import java.util.List;
 import core.models.LoginRequest;
 import core.policy.password.ANDCompositePasswordPolicy;
 
-public class ANDSecurityPolicy extends CompositeSecurityPolicy{
+public class ANDCompositeSecurityPolicy extends CompositeSecurityPolicy{
 	
 	/*
 	 * Execute all policies to update stats but the RESULT is logical AND
@@ -22,7 +22,7 @@ public class ANDSecurityPolicy extends CompositeSecurityPolicy{
 	}
 	
 	public boolean equals(Object o) {
-		return o instanceof ANDSecurityPolicy && super.equals(o);
+		return o instanceof ANDCompositeSecurityPolicy && super.equals(o);
 	}
 	
 }

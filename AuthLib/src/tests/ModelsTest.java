@@ -5,11 +5,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import core.models.CookieWrapper;
-import core.models.IPWrapper;
-import core.models.IPWrapper.IPCreationFailed;
 import core.models.LoginRequest;
-import core.models.UserAgentWrapper;
+import core.models.wrappers.CookieWrapper;
+import core.models.wrappers.IPWrapper;
+import core.models.wrappers.UserAgentWrapper;
+import core.models.wrappers.IPWrapper.IPCreationFailed;
 
 public class ModelsTest {
 

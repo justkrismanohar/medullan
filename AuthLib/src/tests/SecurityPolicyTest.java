@@ -11,19 +11,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-
-import core.models.CookieWrapper;
-import core.models.IPWrapper;
-import core.models.IPWrapper.IPCreationFailed;
 import core.models.LoginDetails;
 import core.models.LoginRequest;
-import core.models.UserAgentWrapper;
-import core.policy.security.ANDSecurityPolicy;
-import core.policy.security.BasicBruteForce;
-import core.policy.security.LockoutPolicy;
-import core.policy.security.NConsecutiveFailedLogins;
-import core.policy.security.ORSecurityPolicy;
+import core.models.wrappers.CookieWrapper;
+import core.models.wrappers.IPWrapper;
+import core.models.wrappers.UserAgentWrapper;
+import core.models.wrappers.IPWrapper.IPCreationFailed;
+import core.policy.security.ANDCompositeSecurityPolicy;
+import core.policy.security.BasicBruteForceSecurityPolicy;
+import core.policy.security.LockoutSecurityPolicy;
+import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
+import core.policy.security.ORCompositeSecurityPolicy;
 import core.policy.security.SecurityPolicy;
 import core.queries.MockDB;
 import core.queries.QueryLayer;
@@ -52,7 +50,7 @@ public class SecurityPolicyTest {
 		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		
 		LoginRequest signature = new LoginRequest(ip1,c1,a1);
-		SecurityPolicy bruteForce = new BasicBruteForce(10,13);
+		SecurityPolicy bruteForce = new BasicBruteForceSecurityPolicy(10,13);
 		
 		assertFalse(q.isSignaturetInBlockList(signature));
 	
@@ -101,7 +99,7 @@ public class SecurityPolicyTest {
 		LoginRequest signature = new LoginRequest(ip1,c1,a1,details);
 		q.registerUser(signature);
 		
-		SecurityPolicy cFailed = new NConsecutiveFailedLogins(3);
+		SecurityPolicy cFailed = new NConsecutiveFailedLoginsSecurityPolicy(3);
 		
 		assertFalse(q.isUserNameLocked(userName));
 	
@@ -159,10 +157,10 @@ public class SecurityPolicyTest {
 		
 		LoginRequest req = new LoginRequest(ip1,c1,a1,details);
 		
-		SecurityPolicy cFailed = new NConsecutiveFailedLogins(3);
-		SecurityPolicy bruteForce = new BasicBruteForce(10,13);
+		SecurityPolicy cFailed = new NConsecutiveFailedLoginsSecurityPolicy(3);
+		SecurityPolicy bruteForce = new BasicBruteForceSecurityPolicy(10,13);
 		
-		ORSecurityPolicy or = new ORSecurityPolicy();
+		ORCompositeSecurityPolicy or = new ORCompositeSecurityPolicy();
 		or.add(bruteForce);//keep order to work with tick fucntion in mock DB
 		or.add(cFailed);
 		
@@ -212,10 +210,10 @@ public class SecurityPolicyTest {
 		
 		LoginRequest req = new LoginRequest(ip1,c1,a1,details);
 		
-		SecurityPolicy cFailed = new NConsecutiveFailedLogins(3);
-		SecurityPolicy bruteForce = new BasicBruteForce(10,13);
+		SecurityPolicy cFailed = new NConsecutiveFailedLoginsSecurityPolicy(3);
+		SecurityPolicy bruteForce = new BasicBruteForceSecurityPolicy(10,13);
 		
-		ANDSecurityPolicy or = new ANDSecurityPolicy();
+		ANDCompositeSecurityPolicy or = new ANDCompositeSecurityPolicy();
 		or.add(bruteForce);//keep order to work with tick function in mock DB
 		or.add(cFailed);
 		
@@ -239,7 +237,7 @@ public class SecurityPolicyTest {
 		LoginDetails details = new LoginDetails(userName,"pass1");
 		
 		LoginRequest req = new LoginRequest(ip1,c1,a1,details);
-		LockoutPolicy lp = new LockoutPolicy(20);
+		LockoutSecurityPolicy lp = new LockoutSecurityPolicy(20);
 		
 		assertTrue(lp.handleRequest(req));//Not blocked should pass
 		

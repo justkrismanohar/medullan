@@ -1,4 +1,4 @@
-package core.models;
+package core.models.wrappers;
 
 public class UserAgentWrapper {
 	private String someAgent;

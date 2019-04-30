@@ -1,4 +1,4 @@
-package core.policy.login;
+package core.policy.session;
 
 import core.models.Session;
 

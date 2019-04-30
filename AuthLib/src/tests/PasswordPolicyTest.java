@@ -9,7 +9,7 @@ import core.policy.password.ANDCompositePasswordPolicy;
 import core.policy.password.CharHasSometingPasswordPolicyFactory;
 import core.policy.password.ORCompositePasswordPolicy;
 import core.policy.password.PasswordPolicy;
-import core.policy.username.EmailFormat;;
+import core.policy.username.EmailFormatUsernamePolicy;;
 
 public class PasswordPolicyTest {
 
@@ -96,7 +96,7 @@ public class PasswordPolicyTest {
 		String emailPass = "justkrismanohar@gmail.com";
 		String emailFail = "@gmail.com";
 		
-		EmailFormat emailPolicy = new EmailFormat();
+		EmailFormatUsernamePolicy emailPolicy = new EmailFormatUsernamePolicy();
 		assertTrue(emailPolicy.evaluateUsername(emailPass));
 		assertFalse(emailPolicy.evaluateUsername(emailFail));		
 	}
