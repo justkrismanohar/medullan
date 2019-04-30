@@ -1,6 +1,6 @@
 package core.policy.password;
 
-public class Has {
+public class CharHasSometingPasswordPolicyFactory {
 	public static PasswordPolicy lowerCase() {
 		return new CharHasPasswordPolicy(CharHasPasswordPolicy.Type.LOWER_CASE) {
 			@Override
@@ -94,6 +94,16 @@ public class Has {
 			public boolean hasRequiredAmt(int count) {
 				return count >= this.amt;
 			}
+		};
+	}
+	
+	public static PasswordPolicy nullPolicy() {
+		return new CharHasPasswordPolicy() {
+			@Override
+			public boolean charIsWhatever(char ch) {
+				return false;
+			}
+			
 		};
 	}
 

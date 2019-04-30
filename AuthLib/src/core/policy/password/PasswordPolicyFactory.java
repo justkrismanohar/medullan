@@ -14,21 +14,21 @@ public class PasswordPolicyFactory {
 			String type = attr.get("type");
 			int n = Integer.parseInt(attr.get("n"));			
 			if(type.equals("atleast"))
-				return Has.atLeastUpperCase(n);
+				return CharHasSometingPasswordPolicyFactory.atLeastUpperCase(n);
 		}
 		
 		if(name.equals("LowerCase")) {
 			String type = attr.get("type");
 			int n = Integer.parseInt(attr.get("n"));			
 			if(type.equals("atleast"))
-				return Has.atLeastLowerCase(n);
+				return CharHasSometingPasswordPolicyFactory.atLeastLowerCase(n);
 		}
 	
 		if(name.equals("Digit")) {
 			String type = attr.get("type");
 			int n = Integer.parseInt(attr.get("n"));			
 			if(type.equals("atleast"))
-				return Has.atLeastDigit(n);
+				return CharHasSometingPasswordPolicyFactory.atLeastDigit(n);
 		}
 		
 		return null;

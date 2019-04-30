@@ -10,7 +10,7 @@ import core.api.XMLConfig;
 import core.policy.login.BasicVerification;
 import core.policy.login.TimeoutSession;
 import core.policy.password.ANDCompositePasswordPolicy;
-import core.policy.password.Has;
+import core.policy.password.CharHasSometingPasswordPolicyFactory;
 import core.policy.password.ORCompositePasswordPolicy;
 import core.policy.security.ANDSecurityPolicy;
 import core.policy.security.BasicBruteForce;
@@ -50,9 +50,9 @@ public class XMLConfigTest {
 		
 		//set up password policies
 		ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
-		passwordPolicy.add(Has.atLeastUpperCase(2));
-		passwordPolicy.add(Has.atLeastLowerCase(3));
-		passwordPolicy.add(Has.atLeastDigit(1));
+		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
+		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
+		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
 		
 		//set up username policies 
 		appConfig.usernamePolicy = new EmailFormat();
@@ -103,11 +103,11 @@ public class XMLConfigTest {
 		
 		//set up password policies
 		ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
-		passwordPolicy.add(Has.atLeastUpperCase(2));
-		passwordPolicy.add(Has.atLeastLowerCase(3));
-		passwordPolicy.add(Has.atLeastDigit(1));
+		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
+		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
+		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
 		ORCompositePasswordPolicy passwordPolicyOR = new ORCompositePasswordPolicy();
-		passwordPolicyOR.add(Has.atLeastDigit(10));
+		passwordPolicyOR.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(10));
 		passwordPolicy.add(passwordPolicyOR);
 		
 		
