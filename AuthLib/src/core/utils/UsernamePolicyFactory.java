@@ -1,6 +1,9 @@
-package core.policy.username;
+package core.utils;
 
 import java.util.HashMap;
+
+import core.policy.username.EmailFormatUsernamePolicy;
+import core.policy.username.UsernamePolicy;
 
 public class UsernamePolicyFactory {
 	

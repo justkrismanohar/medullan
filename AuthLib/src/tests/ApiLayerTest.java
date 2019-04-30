@@ -4,6 +4,8 @@ package tests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.time.temporal.ChronoUnit;
+
 import org.junit.Test;
 
 import core.api.EndPoint;
@@ -107,7 +109,7 @@ public class ApiLayerTest {
 		//Simulate some time passing 
 		QueryLayer q = QueryLayerFactory.getInstance();
 		Session userSession = q.getUserSession(username);
-		userSession.lastRequest.dateTime = userSession.lastRequest.dateTime.minusMinutes(100);
+		userSession.creationTime = userSession.creationTime.minus(100,ChronoUnit.MINUTES);
 		
 		assertFalse(end.autheticateSession(username));//session should timeout
 		assertTrue(q.getUserSession(username) == null);//verify at data layer, that session was removed

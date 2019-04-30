@@ -1,7 +1,10 @@
-package core.policy.password;
+package core.utils;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import core.policy.password.CharHasWhateverPasswordPolicyFactory;
+import core.policy.password.PasswordPolicy;
 
 import java.util.HashMap;
 

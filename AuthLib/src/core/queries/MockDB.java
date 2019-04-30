@@ -1,6 +1,8 @@
 package core.queries;
 
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +30,7 @@ public class MockDB implements QueryLayer {
 	protected List<LoginRequest> blockedSignatures;
 	protected List<String> blockedUsernames;
 	
-	protected HashMap<LoginRequest, List<LocalTime>> failedBySignature;
+	protected HashMap<LoginRequest, List<Instant>> failedBySignature;
 	protected HashMap<String,Integer> consecutiveFailedByUser;
 	protected HashMap<String,String> registeredUsers;
 	protected HashMap<String,Session> userSessions;
@@ -37,7 +39,7 @@ public class MockDB implements QueryLayer {
 	public MockDB() {
 		blockedSignatures = new ArrayList<LoginRequest>();
 		blockedUsernames = new ArrayList<String>();
-		failedBySignature = new HashMap<LoginRequest,List<LocalTime>>();
+		failedBySignature = new HashMap<LoginRequest,List<Instant>>();
 		consecutiveFailedByUser = new HashMap<String,Integer>();
 		registeredUsers = new HashMap<String,String>();
 		userSessions = new HashMap<String,Session>();
@@ -58,10 +60,10 @@ public class MockDB implements QueryLayer {
 		if(!failedBySignature.containsKey(signature))
 			return 0;
 		
-		List<LocalTime> fails = failedBySignature.get(signature);
-		LocalTime now = LocalTime.now().minusMinutes(xMins);
+		List<Instant> fails = failedBySignature.get(signature);
+		Instant now = Instant.now().minus(xMins,ChronoUnit.MINUTES);
 		int count = 0;
-		for(LocalTime then : fails) {
+		for(Instant then : fails) {
 			if(now.compareTo(then) < 0)//after minusing if now occurs before then, it means then is within xMins of now
 				count++;
 		}
@@ -170,7 +172,7 @@ public class MockDB implements QueryLayer {
 			failedBySignature.get(signature).add(signature.dateTime);
 		}
 		else {
-			failedBySignature.put(signature, new ArrayList<LocalTime>());
+			failedBySignature.put(signature, new ArrayList<Instant>());
 		}
 	}
 	

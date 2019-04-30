@@ -1,7 +1,10 @@
-package core.policy.session;
+package core.utils;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import core.policy.session.SessionPolicy;
+import core.policy.session.TimeoutSessionSessionPolicy;
 
 import java.util.HashMap;
 

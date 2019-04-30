@@ -1,7 +1,13 @@
-package core.policy.security;
+package core.utils;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import core.policy.security.BasicBruteForceSecurityPolicy;
+import core.policy.security.LockoutSecurityPolicy;
+import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
+import core.policy.security.SecurityPolicy;
+import core.policy.security.UserAccountLockedSecurityPolicy;
 
 import java.util.HashMap;
 

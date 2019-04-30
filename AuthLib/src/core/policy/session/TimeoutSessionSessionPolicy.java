@@ -1,6 +1,8 @@
 package core.policy.session;
 
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 import core.models.Session;
 import core.queries.QueryLayer;
@@ -20,9 +22,9 @@ public class TimeoutSessionSessionPolicy implements SessionPolicy{
 		Session current = q.getUserSession(username);
 		if(current == null) return false;//no session for user
 		
-		LocalTime validTime = LocalTime.now().minusMinutes(timeout);
+		Instant validTime = Instant.now().minus(timeout,ChronoUnit.MINUTES);
 		
-		if(validTime.compareTo(current.lastRequest.dateTime) < 0)
+		if(validTime.compareTo(current.creationTime) < 0)
 			return true;//There is still time for this session
 		
 		//Session expired 

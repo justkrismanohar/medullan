@@ -19,6 +19,7 @@ import core.policy.session.TimeoutSessionSessionPolicy;
 import core.policy.username.EmailFormatUsernamePolicy;
 import core.policy.username.UsernamePolicy;
 import core.queries.QueryLayerFactory;
+import core.utils.AppPolicyFactory;
 
 public class EndPoint {
 	
@@ -35,37 +36,7 @@ public class EndPoint {
 		}
 		
 		public EndPoint() {
-			appConfig = new AppPolicies();
-			
-			//should really load execute the following based on .xml config
-			//set up security policies
-			CompositeANDSecurityPolicy preLoginPolicies = new CompositeANDSecurityPolicy();
-			CompositeANDSecurityPolicy postLoginPolicies = new CompositeANDSecurityPolicy();
-			
-			preLoginPolicies.add(new LockoutSecurityPolicy(20));
-			preLoginPolicies.add(new UserAccountLockedSecurityPolicy());
-			
-			postLoginPolicies.add(new NConsecutiveFailedLoginsSecurityPolicy(3));
-			postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
-			
-			//set up password policies
-			CompositeANDPasswordPolicy passwordPolicy = new CompositeANDPasswordPolicy();
-			passwordPolicy.add(CharHasWhateverPasswordPolicyFactory.atLeastUpperCase(2));
-			passwordPolicy.add(CharHasWhateverPasswordPolicyFactory.atLeastLowerCase(3));
-			passwordPolicy.add(CharHasWhateverPasswordPolicyFactory.atLeastDigit(1));
-			
-			//set up username policies 
-			appConfig.usernamePolicy = new EmailFormatUsernamePolicy();
-			
-			//setup verification policies
-			appConfig.basicVerification = new BasicLoginPolicy();
-			
-			//setup session policy
-			appConfig.timeoutSession = new TimeoutSessionSessionPolicy(30);
-			
-			appConfig.preLoginPolicies = preLoginPolicies;
-			appConfig.postLoginPolicies = postLoginPolicies;
-			appConfig.passwordPolicy = passwordPolicy;
+			appConfig = AppPolicyFactory.getDefault();
 		}
 		
 		/**

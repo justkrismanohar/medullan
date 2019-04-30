@@ -1,6 +1,9 @@
-package core.policy.login;
+package core.utils;
 
 import java.util.HashMap;
+
+import core.policy.login.BasicLoginPolicy;
+import core.policy.login.LoginPolicy;
 
 
 public class LoginPolicyFactory {

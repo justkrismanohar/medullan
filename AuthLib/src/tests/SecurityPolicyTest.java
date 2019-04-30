@@ -7,6 +7,7 @@ import org.junit.Test;
 
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -244,7 +245,7 @@ public class SecurityPolicyTest {
 		q.blockSignature(req);//Say something caused it to be locked out
 		assertFalse(lp.handleRequest(req));//Blocked so should fail
 		
-		req.dateTime = req.dateTime.minusMinutes(100);//pretend  100 mins passed
+		req.dateTime = req.dateTime.minus(100,ChronoUnit.MINUTES);//pretend  100 mins passed
 		assertTrue(lp.handleRequest(req));//handleRequest should unblock the signature
 		assertFalse(q.isSignaturetInBlockList(req));//just double checking
 	

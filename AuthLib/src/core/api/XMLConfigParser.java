@@ -16,20 +16,20 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import core.policy.login.LoginPolicy;
-import core.policy.login.LoginPolicyFactory;
 import core.policy.password.CompositeANDPasswordPolicy;
 import core.policy.password.CompositePasswordPolicy;
 import core.policy.password.PasswordPolicy;
-import core.policy.password.PasswordPolicyFactory;
 import core.policy.security.CompositeANDSecurityPolicy;
 import core.policy.security.CompositeSecurityPolicy;
 import core.policy.security.CompositeORSecurityPolicy;
 import core.policy.security.SecurityPolicy;
-import core.policy.security.SecurityPolicyFactory;
 import core.policy.session.SessionPolicy;
-import core.policy.session.SessionPolicyFactory;
 import core.policy.username.UsernamePolicy;
-import core.policy.username.UsernamePolicyFactory;
+import core.utils.LoginPolicyFactory;
+import core.utils.PasswordPolicyFactory;
+import core.utils.SecurityPolicyFactory;
+import core.utils.SessionPolicyFactory;
+import core.utils.UsernamePolicyFactory;
 
 /*
  * This class is a bit messy. XML was chosen over .properties since 
