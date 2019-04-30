@@ -5,7 +5,7 @@ import java.util.List;
 
 import core.models.LoginRequest;
 
-public class ORCompositeSecurityPolicy extends CompositeSecurityPolicy{
+public class CompositeORSecurityPolicy extends CompositeSecurityPolicy{
 	
 	@Override
 	public boolean handleRequest(LoginRequest req) {
@@ -16,6 +16,6 @@ public class ORCompositeSecurityPolicy extends CompositeSecurityPolicy{
 	}
 	
 	public boolean equals(Object o) {
-		return o instanceof ORCompositeSecurityPolicy && super.equals(o);
+		return o instanceof CompositeORSecurityPolicy && super.equals(o);
 	}
 }

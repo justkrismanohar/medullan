@@ -5,9 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import core.policy.password.ANDCompositePasswordPolicy;
+import core.policy.password.CompositeANDPasswordPolicy;
 import core.policy.password.CharHasSometingPasswordPolicyFactory;
-import core.policy.password.ORCompositePasswordPolicy;
+import core.policy.password.CompositeORPasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.username.EmailFormatUsernamePolicy;;
 
@@ -46,7 +46,7 @@ public class PasswordPolicyTest {
 	
 	@Test
 	public void testLowerAndUpperExact() {
-		ANDCompositePasswordPolicy c = new ANDCompositePasswordPolicy();
+		CompositeANDPasswordPolicy c = new CompositeANDPasswordPolicy();
 		c.add(CharHasSometingPasswordPolicyFactory.upperCase(2));
 		c.add(CharHasSometingPasswordPolicyFactory.lowerCase(2));
 		String password = "TiHs";
@@ -59,7 +59,7 @@ public class PasswordPolicyTest {
 	
 	@Test
 	public void testAtLeastNWithAND() {
-		ANDCompositePasswordPolicy c = new ANDCompositePasswordPolicy();
+		CompositeANDPasswordPolicy c = new CompositeANDPasswordPolicy();
 		c.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
 		c.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
 		c.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
@@ -73,7 +73,7 @@ public class PasswordPolicyTest {
 	
 	@Test
 	public void testAtLeastNWithOR() {
-		ORCompositePasswordPolicy c = new ORCompositePasswordPolicy();
+		CompositeORPasswordPolicy c = new CompositeORPasswordPolicy();
 		c.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
 		c.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
 		c.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));

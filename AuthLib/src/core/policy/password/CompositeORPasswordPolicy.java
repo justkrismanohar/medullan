@@ -2,7 +2,7 @@ package core.policy.password;
 
 import java.util.ArrayList;
 
-public class ORCompositePasswordPolicy extends CompositePasswordPolicy{
+public class CompositeORPasswordPolicy extends CompositePasswordPolicy{
 	
 	@Override
 	public boolean evaluatePassword(String password) {
@@ -13,6 +13,6 @@ public class ORCompositePasswordPolicy extends CompositePasswordPolicy{
 	}
 	
 	public boolean equals(Object o) {
-		return o instanceof ORCompositePasswordPolicy && super.equals(o);
+		return o instanceof CompositeORPasswordPolicy && super.equals(o);
 	}
 }

@@ -8,14 +8,14 @@ import org.junit.Test;
 import core.api.AppPolicies;
 import core.api.XMLConfigParser;
 import core.policy.login.BasicLoginPolicy;
-import core.policy.password.ANDCompositePasswordPolicy;
+import core.policy.password.CompositeANDPasswordPolicy;
 import core.policy.password.CharHasSometingPasswordPolicyFactory;
-import core.policy.password.ORCompositePasswordPolicy;
-import core.policy.security.ANDCompositeSecurityPolicy;
+import core.policy.password.CompositeORPasswordPolicy;
+import core.policy.security.CompositeANDSecurityPolicy;
 import core.policy.security.BasicBruteForceSecurityPolicy;
 import core.policy.security.LockoutSecurityPolicy;
 import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
-import core.policy.security.ORCompositeSecurityPolicy;
+import core.policy.security.CompositeORSecurityPolicy;
 import core.policy.security.UserAccountLockedSecurityPolicy;
 import core.policy.session.TimeoutSessionSessionPolicy;
 import core.policy.username.EmailFormatUsernamePolicy;
@@ -39,8 +39,8 @@ public class XMLConfigTest {
 	private AppPolicies setupAppPolicies() {
 		AppPolicies appConfig = new AppPolicies();
 		
-		ANDCompositeSecurityPolicy preLoginPolicies = new ANDCompositeSecurityPolicy();
-		ANDCompositeSecurityPolicy postLoginPolicies = new ANDCompositeSecurityPolicy();
+		CompositeANDSecurityPolicy preLoginPolicies = new CompositeANDSecurityPolicy();
+		CompositeANDSecurityPolicy postLoginPolicies = new CompositeANDSecurityPolicy();
 		
 		preLoginPolicies.add(new LockoutSecurityPolicy(20));
 		preLoginPolicies.add(new UserAccountLockedSecurityPolicy());
@@ -49,7 +49,7 @@ public class XMLConfigTest {
 		postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
 		
 		//set up password policies
-		ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
+		CompositeANDPasswordPolicy passwordPolicy = new CompositeANDPasswordPolicy();
 		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
 		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
 		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
@@ -87,26 +87,26 @@ public class XMLConfigTest {
 	private AppPolicies setupNestedAppPolicies() {
 		AppPolicies appConfig = new AppPolicies();
 		
-		ANDCompositeSecurityPolicy preLoginPolicies = new ANDCompositeSecurityPolicy();
-		ANDCompositeSecurityPolicy postLoginPolicies = new ANDCompositeSecurityPolicy();
+		CompositeANDSecurityPolicy preLoginPolicies = new CompositeANDSecurityPolicy();
+		CompositeANDSecurityPolicy postLoginPolicies = new CompositeANDSecurityPolicy();
 		
 		preLoginPolicies.add(new LockoutSecurityPolicy(20));
 		preLoginPolicies.add(new UserAccountLockedSecurityPolicy());
 		
 		postLoginPolicies.add(new NConsecutiveFailedLoginsSecurityPolicy(3));
 		postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
-		ORCompositeSecurityPolicy postLoginPoliciesOR = new ORCompositeSecurityPolicy();
+		CompositeORSecurityPolicy postLoginPoliciesOR = new CompositeORSecurityPolicy();
 		postLoginPoliciesOR.add(new NConsecutiveFailedLoginsSecurityPolicy(2));
 		postLoginPoliciesOR.add(new BasicBruteForceSecurityPolicy(7, 9));
 		postLoginPolicies.add(postLoginPoliciesOR);
 		
 		
 		//set up password policies
-		ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
+		CompositeANDPasswordPolicy passwordPolicy = new CompositeANDPasswordPolicy();
 		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
 		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
 		passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));
-		ORCompositePasswordPolicy passwordPolicyOR = new ORCompositePasswordPolicy();
+		CompositeORPasswordPolicy passwordPolicyOR = new CompositeORPasswordPolicy();
 		passwordPolicyOR.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(10));
 		passwordPolicy.add(passwordPolicyOR);
 		

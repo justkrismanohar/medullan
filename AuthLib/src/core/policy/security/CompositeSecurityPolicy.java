@@ -10,11 +10,11 @@ public abstract class CompositeSecurityPolicy implements SecurityPolicy {
 		//or whatever to map String type to a class name
 		//Not necessary right now for only AND and OR types
 		if(type.equals("OR")) {
-			return new ORCompositeSecurityPolicy();
+			return new CompositeORSecurityPolicy();
 		}
 		
 		//Default...maybe throw and error or something later...
-		return new ANDCompositeSecurityPolicy();
+		return new CompositeANDSecurityPolicy();
 	}
 	
 	protected List<SecurityPolicy> policies;

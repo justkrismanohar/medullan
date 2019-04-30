@@ -5,10 +5,10 @@ import core.models.LoginRequest;
 import core.models.Session;
 import core.policy.login.BasicLoginPolicy;
 import core.policy.login.LoginPolicy;
-import core.policy.password.ANDCompositePasswordPolicy;
+import core.policy.password.CompositeANDPasswordPolicy;
 import core.policy.password.CharHasSometingPasswordPolicyFactory;
 import core.policy.password.PasswordPolicy;
-import core.policy.security.ANDCompositeSecurityPolicy;
+import core.policy.security.CompositeANDSecurityPolicy;
 import core.policy.security.BasicBruteForceSecurityPolicy;
 import core.policy.security.LockoutSecurityPolicy;
 import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
@@ -39,8 +39,8 @@ public class EndPoint {
 			
 			//should really load execute the following based on .xml config
 			//set up security policies
-			ANDCompositeSecurityPolicy preLoginPolicies = new ANDCompositeSecurityPolicy();
-			ANDCompositeSecurityPolicy postLoginPolicies = new ANDCompositeSecurityPolicy();
+			CompositeANDSecurityPolicy preLoginPolicies = new CompositeANDSecurityPolicy();
+			CompositeANDSecurityPolicy postLoginPolicies = new CompositeANDSecurityPolicy();
 			
 			preLoginPolicies.add(new LockoutSecurityPolicy(20));
 			preLoginPolicies.add(new UserAccountLockedSecurityPolicy());
@@ -49,7 +49,7 @@ public class EndPoint {
 			postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
 			
 			//set up password policies
-			ANDCompositePasswordPolicy passwordPolicy = new ANDCompositePasswordPolicy();
+			CompositeANDPasswordPolicy passwordPolicy = new CompositeANDPasswordPolicy();
 			passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastUpperCase(2));
 			passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastLowerCase(3));
 			passwordPolicy.add(CharHasSometingPasswordPolicyFactory.atLeastDigit(1));

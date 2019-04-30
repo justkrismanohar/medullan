@@ -17,13 +17,13 @@ import org.xml.sax.SAXException;
 
 import core.policy.login.LoginPolicy;
 import core.policy.login.LoginPolicyFactory;
-import core.policy.password.ANDCompositePasswordPolicy;
+import core.policy.password.CompositeANDPasswordPolicy;
 import core.policy.password.CompositePasswordPolicy;
 import core.policy.password.PasswordPolicy;
 import core.policy.password.PasswordPolicyFactory;
-import core.policy.security.ANDCompositeSecurityPolicy;
+import core.policy.security.CompositeANDSecurityPolicy;
 import core.policy.security.CompositeSecurityPolicy;
-import core.policy.security.ORCompositeSecurityPolicy;
+import core.policy.security.CompositeORSecurityPolicy;
 import core.policy.security.SecurityPolicy;
 import core.policy.security.SecurityPolicyFactory;
 import core.policy.session.SessionPolicy;

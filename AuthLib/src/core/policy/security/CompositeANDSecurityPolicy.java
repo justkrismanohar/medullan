@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import core.models.LoginRequest;
-import core.policy.password.ANDCompositePasswordPolicy;
+import core.policy.password.CompositeANDPasswordPolicy;
 
-public class ANDCompositeSecurityPolicy extends CompositeSecurityPolicy{
+public class CompositeANDSecurityPolicy extends CompositeSecurityPolicy{
 	
 	/*
 	 * Execute all policies to update stats but the RESULT is logical AND
@@ -22,7 +22,7 @@ public class ANDCompositeSecurityPolicy extends CompositeSecurityPolicy{
 	}
 	
 	public boolean equals(Object o) {
-		return o instanceof ANDCompositeSecurityPolicy && super.equals(o);
+		return o instanceof CompositeANDSecurityPolicy && super.equals(o);
 	}
 	
 }

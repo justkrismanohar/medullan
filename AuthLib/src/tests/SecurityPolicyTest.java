@@ -17,11 +17,11 @@ import core.models.wrappers.CookieWrapper;
 import core.models.wrappers.IPWrapper;
 import core.models.wrappers.UserAgentWrapper;
 import core.models.wrappers.IPWrapper.IPCreationFailed;
-import core.policy.security.ANDCompositeSecurityPolicy;
+import core.policy.security.CompositeANDSecurityPolicy;
 import core.policy.security.BasicBruteForceSecurityPolicy;
 import core.policy.security.LockoutSecurityPolicy;
 import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
-import core.policy.security.ORCompositeSecurityPolicy;
+import core.policy.security.CompositeORSecurityPolicy;
 import core.policy.security.SecurityPolicy;
 import core.queries.MockDB;
 import core.queries.QueryLayer;
@@ -160,7 +160,7 @@ public class SecurityPolicyTest {
 		SecurityPolicy cFailed = new NConsecutiveFailedLoginsSecurityPolicy(3);
 		SecurityPolicy bruteForce = new BasicBruteForceSecurityPolicy(10,13);
 		
-		ORCompositeSecurityPolicy or = new ORCompositeSecurityPolicy();
+		CompositeORSecurityPolicy or = new CompositeORSecurityPolicy();
 		or.add(bruteForce);//keep order to work with tick fucntion in mock DB
 		or.add(cFailed);
 		
@@ -213,7 +213,7 @@ public class SecurityPolicyTest {
 		SecurityPolicy cFailed = new NConsecutiveFailedLoginsSecurityPolicy(3);
 		SecurityPolicy bruteForce = new BasicBruteForceSecurityPolicy(10,13);
 		
-		ANDCompositeSecurityPolicy or = new ANDCompositeSecurityPolicy();
+		CompositeANDSecurityPolicy or = new CompositeANDSecurityPolicy();
 		or.add(bruteForce);//keep order to work with tick function in mock DB
 		or.add(cFailed);
 		
