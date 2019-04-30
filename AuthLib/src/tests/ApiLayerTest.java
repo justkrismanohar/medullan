@@ -66,51 +66,37 @@ public class ApiLayerTest {
 
 	
 	@Test
-	public void testRegister() throws IPCreationFailed {
+	public void Register_VariousLogins() throws Exception {
+		MockDB q = UnitTestHelper.getMockDBInstance();
+		
+		LoginRequest invalidUserNameAndPassword = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"user","user1");
+		LoginRequest invalidUserName = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"user","PaSSword5");
+		LoginRequest validLogin = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"use1@domain.com","PaSSword5");
+		
 		EndPoint end = new EndPoint();
-		
-		//set up a request
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		
-		LoginDetails newUser = new LoginDetails("user","user1");
-		LoginRequest req = new LoginRequest(ip1,c1,a1,newUser);
-		
-		assertFalse(end.register(req));
-		
-		newUser.encryptedPassword = "PaSSword5";
-		assertFalse(end.register(req));
-		
-		newUser.userName = "user@domain.com";
-		assertTrue(end.register(req));
+				
+		assertThat("Invaild username and password. .register should return false.",end.register(invalidUserNameAndPassword),is(false));
+		assertThat("Invaild username. .register should return false.",end.register(invalidUserName),is(false));
+		assertThat("Vaild username and password. .register should return true.",end.register(validLogin),is(true));
 	}
 	
 	@Test
-	public void testSession() throws IPCreationFailed {
-		//set up a request
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		String username = "session1@users.com";
-		LoginDetails detailsPass = new LoginDetails(username,"USername1");
-		
-		LoginRequest req = new LoginRequest(ip1,c1,a1,detailsPass);
+	public void Session_LoginInThenSessionExpires() throws Exception {
+		MockDB q = UnitTestHelper.getMockDBInstance();
+		LoginRequest validLogin = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"session1@users.com","USername1");
 		
 		EndPoint end = new EndPoint();
+		end.register(validLogin);//registers user1
 		
-		end.register(req);//registers user1
-		
-		assertFalse(end.autheticateSession(username));//no session user needs to log in
-		end.login(req);
-		assertTrue(end.autheticateSession(username));//user logged in should now have a valid session
+		assertThat("User has not logged in as yet. There should be no session for him. .autheticateSession should return false.",end.autheticateSession(validLogin.loginDetails.userName),is(false));//no session user needs to log in
+		end.login(validLogin);
+		assertThat("User logged in as yet. There should be a session for him. .autheticateSession should return true.",end.autheticateSession(validLogin.loginDetails.userName),is(true));//no session user needs to log in
 		
 		//Simulate some time passing 
-		QueryLayer q = QueryLayerFactory.getInstance();
-		Session userSession = q.getUserSession(username);
+		Session userSession = q.getUserSession(validLogin.loginDetails.userName);
 		userSession.creationTime = userSession.creationTime.minus(100,ChronoUnit.MINUTES);
 		
-		assertFalse(end.autheticateSession(username));//session should timeout
-		assertTrue(q.getUserSession(username) == null);//verify at data layer, that session was removed
+		assertThat("100 mins passed since last log on. User should be logged out. .autheticateSession should return false.",end.autheticateSession(validLogin.loginDetails.userName),is(false));//no session user needs to log in
+		assertThat("Verify at the datalayer there is no session. .getUserSession should return null.",q.getUserSession(validLogin.loginDetails.userName),is(nullValue()));//verify at data layer, that session was removed
 	}
 }
