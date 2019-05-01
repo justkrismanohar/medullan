@@ -5,8 +5,9 @@ Implementation of Authenticaiton Libaray for MyHealthPass application
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Assumtions
+## Assumptions
 * All input to the system is fed through the EndPontion method calls (register, login, autheticateSession
+* One instance of EndPoint per region. Currenlty each EndPoint executes sever [AppPolicies](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/api/AppPolicies.java) which are configurable via an xml file like [config.xml](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/config.xml)
 
 ## Limitations
 The following limitations are due mainly to lack to time on my part
