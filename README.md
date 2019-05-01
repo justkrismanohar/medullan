@@ -17,7 +17,7 @@ Include the following dependenices in your classpath. They are include AuthLib f
 ### Installing
 
 Download latest build
-* [AuthLib.jar] (https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
+* [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
 ```
 Give the example
 ```
