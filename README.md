@@ -7,7 +7,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Include the following dependenices in your classpath. They are include AuthLib folder for easy access.
+
+hamcrest-all-1.3.jar
+log4j-api-2.11.2.jar
+log4j-core-2.11.2.jar
+servlet-api-2.5.jar
 
 ```
 Give examples
