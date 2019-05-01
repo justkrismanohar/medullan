@@ -1,6 +1,8 @@
 package core.queries;
 
+import java.time.Instant;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +30,7 @@ public class MockDB implements QueryLayer {
 	protected List<LoginRequest> blockedSignatures;
 	protected List<String> blockedUsernames;
 	
-	protected HashMap<LoginRequest, List<LocalTime>> failedBySignature;
+	protected HashMap<LoginRequest, List<Instant>> failedBySignature;
 	protected HashMap<String,Integer> consecutiveFailedByUser;
 	protected HashMap<String,String> registeredUsers;
 	protected HashMap<String,Session> userSessions;
@@ -37,7 +39,7 @@ public class MockDB implements QueryLayer {
 	public MockDB() {
 		blockedSignatures = new ArrayList<LoginRequest>();
 		blockedUsernames = new ArrayList<String>();
-		failedBySignature = new HashMap<LoginRequest,List<LocalTime>>();
+		failedBySignature = new HashMap<LoginRequest,List<Instant>>();
 		consecutiveFailedByUser = new HashMap<String,Integer>();
 		registeredUsers = new HashMap<String,String>();
 		userSessions = new HashMap<String,Session>();
@@ -55,13 +57,24 @@ public class MockDB implements QueryLayer {
 
 	@Override
 	public int getNumFailedByRequestInLastXMins(LoginRequest signature, int xMins) {
-		if(!failedBySignature.containsKey(signature))
-			return 0;
+		List<Instant> fails;
+		if(!failedBySignature.containsKey(signature)) {
+			//hascode .equals madenss
+			Object value = containsFindValueFromEqualKey(failedBySignature,signature);
+			if(value !=null) {
+				fails = (List<Instant>)value;
+			}
+			else {
+				return 0;
+			}
+		}
+		else {
+			fails = failedBySignature.get(signature);
+		}
 		
-		List<LocalTime> fails = failedBySignature.get(signature);
-		LocalTime now = LocalTime.now().minusMinutes(xMins);
+		Instant now = Instant.now().minus(xMins,ChronoUnit.MINUTES);
 		int count = 0;
-		for(LocalTime then : fails) {
+		for(Instant then : fails) {
 			if(now.compareTo(then) < 0)//after minusing if now occurs before then, it means then is within xMins of now
 				count++;
 		}
@@ -163,14 +176,37 @@ public class MockDB implements QueryLayer {
 			consecutiveFailedByUser.put(username, 0);
 		}
 	}
-
+	
+	/*
+	 * 
+	 * Hashcode .equals madness
+	 */
+	
+	private Object containsFindValueFromEqualKey(HashMap map, Object key) {
+		Object[] keys = map.keySet().toArray();
+		Object[] values = map.values().toArray();
+		Object other;
+		for(int i=0; i < keys.length; i++) {
+			other = keys[i];
+			if(other.equals(key))
+				return values[i];
+		}
+		return null;
+	}
+	
 	@Override
 	public void recordFailedLogonFromSignature(LoginRequest signature) {
 		if(failedBySignature.containsKey(signature)) {
 			failedBySignature.get(signature).add(signature.dateTime);
 		}
+		//Hashcode vs .equals madness
+		Object value = containsFindValueFromEqualKey(failedBySignature,signature);
+		if(value !=null) {
+			List<Instant> list = (List<Instant>)value;
+			list.add(signature.dateTime);
+		}
 		else {
-			failedBySignature.put(signature, new ArrayList<LocalTime>());
+			failedBySignature.put(signature, new ArrayList<Instant>());
 		}
 	}
 	

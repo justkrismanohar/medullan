@@ -1,251 +1,141 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Test;
+
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import core.models.CookieWrapper;
-import core.models.IPWrapper;
-import core.models.IPWrapper.IPCreationFailed;
 import core.models.LoginDetails;
 import core.models.LoginRequest;
-import core.models.UserAgentWrapper;
-import core.policy.security.ANDSecurityPolicy;
-import core.policy.security.BasicBruteForce;
-import core.policy.security.LockoutPolicy;
-import core.policy.security.NConsecutiveFailedLogins;
-import core.policy.security.ORSecurityPolicy;
+
+import core.policy.security.CompositeANDSecurityPolicy;
+import core.policy.security.BasicBruteForceSecurityPolicy;
+import core.policy.security.LockoutSecurityPolicy;
+import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
+import core.policy.security.CompositeORSecurityPolicy;
 import core.policy.security.SecurityPolicy;
 import core.queries.MockDB;
 import core.queries.QueryLayer;
+import core.utils.UnitTestHelper;
 
-class SecurityPolicyTest {
+public class SecurityPolicyTest {
 
 	@Test
-	void testBasicBruteForce() throws IPCreationFailed {
+	public void BasicBruteForceLockout_NewUserThen23FailedThenTimeoutAfter20min_PassFailPass() throws Exception {
 		//Set up mockDB specifics for this test 
-		MockDB q = new MockDB() {
-			private int [] simulatedFailuresInLastXMins = {23,0};//force fail login, then force pass login
-			private int count = 0;
-			@Override
-			public int getNumFailedByRequestInLastXMins(LoginRequest signature, int xMins) {
-				int failures = simulatedFailuresInLastXMins[count];
-				count++;
-				return failures;
-			}
-		};
-		
+		MockDB q = UnitTestHelper.getMockDBForBruteForceTest();
 		MockDB.setMockDB(q);//quick and dirty something just for testing
 		
-		//set up a request
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
+		LoginRequest signature = UnitTestHelper.getSignature(1);
+		SecurityPolicy bruteForce = new BasicBruteForceSecurityPolicy(10,13);
 		
-		LoginRequest signature = new LoginRequest(ip1,c1,a1);
-		SecurityPolicy bruteForce = new BasicBruteForce(10,13);
-		
-		assertFalse(q.isSignaturetInBlockList(signature));
+		assertThat("New signature. Should not be in signature block list",q.isSignaturetInBlockList(signature),is(false));
 	
 		/**
-		 * Due to the MockDB config, first handleRequest(...) should faild and activate the policy to block request signature
+		 * Due to the MockDB config, first handleRequest(...) should fail and activate the policy to block request signature
 		 */
 		bruteForce.handleRequest(signature);
-		assertTrue(q.isSignaturetInBlockList(signature));
-		
-		
+		assertThat("Threhsold is 20 getNumFailedByRequestInLastXMins returns 23. Signature should be in blocked list.",q.isSignaturetInBlockList(signature),is(true));
+		 
 		/**
 		 * Due to the MockDB config, second handleRequest(...) simulates 20 mins had passed. This should pass security check.
 		 * That is the block request action should not be activated
 		 */
 		q.resetBlockSignatures();//simulate 20 mins passed
 		bruteForce.handleRequest(signature);
-		assertFalse(q.isSignaturetInBlockList(signature));
-		
+		assertThat("Threhsold is 20 getNumFailedByRequestInLastXMins returns 0. Signature should NOT be in blocked list.",q.isSignaturetInBlockList(signature),is(false));
 	}
 
-	
 	@Test
-	void testConsecutiveFailedLogins() throws IPCreationFailed {
+	public void ConsecutiveFailedLoginsBlocksUser_0Then3ConsecutiveFailedLogin_isBlockedThenIsNotBlocked() throws Exception {
 		//Set up mockDB specifics for this test 
-		MockDB q = new MockDB() {
-			private int [] simulatedFailedConsecutiveLogins = {0,3};//force pass login, then force fail login
-			private int count = 0;
-			@Override
-			public int getNumFailedConnsecutiveByUser(String userName) {
-				int failed = simulatedFailedConsecutiveLogins[count];
-				count++;
-				return failed;
-			}
-						
-		};
-		
+		MockDB q = UnitTestHelper.getMockDBForConsecutiveFailedTest();
 		MockDB.setMockDB(q);//quick and dirty something just for testing
-		
 		//set up a request
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		String userName = "user1";
-		LoginDetails details = new LoginDetails(userName,"PAass1");
+		LoginRequest signature = UnitTestHelper.getSignatureWithUsernameAndPassword(1, userName, "PAss1");
 		
-		LoginRequest signature = new LoginRequest(ip1,c1,a1,details);
+		SecurityPolicy cFailed = new NConsecutiveFailedLoginsSecurityPolicy(3);
+		
 		q.registerUser(signature);
-		
-		SecurityPolicy cFailed = new NConsecutiveFailedLogins(3);
-		
-		assertFalse(q.isUserNameLocked(userName));
 	
 		/**
 		 * Due to the MockDB config, first handleRequest(...) should pass and NOT activate the policy to block user
 		 */
 		cFailed.handleRequest(signature);
-		assertFalse(q.isUserNameLocked(userName));
-		
+		assertThat("Threshold is 3 getNumFailedConnsecutiveByUser returns 0. username should not be in blocked list.",q.isUserNameLocked(userName),is(false));
+
 		/**
 		 * Due to the MockDB config, second handleRequest(...) simulates 3 consecutive failed logins. This should FAIL security check.
 		 * That is the block request action should not be activated
 		 */
 		cFailed.handleRequest(signature);
-		assertTrue(q.isUserNameLocked(userName));
+		assertThat("Threshold is 3 getNumFailedConnsecutiveByUser returns 3. username should be in blocked list.",q.isUserNameLocked(userName),is(true));
 	}
 	
-	
 	@Test
-	void testORSecurityPolicy() throws IPCreationFailed {
+	public void CompositeORSecurityPolicy_2CompoentsVariousTruthValues_FailPassPass() throws Exception {
 		//Set up mockDB specifics for this test 
-		MockDB q = new MockDB() {
-			private int [] simulatedFailedConsecutiveLogins = {3,0,0};//Fail, Pass, Pass
-			private int [] simulatedFailuresInLastXMins = {23,23,0};   //Fail, Fail, Pass 
-			
-			private int count = 0;
-			private int tick = 0;
-			private void updateCount() {
-				tick++;
-				count = tick/2;
-			}
-			@Override
-			public int getNumFailedByRequestInLastXMins(LoginRequest signature, int xMins) {
-				int failures = simulatedFailuresInLastXMins[count];
-				updateCount();
-				return failures;
-			}
-			
-			@Override
-			public int getNumFailedConnsecutiveByUser(String userName) {
-				int failed = simulatedFailedConsecutiveLogins[count];
-				updateCount();
-				return failed;
-			}
-		};
-		
-		MockDB.setMockDB(q);//quick and dirty something just for testing
+		MockDB q = UnitTestHelper.getMockDBForCompositeORSecurityTest();
 		
 		//set up a request
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		String userName = "user1";
-		LoginDetails details = new LoginDetails(userName,"pass1");
+		LoginRequest req = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"user1", "pass1");
 		
-		LoginRequest req = new LoginRequest(ip1,c1,a1,details);
+		CompositeORSecurityPolicy or = UnitTestHelper.get3ConsecutiveFailedOR13BruteForceLockoutFor10();
 		
-		SecurityPolicy cFailed = new NConsecutiveFailedLogins(3);
-		SecurityPolicy bruteForce = new BasicBruteForce(10,13);
-		
-		ORSecurityPolicy or = new ORSecurityPolicy();
-		or.add(bruteForce);//keep order to work with tick fucntion in mock DB
-		or.add(cFailed);
-		
-		
-		assertFalse(or.handleRequest(req));//Fail OR Fail is Fail	
-		assertTrue(or.handleRequest(req));// Fail OR Pass is Pass
-		assertTrue(or.handleRequest(req));// Pass OR Pass is Pass
-		
+		//Fail OR Fail is Fail
+		assertThat("Both componets fail. CompositeORPolicy should fail.",or.handleRequest(req),is(false));	
+		//Fail OR Pass is Pass
+		assertThat("One componet passes. CompositeORPolicy should pass.",or.handleRequest(req),is(true));
+		// Pass OR Pass is Pass
+		assertThat("Both componets pass. CompositeORPolicy should pass.",or.handleRequest(req),is(true));
 	}
 	
 	@Test
-	void testANDSecurityPolicy() throws IPCreationFailed {
+	public void CompositeANDSecurityPolicy_2ComponetsVariousTruthValues_PassFailFail() throws Exception {
 		//Set up mockDB specifics for this test 
-		MockDB q = new MockDB() {
-			private int [] simulatedFailedConsecutiveLogins = {0,3,3};//Pass, Fail, Fail
-			private int [] simulatedFailuresInLastXMins = {0,0,23};   //Pass, Pass, Fail 
-			
-			private int count = 0;
-			private int tick = 0;
-			private void updateCount() {
-				tick++;
-				count = tick/2;
-			}
-			@Override
-			public int getNumFailedByRequestInLastXMins(LoginRequest signature, int xMins) {
-				int failures = simulatedFailuresInLastXMins[count];
-				updateCount();
-				return failures;
-			}
-			
-			@Override
-			public int getNumFailedConnsecutiveByUser(String userName) {
-				int failed = simulatedFailedConsecutiveLogins[count];
-				updateCount();
-				return failed;
-			}
-		};
-		
-		MockDB.setMockDB(q);//quick and dirty something just for testing
+		MockDB q =UnitTestHelper.getMockDBForCompositeANDSecurityPolicy();
 		
 		//set up a request
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		String userName = "user1";
-		LoginDetails details = new LoginDetails(userName,"pass1");
+		LoginRequest req = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"user1", "pass1");
+				
+		CompositeANDSecurityPolicy and = UnitTestHelper.get3ConsecutiveFailedAND13BruteForceLockoutFor10();
 		
-		LoginRequest req = new LoginRequest(ip1,c1,a1,details);
-		
-		SecurityPolicy cFailed = new NConsecutiveFailedLogins(3);
-		SecurityPolicy bruteForce = new BasicBruteForce(10,13);
-		
-		ANDSecurityPolicy or = new ANDSecurityPolicy();
-		or.add(bruteForce);//keep order to work with tick function in mock DB
-		or.add(cFailed);
-		
-		assertTrue(or.handleRequest(req));//Pass AND Pass is Pass	
-		assertFalse(or.handleRequest(req));//Pass AND Fail is Fail
-		assertFalse(or.handleRequest(req));// Fail AND Fail is Fail
-		
+		//Pass AND Pass is Pass	
+		assertThat("Both components pass. CompositeANDPolicy should pass.",and.handleRequest(req),is(true));	
+		//Pass AND Fail is Fail
+		assertThat("One component fails. CompositeANDPolicy should fail.",and.handleRequest(req),is(false));	
+		// Fail AND Fail is Fail
+		assertThat("Both components fail. CompositeANDPolicy should fail.",and.handleRequest(req),is(false));	
 	}
 	
 	@Test
-	void testLockoutPolicy() throws IPCreationFailed {
+	public void LockoutSecurityPolicyFLow_NewUserLockedUser100MinsAfterLockedUser_PassFailPass() throws Exception {
 		
-		MockDB q = new MockDB();
-		MockDB.setMockDB(q);//quick and dirty something just for testing
+		MockDB q = UnitTestHelper.getMockDBInstance();
 		
 		//set up a request
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		String userName = "user1";
-		LoginDetails details = new LoginDetails(userName,"pass1");
+		LoginRequest req = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"user1", "pass1");
+					
+		LockoutSecurityPolicy lp = new LockoutSecurityPolicy(20);
 		
-		LoginRequest req = new LoginRequest(ip1,c1,a1,details);
-		LockoutPolicy lp = new LockoutPolicy(20);
-		
-		assertTrue(lp.handleRequest(req));//Not blocked should pass
+		assertThat("New user. LockoutSecurityPolicy should pass.",lp.handleRequest(req),is(true));
 		
 		q.blockSignature(req);//Say something caused it to be locked out
-		assertFalse(lp.handleRequest(req));//Blocked so should fail
+		assertThat("Simulated blocked signature. LockoutSecurityPolicy should fail.",lp.handleRequest(req),is(false));
 		
-		req.dateTime = req.dateTime.minusMinutes(100);//pretend  100 mins passed
-		assertTrue(lp.handleRequest(req));//handleRequest should unblock the signature
-		assertFalse(q.isSignaturetInBlockList(req));//just double checking
-	
+		req.dateTime = req.dateTime.minus(100,ChronoUnit.MINUTES);//pretend  100 mins passed
+		assertThat("100 mins after signature was blocked. LockoutSecurityPolicy should pass.",lp.handleRequest(req),is(true));
+		assertThat("100 mins after signature was blocked. Signature should not be in blocked list.",q.isSignaturetInBlockList(req),is(false));
 	}
 			
 }

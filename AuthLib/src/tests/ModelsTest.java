@@ -1,67 +1,56 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+import org.junit.Test;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-import org.junit.jupiter.api.Test;
-
-import core.models.CookieWrapper;
-import core.models.IPWrapper;
-import core.models.IPWrapper.IPCreationFailed;
 import core.models.LoginRequest;
-import core.models.UserAgentWrapper;
+import core.models.wrappers.CookieWrapper;
+import core.models.wrappers.IPWrapper;
+import core.models.wrappers.UserAgentWrapper;
+import core.utils.UnitTestHelper;
+import core.models.wrappers.IPWrapper.IPCreationFailed;
 
-class ModelsTest {
+public class ModelsTest {
 
 	@Test
-	void testIPCreation() throws IPCreationFailed {
+	public void IPWrapperEquals_2InstancesSameAddress_Pass() throws IPCreationFailed {
 		IPWrapper other = new IPWrapper("127.0.0.1");
 		IPWrapper address = new IPWrapper("127.0.0.1");
-		assertTrue(address.equals(other));
+		assertThat("IP address strings are the same. IPWrapper.equals should return true.",address.equals(other),is(true));
 	}
 
 	
 	@Test
-	void testCookieCreation() {
+	public void CookieWrapperEquals_SameValuesDifferentValues_PassFail() {
 		CookieWrapper c1 = new CookieWrapper("c1","val1");
 		CookieWrapper c2 = new CookieWrapper("c1","val1");
-		assertTrue(c1.equals(c2));
+		assertThat("Cookies have the smae values. CookieWrapper.equals should return true.",c1.equals(c2),is(true));
 		CookieWrapper c3 = new CookieWrapper("c1","val2");
-		assertFalse(c1.equals(c3));
+		assertThat("Cookies have differnent values. CookieWrapper.equals should return false.",c1.equals(c3),is(false));
 	}
 	
 	@Test
-	void testUserAgentCreation() {
+	public void UserAgentWrapperEquals_SameValuesDifferntValues_PassFail() {
 		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		UserAgentWrapper a2 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		assertTrue(a1.equals(a2));
+		assertThat("UserAgent strings are the same. UserAgentWrapper.equals should return true.",a1.equals(a2),is(true));
 		UserAgentWrapper a3 = new UserAgentWrapper("Mozilla/5.0 (Linux; Android 6.0; HTC One M9 Build/MRA58K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.3");
-		assertFalse(a1.equals(a3));
+		assertThat("UserAgent string are different. UserAgent.euqals shoudl return false.",a1.equals(a3),is(false));
 	}
 	
 	@Test
-	void testLoginRequest() throws IPCreationFailed {
+	public void LoginRequestEquals_SameValuesDifferntValues_PassFail() throws Exception {
 		
-		IPWrapper ip1 = new IPWrapper("127.0.0.1");
-		CookieWrapper c1 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		LoginRequest r1 = new LoginRequest(ip1,c1,a1);
+		LoginRequest r1 = UnitTestHelper.createSignature("127.0.0.1","c1","val1","Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
+		LoginRequest r2 = UnitTestHelper.createSignature("127.0.0.1","c1","val1","Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 		
-		IPWrapper ip2 = new IPWrapper("127.0.0.1");
-		CookieWrapper c2 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a2 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		LoginRequest r2 = new LoginRequest(ip2,c2,a2);
+		assertThat("LoginRequests have the same value. LoginRequest.equals should return true.",r1.equals(r2),is(true));
 		
-		assertTrue(r1.equals(r2));
-		
-		IPWrapper ip3 = new IPWrapper("192.168.1.9");
-		CookieWrapper c3 = new CookieWrapper("c1","val1");
-		UserAgentWrapper a3 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
-		LoginRequest r3 = new LoginRequest(ip3,c3,a3);
-		
-		assertFalse(r1.equals(r3));
-		
+		LoginRequest r3 = UnitTestHelper.createSignature("192.168.1.9","c1","val1","Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
+
+		assertThat("LoginRequests have differnt ip adrresses. LoginRequest.equals should return false.",r1.equals(r3),is(false));		
 	}
 }

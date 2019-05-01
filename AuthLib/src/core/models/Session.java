@@ -1,15 +1,18 @@
 package core.models;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class Session {
 	
 	public UUID sessionID;
-	public LoginRequest lastRequest;
-
-	public Session(LoginRequest lastRequest) {
+	public Instant creationTime;
+	public String username;
+	
+	public Session(LoginRequest req) {
 		sessionID = UUID.randomUUID();
-		this.lastRequest = lastRequest;
+		this.creationTime = Instant.now();
+		this.username = req.loginDetails.userName;
 	}
 
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Policies>
+	<Session>
+		<Timeout max="30"/>
+	</Session>
+	
+	<PreLogin type="AND">
+		<Lockout duration="20"/>
+		<UserAccountLocked />
+	</PreLogin>
+	
+	<Login>
+		<Verification type="basic"/>
+		<Username type="email" />
+		<Password>
+			<UpperCase type="atleast" n="2" />
+			<LowerCase type="atleast" n="3" />
+			<Digit type="atleast" n="1" />	
+		</Password>"
+	</Login>
+	
+	<PostLogin type="AND">
+		<ConsecutiveFailed max="3" />
+		<BasicBruteForce span="10" threshold="13" />
+	</PostLogin>
+	
+</Policies>

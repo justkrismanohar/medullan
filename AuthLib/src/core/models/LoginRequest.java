@@ -1,10 +1,15 @@
 package core.models;
 
 import java.net.InetAddress;
+import java.time.Instant;
 import java.time.LocalTime;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
+
+import core.models.wrappers.CookieWrapper;
+import core.models.wrappers.IPWrapper;
+import core.models.wrappers.UserAgentWrapper;
 
 /**
  * @author krism
@@ -27,7 +32,7 @@ public class LoginRequest {
 	public UserAgentWrapper userAgent;
 	public LoginDetails loginDetails;
 	public RequestStatus status;
-	public LocalTime dateTime;
+	public Instant dateTime;
 	public UUID requestID;
 	public UUID sessionID;
 	
@@ -35,21 +40,25 @@ public class LoginRequest {
 		this. address = address; this.cookie = cookie; this.userAgent = userAgent;
 		loginDetails = new LoginDetails("","");
 		this.status = RequestStatus.PENDING;
-		this.dateTime = LocalTime.now();
+		this.dateTime = Instant.now();
 		this.requestID = UUID.randomUUID();
 		sessionID = null;//empty
 	}
 	
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent, LoginDetails loginDetails) {
-		this. address = address; this.cookie = cookie; this.userAgent = userAgent; this.loginDetails = loginDetails;
+		this.address = address; this.cookie = cookie; this.userAgent = userAgent; this.loginDetails = loginDetails;
 		this.status = RequestStatus.PENDING;
-		this.dateTime = LocalTime.now();
+		this.dateTime = Instant.now();
 		this.requestID = UUID.randomUUID();
 		sessionID = null;//empty
 	}
 	
-	public boolean equals(LoginRequest req) {
-		return address.equals(req.address) && cookie.equals(req.cookie) && userAgent.equals(req.userAgent);
+	public boolean equals(Object o) {
+		if(o instanceof LoginRequest) {
+			LoginRequest req = (LoginRequest)o;
+			return address.equals(req.address) && cookie.equals(req.cookie) && userAgent.equals(req.userAgent);
+		}
+		return false;
 	}
 
 }

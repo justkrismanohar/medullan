@@ -3,75 +3,56 @@ package core.api;
 import core.models.LoginDetails;
 import core.models.LoginRequest;
 import core.models.Session;
-import core.policy.login.BasicVerification;
-import core.policy.login.SessionPolicy;
-import core.policy.login.TimeoutSession;
-import core.policy.login.VerificationPolicy;
-import core.policy.password.ANDPasswordPolicy;
-import core.policy.password.Has;
+import core.policy.login.BasicLoginPolicy;
+import core.policy.login.LoginPolicy;
+import core.policy.password.CompositeANDPasswordPolicy;
+import core.policy.password.CharHasWhateverPasswordPolicyFactory;
 import core.policy.password.PasswordPolicy;
-import core.policy.security.ANDSecurityPolicy;
-import core.policy.security.BasicBruteForce;
-import core.policy.security.LockoutPolicy;
-import core.policy.security.NConsecutiveFailedLogins;
+import core.policy.security.CompositeANDSecurityPolicy;
+import core.policy.security.BasicBruteForceSecurityPolicy;
+import core.policy.security.LockoutSecurityPolicy;
+import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
 import core.policy.security.SecurityPolicy;
-import core.policy.security.UserAccountLockedPolicy;
-import core.policy.username.EmailFormat;
+import core.policy.security.UserAccountLockedSecurityPolicy;
+import core.policy.session.SessionPolicy;
+import core.policy.session.TimeoutSessionSessionPolicy;
+import core.policy.username.EmailFormatUsernamePolicy;
 import core.policy.username.UsernamePolicy;
 import core.queries.QueryLayerFactory;
+import core.utils.AppPolicyFactory;
+import core.utils.Factory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 
 public class EndPoint {
+	public static final Logger log = LogManager.getLogger(EndPoint.class);
 	
 	/**
 	 * EndPoints are boolean for now, they can be refactored to return custom messages etc later.
 	 * For now testing the core logic.
 	 * 
 	 */
-		Policies appConfig;
+		AppPolicies appConfig;
 		
 		public EndPoint(String configFile) {
-			XMLConfig config = new XMLConfig(configFile);
+			XMLConfigParser config = new XMLConfigParser(configFile);
 			appConfig = config.parsePolicies();
 		}
 		
 		public EndPoint() {
-			appConfig = new Policies();
-			
-			//should really load execute the following based on .xml config
-			//set up security policies
-			ANDSecurityPolicy preLoginPolicies = new ANDSecurityPolicy();
-			ANDSecurityPolicy postLoginPolicies = new ANDSecurityPolicy();
-			
-			preLoginPolicies.add(new LockoutPolicy(20));
-			preLoginPolicies.add(new UserAccountLockedPolicy());
-			
-			postLoginPolicies.add(new NConsecutiveFailedLogins(3));
-			postLoginPolicies.add(new BasicBruteForce(10, 13));
-			
-			//set up password policies
-			ANDPasswordPolicy passwordPolicy = new ANDPasswordPolicy();
-			passwordPolicy.add(Has.atLeastUpperCase(2));
-			passwordPolicy.add(Has.atLeastLowerCase(3));
-			passwordPolicy.add(Has.atLeastDigit(1));
-			
-			//set up username policies 
-			appConfig.usernamePolicy = new EmailFormat();
-			
-			//setup verification policies
-			appConfig.basicVerification = new BasicVerification();
-			
-			//setup session policy
-			appConfig.timeoutSession = new TimeoutSession(30);
-			
-			appConfig.preLoginPolicies = preLoginPolicies;
-			appConfig.postLoginPolicies = postLoginPolicies;
-			appConfig.passwordPolicy = passwordPolicy;
+			appConfig = AppPolicyFactory.getDefault();
 		}
 		
 		/**
 		 * External APIs will use an EndPoint to access the library
 		 */
 		public boolean login(LoginRequest req) {
+			if(req == null) return false;
+			log.info("Login - Request - {} - {} - {} - {} - {}",req.requestID, req.loginDetails.userName,req.address,req.userAgent,req.cookie);
+			
 			//Check if the request is blocked
 			boolean blocked = appConfig.preLoginPolicies.handleRequest(req);
 			//Determine if the UN + PWD pair match
@@ -79,21 +60,35 @@ public class EndPoint {
 			//Apply security post security policies
 			boolean passedPostPolicies = appConfig.postLoginPolicies.handleRequest(req);
 			//If pass checks return true
-			return blocked && verified && passedPostPolicies;
+			boolean result = blocked && verified && passedPostPolicies;
+			
+			log.info("Login - Response - {} - {} - {} - {} - {} - {}", req.requestID,  req.loginDetails.userName,result,req.address,req.userAgent,req.cookie);
+			
+			return result;
 		}
 		
 		public boolean register(LoginRequest req) {
+			if(req == null) return false;
+			
+			log.info("Registration - Request - {} - {} - {} - {} - {}", req.requestID, req.loginDetails.userName,req.address,req.userAgent,req.cookie);
+			
 			LoginDetails details = req.loginDetails;
-			boolean passedPolicies = appConfig.usernamePolicy.evaluateUsername(details.userName) && 
+			boolean passedPolicies = appConfig.usernamePolicy.evaluateUsername(req) && 
 									 appConfig.passwordPolicy.evaluatePassword(details.encryptedPassword);
 			if(passedPolicies)
 				QueryLayerFactory.getInstance().registerUser(req);
-				
+			
+			log.info("Registration - Response - {} - {} - {} - {} - {} - {}", req.requestID, req.loginDetails.userName, passedPolicies, req.address,req.userAgent,req.cookie);
 			return passedPolicies;
 		}
 		
-		public boolean autheticateSession(String username) {
-			return appConfig.timeoutSession.isValid(username);
+		public boolean authenticateSession(String username) {
+			if(username == null) return false;
+			log.info("Authenticate - Session - Request - {}", username);
+			boolean result = appConfig.timeoutSession.isValid(username);
+			log.info("Authenticate - Session - Response - {} - {}", username,result);
+			return result;
 		}
+		
 		
 }
