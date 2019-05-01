@@ -7,7 +7,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Assumptions
 * All input to the system is fed through the EndPontion method calls (register, login, autheticateSession
-* One instance of EndPoint per region. Currenlty each EndPoint executes several [AppPolicies](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/api/AppPolicies.java) which are configurable via an xml file like [config.xml](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/config.xml). It can be easily extended to handle context based AppPolicies via a Factory.
+* One instance of EndPoint per region (well context really). Currenlty each EndPoint executes several [AppPolicies](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/api/AppPolicies.java) which are configurable via an xml file like [config.xml](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/config.xml). It can be easily extended to handle context based AppPolicies via a Factory. A context does not have to be simply regions, it can be any classification of the incomming requests to and [EndPoint](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/api/EndPoint.java) so, regions, ips, usage patterns, user demographics (like age etc.).
 
 ## Limitations
 The following limitations are due mainly to lack to time on my part
