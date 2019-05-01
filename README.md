@@ -58,7 +58,7 @@ req.loginDetails.encryptedPassword = "JuSTKris124";
 ```
 end.register(req);
 end.login(req);
-
+end.authenticateSession(req);
 ```
 
 And repeat
