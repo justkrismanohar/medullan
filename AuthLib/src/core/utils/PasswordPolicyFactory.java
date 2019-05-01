@@ -3,6 +3,8 @@ package core.utils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import core.models.LoginRequest;
+import core.policy.login.LoginPolicy;
 import core.policy.password.CharHasWhateverPasswordPolicyFactory;
 import core.policy.password.PasswordPolicy;
 
@@ -10,7 +12,7 @@ import java.util.HashMap;
 
 import org.w3c.dom.Element;
  
-public class PasswordPolicyFactory {
+public class PasswordPolicyFactory extends Factory{
 	
 	public static PasswordPolicy getInstance(String name, HashMap<String,String> attr) {
 		if(name.equals("UpperCase")) {
@@ -34,7 +36,16 @@ public class PasswordPolicyFactory {
 				return CharHasWhateverPasswordPolicyFactory.atLeastDigit(n);
 		}
 		
-		return null;
+		String err ="Invalid PasswordPolicy "+name+" requested.";
+		log.error(err);
+		
+		return new PasswordPolicy() {
+			@Override
+			public boolean evaluatePassword(String password) {
+				log.info("Creating NULL PasswordPolicy");
+				return false;
+			}
+		};
 		
 	}
 

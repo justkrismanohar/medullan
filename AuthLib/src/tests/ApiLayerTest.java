@@ -35,7 +35,7 @@ public class ApiLayerTest {
 		
 		EndPoint end = new EndPoint("jUnitTestConfig.xml");
 		
-		end.register(validLogin);//registers user1
+		end.register(validLogin);
 		
 		assertThat("Username and password meets policy requirements in jUnitTestConfig.xml. So .login should return true.",end.login(validLogin),is(true));
 		
@@ -73,7 +73,7 @@ public class ApiLayerTest {
 		LoginRequest invalidUserName = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"user","PaSSword5");
 		LoginRequest validLogin = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"use1@domain.com","PaSSword5");
 		
-		EndPoint end = new EndPoint();
+		EndPoint end = new EndPoint("jUnitTestConfig.xml");
 				
 		assertThat("Invaild username and password. .register should return false.",end.register(invalidUserNameAndPassword),is(false));
 		assertThat("Invaild username. .register should return false.",end.register(invalidUserName),is(false));
@@ -85,18 +85,18 @@ public class ApiLayerTest {
 		MockDB q = UnitTestHelper.getMockDBInstance();
 		LoginRequest validLogin = UnitTestHelper.getSignatureWithUsernameAndPassword(1,"session1@users.com","USername1");
 		
-		EndPoint end = new EndPoint();
-		end.register(validLogin);//registers user1
+		EndPoint end = new EndPoint("jUnitTestConfig.xml");
+		end.register(validLogin);
 		
-		assertThat("User has not logged in as yet. There should be no session for him. .autheticateSession should return false.",end.autheticateSession(validLogin.loginDetails.userName),is(false));//no session user needs to log in
+		assertThat("User has not logged in as yet. There should be no session for him. .autheticateSession should return false.",end.authenticateSession(validLogin.loginDetails.userName),is(false));//no session user needs to log in
 		end.login(validLogin);
-		assertThat("User logged in as yet. There should be a session for him. .autheticateSession should return true.",end.autheticateSession(validLogin.loginDetails.userName),is(true));//no session user needs to log in
+		assertThat("User logged in as yet. There should be a session for him. .autheticateSession should return true.",end.authenticateSession(validLogin.loginDetails.userName),is(true));//no session user needs to log in
 		
 		//Simulate some time passing 
 		Session userSession = q.getUserSession(validLogin.loginDetails.userName);
 		userSession.creationTime = userSession.creationTime.minus(100,ChronoUnit.MINUTES);
 		
-		assertThat("100 mins passed since last log on. User should be logged out. .autheticateSession should return false.",end.autheticateSession(validLogin.loginDetails.userName),is(false));//no session user needs to log in
+		assertThat("100 mins passed since last log on. User should be logged out. .autheticateSession should return false.",end.authenticateSession(validLogin.loginDetails.userName),is(false));//no session user needs to log in
 		assertThat("Verify at the datalayer there is no session. .getUserSession should return null.",q.getUserSession(validLogin.loginDetails.userName),is(nullValue()));//verify at data layer, that session was removed
 	}
 }

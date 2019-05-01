@@ -3,6 +3,7 @@ package core.utils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import core.models.LoginRequest;
 import core.policy.security.BasicBruteForceSecurityPolicy;
 import core.policy.security.LockoutSecurityPolicy;
 import core.policy.security.NConsecutiveFailedLoginsSecurityPolicy;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 
 import org.w3c.dom.Element;
  
-public class SecurityPolicyFactory {
+public class SecurityPolicyFactory extends Factory {
 	
 	public static SecurityPolicy getInstance(String name, HashMap<String,String> attr) {
 		if(name.equals("Lockout")) {
@@ -36,7 +37,17 @@ public class SecurityPolicyFactory {
 			return new BasicBruteForceSecurityPolicy(span, threshold);
 		}
 		
-		return null;
+		String err ="Invalid SecurityPolicy "+name+" requested.";
+		log.error(err);
+		
+		return new SecurityPolicy() {
+			@Override
+			public boolean handleRequest(LoginRequest req) {
+				log.info("Creating NULL SecurityPolicy");
+				return false;
+			}
+		
+		};
 		
 	}
 

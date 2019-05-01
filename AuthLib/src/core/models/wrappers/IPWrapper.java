@@ -33,4 +33,8 @@ public class IPWrapper {
 	public boolean equals(IPWrapper other) {
 		return other.address.getHostAddress().equals(this.address.getHostAddress());
 	}
+	
+	public String toString() {
+		return address.getHostAddress();
+	}
 }

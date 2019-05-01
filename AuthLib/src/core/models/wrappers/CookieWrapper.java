@@ -14,4 +14,7 @@ public class CookieWrapper {
 			this.cookie.getValue().equals(c.cookie.getValue());
 	}
 	
+	public String toString() {
+		return "{"+cookie.getName()+","+cookie.getValue()+"}";
+	}
 }

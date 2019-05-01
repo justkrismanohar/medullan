@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import core.api.AppPolicies;
+import core.api.EndPoint;
 import core.api.XMLConfigParser;
 import core.policy.login.BasicLoginPolicy;
 import core.policy.password.CompositeANDPasswordPolicy;
@@ -26,7 +27,7 @@ public class XMLConfigTest {
 	public void testSimpleConfigFile() {
 		//load app Polices to compare with 
 		AppPolicies appConfig = setupAppPolicies();
-		XMLConfigParser xmlFile = new XMLConfigParser("config.xml");
+		XMLConfigParser xmlFile = new XMLConfigParser("jUnitTestConfig.xml");
 		AppPolicies fileConfig = xmlFile.parsePolicies();
 		assertTrue(appConfig.timeoutSession.equals(fileConfig.timeoutSession));
 		assertTrue(appConfig.basicVerification.equals(fileConfig.basicVerification));

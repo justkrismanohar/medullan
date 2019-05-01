@@ -4,8 +4,12 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class BasicBruteForceSecurityPolicy implements SecurityPolicy {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+public class BasicBruteForceSecurityPolicy implements SecurityPolicy {
+	public static final Logger log = LogManager.getLogger(BasicBruteForceSecurityPolicy.class);
+	
 	private int xMins;
 	private int threshold;
 	
@@ -18,7 +22,8 @@ public class BasicBruteForceSecurityPolicy implements SecurityPolicy {
 	public boolean handleRequest(LoginRequest req) {
 		QueryLayer q = QueryLayerFactory.getInstance();
 		int numFailed = q.getNumFailedByRequestInLastXMins(req, xMins);
-		if( numFailed >= threshold) {
+		if( numFailed >= threshold && !q.isSignaturetInBlockList(req)) {
+			log.info("Brute Force Detected - Blocking Signature - {} - {} - {} - {}" ,req.requestID,req.address,req.userAgent,req.cookie);
 			q.blockSignature(req);
 			return false;
 		}

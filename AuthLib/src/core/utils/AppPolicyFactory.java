@@ -27,6 +27,7 @@ public class AppPolicyFactory {
 		postLoginPolicies.add(new NConsecutiveFailedLoginsSecurityPolicy(3));
 		postLoginPolicies.add(new BasicBruteForceSecurityPolicy(10, 13));
 		
+		
 		//set up password policies
 		CompositeANDPasswordPolicy passwordPolicy = new CompositeANDPasswordPolicy();
 		passwordPolicy.add(CharHasWhateverPasswordPolicyFactory.atLeastUpperCase(2));

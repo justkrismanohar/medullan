@@ -14,11 +14,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 
 
-public class AllTests {
+public class RunAllUnitTests {
 	   
-   private static final Logger log = LogManager.getLogger(AllTests.class);
+   private static final Logger log = LogManager.getLogger(RunAllUnitTests.class);
    public static void main(String[] args) {
-	      Result result = JUnitCore.runClasses(AllTests.class);
+	      Result result = JUnitCore.runClasses(RunAllUnitTests.class);
 
 	      for (Failure failure : result.getFailures()) {
 	         System.out.println(failure.toString());

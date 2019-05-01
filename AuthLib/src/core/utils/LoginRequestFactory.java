@@ -7,9 +7,14 @@ import core.models.wrappers.IPWrapper;
 import core.models.wrappers.IPWrapper.IPCreationFailed;
 import core.models.wrappers.UserAgentWrapper;
 
-public class LoginRequestFactory {
+public class LoginRequestFactory extends Factory {
 	
 	public static LoginRequest getBasicLoginRequestWithEmailAs(String username) throws IPCreationFailed {
+		if(username == null) {
+			log.error("Requested LoginRequest with null username");
+			username = "";
+		}
+		
 		IPWrapper ip1 = new IPWrapper("127.0.0.1");
 		CookieWrapper c1 = new CookieWrapper("c1","val1");
 		UserAgentWrapper a1 = new UserAgentWrapper("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");

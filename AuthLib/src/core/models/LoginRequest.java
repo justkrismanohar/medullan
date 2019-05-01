@@ -46,7 +46,7 @@ public class LoginRequest {
 	}
 	
 	public LoginRequest(IPWrapper address, CookieWrapper cookie, UserAgentWrapper userAgent, LoginDetails loginDetails) {
-		this. address = address; this.cookie = cookie; this.userAgent = userAgent; this.loginDetails = loginDetails;
+		this.address = address; this.cookie = cookie; this.userAgent = userAgent; this.loginDetails = loginDetails;
 		this.status = RequestStatus.PENDING;
 		this.dateTime = Instant.now();
 		this.requestID = UUID.randomUUID();

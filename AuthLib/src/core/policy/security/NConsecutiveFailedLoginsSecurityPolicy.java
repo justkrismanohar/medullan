@@ -4,8 +4,12 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
-public class NConsecutiveFailedLoginsSecurityPolicy implements SecurityPolicy{
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+public class NConsecutiveFailedLoginsSecurityPolicy implements SecurityPolicy{
+	public static final Logger log = LogManager.getLogger(NConsecutiveFailedLoginsSecurityPolicy.class);
 	private int maxFailures;
 	
 	public NConsecutiveFailedLoginsSecurityPolicy(int maxFailures) {
@@ -18,7 +22,8 @@ public class NConsecutiveFailedLoginsSecurityPolicy implements SecurityPolicy{
 		String userName = req.loginDetails.userName;
 		int failures = q.getNumFailedConnsecutiveByUser(userName);
 		
-		if(failures >= maxFailures) {
+		if(!q.isUserNameLocked(userName) && failures >= maxFailures) {
+			log.info("{} consecutive failed logins for {}. Locking account - {} - {} - {} - {}" ,maxFailures,userName,req.requestID,req.address,req.userAgent,req.cookie);
 			q.blockUser(userName);
 			return false;
 		}

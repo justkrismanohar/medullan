@@ -8,9 +8,13 @@ import core.models.LoginRequest;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 public class LockoutSecurityPolicy implements SecurityPolicy{
 
-	
+	public static final Logger log = LogManager.getLogger(LockoutSecurityPolicy.class);
 	private long duration;
 	
 	public LockoutSecurityPolicy(long duration) {
@@ -30,7 +34,9 @@ public class LockoutSecurityPolicy implements SecurityPolicy{
 			//Determine if to unblock
 			Instant XMinutesAgo = Instant.now().minus(duration,ChronoUnit.MINUTES);
 			if(XMinutesAgo.compareTo(req.dateTime) > 0) {//After minusing XMins if now is still bigger this means more than Xmins has passed
-				q.unblockSignature(req);;//duration passed unblock user
+				log.info("Unblocking Signature {} mins expired - {} - {} - {} - {}" ,duration,req.requestID,req.address,req.userAgent,req.cookie);
+				q.unblockSignature(req);//duration passed unblock user
+				
 				return true;
 			}
 			
