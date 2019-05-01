@@ -24,11 +24,35 @@ The following steps use eclipse. You can you whatever Java IDE you like.
 2. Download latest build at
 * [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
 
-Add the prerequisite jar files your build path. 
+3. Add the prerequisite jar files your build path. 
 ```
 In Eclispe Project folder > Build Path > Configure Build Path > Add external jars
 ```
+3. Add AuthLib.jar ot build path.
 
+4. Create EndPoint
+```
+EndPoint end = new EndPoint();
+```
+5. Create a request either with a default signature using a the UnitTestHelper
+```
+LoginRequest req = UnitTestHelper.getSignatureWithUsernameAndPassword(1, "justkrismanohar@gmail.com", "JuSTKris124");
+
+```
+OR Specify your own with 
+
+```
+LoginRequest req = UnitTestHelper.createSignature("ip_address","cookie_name","cookie_value","user_agent");
+req.loginDetails.userName = "user_name";
+req.loginDetails.encryptedPassword = "secure_password";
+```
+For example
+```
+LoginRequest req = UnitTestHelper.createSignature("127.0.0.1","c1","val1","Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
+req.loginDetails.userName = "justkrismanohar@gmail.com";
+req.loginDetails.encryptedPassword = "JuSTKris124";
+
+```
 And repeat
 
 ```
