@@ -67,7 +67,7 @@ end.login(req);
 end.authenticateSession(req);
 ```
 
-###Quick Example code. Check console for logs
+### Quick Example code. Check console for logs
 ```
 import core.api.EndPoint;
 import core.models.LoginRequest;
