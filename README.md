@@ -15,6 +15,7 @@ The following limitations are due mainly to lack to time on my part
 * Logging. Logs input and output of high level calls and some essentail depper API calls to console. Need to more logging the core logic and write to logs to database or file (something persistent).
 * Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete for the rest of code base.
 * Document each method and how it works following the java docs convents (i.e., @param etc) 
+* Cleaning inputs for injection attacks. This layer can be add on the piple handling incomming requests. This was an task for when implementing the QueryLayer interface for an acutal data base.
 
 ### Prerequisites
 
