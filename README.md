@@ -18,16 +18,16 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Limitations
 The following limitations are due mainly to lack to time on my part
-* Only MockDB (in memory) is implemented. However the library was build against the [QueryLayer](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/queries/QueryLayer.java) interface. So support for any database rolled out easily
-* Logging. Logs input and output of high level calls and some essentail depper API calls to console. Need to more logging the core logic and write to logs to database or file (something persistent).
-* Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete for the rest of code base.
+* Only MockDB (in memory) is implemented. However the AuthLib was build against the [QueryLayer](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/queries/QueryLayer.java) interface. So support for any database can be rolled out easily.
+* Logging. Logs input and output of high level calls and some essential depper API calls to console. Needs more logging the core logic and to write logs to a database or file (something persistent).
+* Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete for the rest of the code base.
 * Document each method and how it works following the java docs convents (i.e., @param etc) 
-* Cleaning inputs for injection attacks. This layer can be add on the piple handling incomming requests. This was an task for when implementing the QueryLayer interface for an acutal data base.
+* Cleaning inputs for injection attacks. This layer can be add on the pipe line handling incomming requests. This was to be done when implementing the QueryLayer interface for an acutal data base.
 * Additional unit and functional tests.
 
 ### Prerequisites
 
-Include the following dependenices in your classpath. They are include AuthLib folder for easy access.
+Include the following dependenices in your classpath. They are included in the AuthLib folder for easy access.
 
 * [hamcrest-all-1.3.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/hamcrest-all-1.3.jar) 
 * [log4j-api-2.11.2.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/log4j-api-2.11.2.jar) 
@@ -37,22 +37,21 @@ Include the following dependenices in your classpath. They are include AuthLib f
 
 ### Installing
 
-The following steps use eclipse. You can you whatever Java IDE you like.
+The following steps use Eclipse. You can you whatever Java IDE you like.
 
 1. Create a blank Java projec in Eclispe
 
-2. Download latest build at
-* [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
+2. Download latest build at [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
 
 3. Add the prerequisite jar files your build path. 
 ```
 In Eclispe Project folder > Build Path > Configure Build Path > Add external jars
 ```
-4. Add AuthLib.jar ot build path.
+4. Add the [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar)  to your build path.
 
 ### Sending request
 
-1. Create an EndPoint. The Policies for the EndPoint are specified in and xml file.
+1. Create an EndPoint. The Policies for the EndPoint are specified in and xml file in the root folder.
 See [config.xml](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/config.xml) for an example.
 ```
 EndPoint end = new EndPoint("config.xml");
@@ -81,7 +80,7 @@ end.login(req);
 end.authenticateSession(req);
 ```
 
-### Quick Example code. Check console for logs
+### A quick example. Check your console for logs
 ```
 import core.api.EndPoint;
 import core.models.LoginRequest;
@@ -117,11 +116,11 @@ public class Main {
 ```
 git clone https://github.com/justkrismanohar/medullan.git
 ```
-2. Import Java project AuthLib into eclispe
+2. Import the AuthLib Java project into your Eclispe workspace
 
-3. Add pre-requisite jars to build path
+3. Add pre-requisite jars to your build path
 
-4. In test package compile and run [RunAllUnitTests.java](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/tests/RunAllUnitTests.java) as unit test (or can run it as main)
+4. In the test package compile and run [RunAllUnitTests.java](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/tests/RunAllUnitTests.java) as unit test (or can run it as main)
 This executes all the Junit test in the test directory. These profrom component and End to End tests.
 
 ## Contributing
