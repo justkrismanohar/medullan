@@ -3,13 +3,17 @@
 Implementation of Authenticaiton Libaray for MyHealthPass application
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+## Assumtions
+* All input to the system is fed through the EndPontion method calls (register, login, autheticateSession
 
 ## Limitations
 The following limitations are due mainly to lack to time on my part
 * Only MockDB (in memory) is implemented. However the library was build against the [QueryLayer](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/queries/QueryLayer.java) interface. So support for any database rolled out easily
 * Logging. Logs input and output of high level calls and some essentail depper API calls to console. Need to more logging the core logic and write to logs to database or file (something persistent).
 * Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete for the rest of code base.
+* Document each method and how it works following the java docs convents (i.e., @param etc) 
 
 ### Prerequisites
 
