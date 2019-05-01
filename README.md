@@ -13,9 +13,11 @@ Include the following dependenices in your classpath. They are include AuthLib f
 * [log4j-api-2.11.2.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/log4j-api-2.11.2.jar) 
 * [log4j-core-2.11.2.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/log4j-core-2.11.2.jar) 
 * [servlet-api-2.5.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/servlet-api-2.5.jar)
+* [Junit4](https://github.com/junit-team/junit4/wiki/Download-and-Install)
 
 ### Installing
 
+For these
 Download latest build
 * [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
 ```
