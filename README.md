@@ -32,9 +32,10 @@ In Eclispe Project folder > Build Path > Configure Build Path > Add external jar
 
 ### Sending request
 
-1. Create an EndPoint
+1. Create an EndPoint. The Policies for the EndPoint are specified in and xml file.
+See [config.xml](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/config.xml) for an example.
 ```
-EndPoint end = new EndPoint();
+EndPoint end = new EndPoint("config.xml");
 ```
 2. Create a request either with a default signature using a the UnitTestHelper
 ```
@@ -55,7 +56,9 @@ req.loginDetails.encryptedPassword = "JuSTKris124";
 ```
 3. Send the request to the EndPoint. All EndPoints return a boolean which indicates if the transasction was completed or not
 ```
+end.register(req);
 end.login(req);
+
 ```
 
 And repeat
