@@ -5,6 +5,12 @@ Implementation of Authenticaiton Libaray for MyHealthPass application
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
+## Limitations
+The following limitations are due mainly to lack to time on my part
+* Only MockDB (in memory) is implemented. However the library was build against the [QueryLayer](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/queries/QueryLayer.java) interface. So support for any database rolled out easily
+* Logging. Logs input and output of high level calls and some essentail depper API calls. Add more logging the core logic
+* Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete fo the rest of code base.
+
 ### Prerequisites
 
 Include the following dependenices in your classpath. They are include AuthLib folder for easy access.
@@ -86,24 +92,6 @@ git clone https://github.com/justkrismanohar/medullan.git
 
 4. In test package compile and run RunAllUnitTests.java as unit test (or can run it as main)
 This executes all the Junit test in the test directory. These profrom component and End to End tests.
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
 ## Contributing
 
