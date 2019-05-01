@@ -9,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 The following limitations are due mainly to lack to time on my part
 * Only MockDB (in memory) is implemented. However the library was build against the [QueryLayer](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/queries/QueryLayer.java) interface. So support for any database rolled out easily
 * Logging. Logs input and output of high level calls and some essentail depper API calls. Add more logging the core logic
-* Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete fo the rest of code base.
+* Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete for the rest of code base.
 
 ### Prerequisites
 
