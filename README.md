@@ -123,9 +123,6 @@ git clone https://github.com/justkrismanohar/medullan.git
 4. In the test package compile and run [RunAllUnitTests.java](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/tests/RunAllUnitTests.java) as unit test (or can run it as main)
 This executes all the Junit test in the test directory. These profrom component and End to End tests.
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## Authors
 
