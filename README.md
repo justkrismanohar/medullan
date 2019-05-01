@@ -9,10 +9,10 @@ These instructions will get you a copy of the project up and running on your loc
 
 Include the following dependenices in your classpath. They are include AuthLib folder for easy access.
 
-hamcrest-all-1.3.jar
-log4j-api-2.11.2.jar
-log4j-core-2.11.2.jar
-servlet-api-2.5.jar
+* [hamcrest-all-1.3.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/hamcrest-all-1.3.jar) 
+* [log4j-api-2.11.2.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/log4j-api-2.11.2.jar) 
+* [log4j-core-2.11.2.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/log4j-core-2.11.2.jar) 
+* [servlet-api-2.5.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/servlet-api-2.5.jar)
 
 ```
 Give examples
