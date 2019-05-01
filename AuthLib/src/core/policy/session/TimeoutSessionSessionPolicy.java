@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
+import core.models.LoginRequest;
 import core.models.Session;
 import core.queries.QueryLayer;
 import core.queries.QueryLayerFactory;
@@ -17,16 +18,18 @@ public class TimeoutSessionSessionPolicy implements SessionPolicy{
 	}
 	
 	@Override
-	public boolean isValid(String username) {
+	public boolean isValid(LoginRequest  req) {
 		QueryLayer q = QueryLayerFactory.getInstance();
-		Session current = q.getUserSession(username);
-		if(current == null) return false;//no session for user
-		
-		Instant validTime = Instant.now().minus(timeout,ChronoUnit.MINUTES);
-		
-		if(validTime.compareTo(current.creationTime) < 0)
-			return true;//There is still time for this session
-		
+		String username = req.loginDetails.userName;
+		if(!q.isUserNameLocked(username) && !q.isSignaturetInBlockList(req)) {
+			Session current = q.getUserSession(username);
+			if(current == null) return false;//no session for user
+			
+			Instant validTime = Instant.now().minus(timeout,ChronoUnit.MINUTES);
+			
+			if(validTime.compareTo(current.creationTime) < 0)
+				return true;//There is still time for this session
+		}
 		//Session expired 
 		//remove it
 		q.removeSession(username);

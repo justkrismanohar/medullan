@@ -18,6 +18,7 @@ public class Main {
 			end.login(reqFail);
 		
 		end.login(req);
+		end.authenticateSession(reqFail);
 		
 		
 	}

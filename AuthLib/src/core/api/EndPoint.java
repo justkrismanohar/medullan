@@ -82,11 +82,11 @@ public class EndPoint {
 			return passedPolicies;
 		}
 		
-		public boolean authenticateSession(String username) {
-			if(username == null) return false;
-			log.info("Authenticate - Session - Request - {}", username);
-			boolean result = appConfig.timeoutSession.isValid(username);
-			log.info("Authenticate - Session - Response - {} - {}", username,result);
+		public boolean authenticateSession(LoginRequest req) {
+			if(req == null) return false;
+			log.info("Autheticate - Request - {} - {} - {} - {} - {}", req.requestID, req.loginDetails.userName,req.address,req.userAgent,req.cookie);
+			boolean result = appConfig.timeoutSession.isValid(req);
+			log.info("Autheticate - Response - {} - {} - {} - {} - {} - {}", req.requestID, req.loginDetails.userName, result, req.address,req.userAgent,req.cookie);
 			return result;
 		}
 		

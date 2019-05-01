@@ -120,12 +120,18 @@ public class MockDB implements QueryLayer {
 
 	@Override
 	public void unblockSignature(LoginRequest signature) {
-		this.blockedSignatures.remove(signature);
+		try{
+			this.blockedSignatures.remove(signature);
+		}
+		catch(Throwable t) {
+			t.printStackTrace();
+		}
 	}
 
 	@Override
 	public void removeSession(String username) {
-		userSessions.remove(username);
+		if(userSessions.containsKey(username))
+				userSessions.remove(username);
 	}
 
 	@Override

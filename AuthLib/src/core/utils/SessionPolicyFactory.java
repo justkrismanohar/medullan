@@ -3,6 +3,7 @@ package core.utils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import core.models.LoginRequest;
 import core.policy.session.SessionPolicy;
 import core.policy.session.TimeoutSessionSessionPolicy;
 
@@ -23,7 +24,7 @@ public class SessionPolicyFactory extends Factory{
 		
 		return new SessionPolicy() {
 			@Override
-			public boolean isValid(String username) {
+			public boolean isValid(LoginRequest req) {
 				log.info("Creating NULL SessionPolicy");
 				return false;
 			}
