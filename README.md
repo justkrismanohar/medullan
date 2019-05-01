@@ -95,6 +95,7 @@ public class Main {
 	}
 }
 ```
+
 ## Running the tests
 
 1. Git clone
