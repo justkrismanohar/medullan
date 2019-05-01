@@ -4,7 +4,8 @@ Implementation of Authenticaiton Libaray for MyHealthPass application
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
+## A brief description of the solution
+The main task of AuthLib is to have user configurable rules for registration (username and password constraints), logins (usage patterns constrations i.e., detecting brute force and consecutive failed logins), basic sessions (keep user logged in for some time). A Composite pattern seemed approprite to handle the idea of configurable rules. Thus AuthLib is essentially a compositions of various types of Policies. A Policy is a rule for some purpose. For example [LoginPolicy](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/policy/login/LoginPolicy.java) handles the logic for loggin in, while [PasswordPolicy](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/policy/password/PasswordPolicy.java) handles some aspect of evaluating the a password.
 ## Assumptions
 * All input to the system is fed through the EndPontion method calls (register, login, autheticateSession
 * One instance of EndPoint per region (well context really). Currenlty each EndPoint executes several [AppPolicies](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/api/AppPolicies.java) which are configurable via an xml file like [config.xml](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/config.xml). It can be easily extended to handle context based AppPolicies via a Factory. A context does not have to be simply regions, it can be any classification of the incomming requests to and [EndPoint](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/src/core/api/EndPoint.java) so, regions, ips, usage patterns, user demographics (like age etc.).
