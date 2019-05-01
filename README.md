@@ -37,7 +37,6 @@ EndPoint end = new EndPoint();
 5. Create a request either with a default signature using a the UnitTestHelper
 ```
 LoginRequest req = UnitTestHelper.getSignatureWithUsernameAndPassword(1, "justkrismanohar@gmail.com", "JuSTKris124");
-
 ```
 OR Specify your own with 
 
@@ -51,7 +50,6 @@ For example
 LoginRequest req = UnitTestHelper.createSignature("127.0.0.1","c1","val1","Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html));");
 req.loginDetails.userName = "justkrismanohar@gmail.com";
 req.loginDetails.encryptedPassword = "JuSTKris124";
-
 ```
 And repeat
 
