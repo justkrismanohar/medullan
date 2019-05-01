@@ -39,7 +39,7 @@ Include the following dependenices in your classpath. They are included in the A
 
 The following steps use Eclipse. You can you whatever Java IDE you like.
 
-1. Create a blank Java projec in Eclispe
+1. Create a blank Java project in Eclispe
 
 2. Download latest build at [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
 
