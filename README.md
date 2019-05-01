@@ -14,16 +14,10 @@ Include the following dependenices in your classpath. They are include AuthLib f
 * [log4j-core-2.11.2.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/log4j-core-2.11.2.jar) 
 * [servlet-api-2.5.jar](https://github.com/justkrismanohar/medullan/raw/master/AuthLib/servlet-api-2.5.jar)
 
-```
-Give examples
-```
-
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+Download latest build
+* [AuthLib.jar] (https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
 ```
 Give the example
 ```
