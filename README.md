@@ -17,11 +17,16 @@ Include the following dependenices in your classpath. They are include AuthLib f
 
 ### Installing
 
-For these
-Download latest build
+The following steps use eclipse. You can you whatever Java IDE you like.
+
+Create a blank Java projec in Eclispe
+
+Download latest build at
 * [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
+
+Add the prerequisite jar files your build path. 
 ```
-Give the example
+In Eclispe Project folder > Build Path > Configure Build Path > Add external jars
 ```
 
 And repeat
