@@ -30,11 +30,13 @@ In Eclispe Project folder > Build Path > Configure Build Path > Add external jar
 ```
 3. Add AuthLib.jar ot build path.
 
-4. Create EndPoint
+### Sending request
+
+1. Create an EndPoint
 ```
 EndPoint end = new EndPoint();
 ```
-5. Create a request either with a default signature using a the UnitTestHelper
+2. Create a request either with a default signature using a the UnitTestHelper
 ```
 LoginRequest req = UnitTestHelper.getSignatureWithUsernameAndPassword(1, "justkrismanohar@gmail.com", "JuSTKris124");
 ```
@@ -51,6 +53,11 @@ LoginRequest req = UnitTestHelper.createSignature("127.0.0.1","c1","val1","Mozil
 req.loginDetails.userName = "justkrismanohar@gmail.com";
 req.loginDetails.encryptedPassword = "JuSTKris124";
 ```
+3. Send the request to the EndPoint. All EndPoints return a boolean which indicates if the transasction was completed or not
+```
+end.login(req);
+```
+
 And repeat
 
 ```
