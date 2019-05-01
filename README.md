@@ -75,12 +75,16 @@ Explain how to run the automated tests for this system
 
 ### Break down into end to end tests
 
-Explain what these tests test and why
+1. Git clone
  
 ```
-Give an example
+git clone https://github.com/justkrismanohar/medullan.git
 ```
+2. Import Java project AuthLib into eclispe
 
+3. Add pre-requisite jars to build path
+
+4. In test package compile and run RunAllUnitTests.java as unit test (or can run it as main)
 ### And coding style tests
 
 Explain what these tests test and why
