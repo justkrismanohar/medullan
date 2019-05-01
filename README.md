@@ -28,7 +28,7 @@ The following steps use eclipse. You can you whatever Java IDE you like.
 ```
 In Eclispe Project folder > Build Path > Configure Build Path > Add external jars
 ```
-3. Add AuthLib.jar ot build path.
+4. Add AuthLib.jar ot build path.
 
 ### Sending request
 
