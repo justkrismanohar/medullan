@@ -97,10 +97,6 @@ public class Main {
 ```
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
 1. Git clone
  
 ```
