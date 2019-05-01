@@ -22,7 +22,7 @@ The following limitations are due mainly to lack to time on my part
 * Logging. Logs input and output of high level calls and some essential depper API calls to console. Needs more logging the core logic and to write logs to a database or file (something persistent).
 * Nulls, exceptions and Null Objects. Impelmented null objects at the factory level. Need to complete for the rest of the code base.
 * Document each method and how it works following the java docs convents (i.e., @param etc) 
-* Cleaning inputs for injection attacks. This layer can be add on the pipe line handling incomming requests. This was to be done when implementing the QueryLayer interface for an acutal data base.
+* Cleaning inputs for injection attacks. This layer can be addded on to the pipe line handling incomming requests. This was to be done when implementing the QueryLayer interface for an acutal data base.
 * Additional unit and functional tests.
 
 ### Prerequisites
