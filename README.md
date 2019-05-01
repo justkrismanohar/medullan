@@ -19,9 +19,9 @@ Include the following dependenices in your classpath. They are include AuthLib f
 
 The following steps use eclipse. You can you whatever Java IDE you like.
 
-Create a blank Java projec in Eclispe
+1. Create a blank Java projec in Eclispe
 
-Download latest build at
+2. Download latest build at
 * [AuthLib.jar](https://github.com/justkrismanohar/medullan/blob/master/AuthLib/exported-jar/AuthLib.jar) 
 
 Add the prerequisite jar files your build path. 
